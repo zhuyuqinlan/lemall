@@ -3,7 +3,7 @@ package org.nanguo.lemall.business.admin.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderReturnReasonRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderReturnReasonResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderReturnReason;
+import org.nanguo.lemall.common.entity.OmsOrderReturnReason;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

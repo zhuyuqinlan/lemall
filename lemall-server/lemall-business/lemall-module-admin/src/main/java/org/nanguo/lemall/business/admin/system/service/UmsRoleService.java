@@ -5,8 +5,8 @@ import org.nanguo.lemall.business.admin.system.dto.request.UmsRoleRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsMenu;
-import org.nanguo.lemall.business.admin.system.entity.UmsRole;
+import org.nanguo.lemall.common.entity.UmsMenu;
+import org.nanguo.lemall.common.entity.UmsRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 

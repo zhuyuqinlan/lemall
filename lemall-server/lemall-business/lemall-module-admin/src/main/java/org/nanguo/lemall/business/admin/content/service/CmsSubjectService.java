@@ -2,7 +2,7 @@ package org.nanguo.lemall.business.admin.content.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.content.dto.response.CmsSubjectResponseDTO;
-import org.nanguo.lemall.business.admin.content.entity.CmsSubject;
+import org.nanguo.lemall.common.entity.CmsSubject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

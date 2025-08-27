@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsResource;
+import org.nanguo.lemall.common.entity.UmsResource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 后台资源管理Service

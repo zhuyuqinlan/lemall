@@ -1,6 +1,6 @@
 package org.nanguo.lemall.business.admin.system.service;
 
-import org.nanguo.lemall.business.admin.system.entity.UmsAdmin;
+import org.nanguo.lemall.common.entity.UmsAdmin;
 
 public interface UmsAdminCacheService {
     /**

@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsResource;
+import org.nanguo.lemall.common.entity.UmsResource;
 import org.nanguo.lemall.business.admin.system.service.UmsResourceService;
-import org.nanguo.lemall.util.response.BizException;
+import org.nanguo.lemall.common.util.response.BizException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.nanguo.lemall.business.admin.system.entity.UmsResourceCategory;
+import org.nanguo.lemall.common.entity.UmsResourceCategory;
 import org.nanguo.lemall.business.admin.system.mapper.UmsResourceCategoryMapper;
 import org.nanguo.lemall.business.admin.system.service.UmsResourceCategoryService;
 

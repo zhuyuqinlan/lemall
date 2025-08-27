@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
 import org.nanguo.lemall.business.admin.system.service.UmsResourceService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

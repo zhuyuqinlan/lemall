@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuNodeResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsMenu;
+import org.nanguo.lemall.common.entity.UmsMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 

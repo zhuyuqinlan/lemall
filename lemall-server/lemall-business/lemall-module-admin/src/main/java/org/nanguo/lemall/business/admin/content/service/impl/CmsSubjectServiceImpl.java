@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.content.mapper.CmsSubjectMapper;
-import org.nanguo.lemall.business.admin.content.entity.CmsSubject;
+import org.nanguo.lemall.common.entity.CmsSubject;
 import org.nanguo.lemall.business.admin.content.service.CmsSubjectService;
 import org.springframework.util.StringUtils;
 

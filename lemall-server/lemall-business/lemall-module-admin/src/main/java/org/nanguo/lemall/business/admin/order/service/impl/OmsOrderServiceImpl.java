@@ -11,12 +11,12 @@ import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderQueryParamRequ
 import org.nanguo.lemall.business.admin.order.dto.request.OmsReceiverInfoParamRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderOperateHistory;
+import org.nanguo.lemall.common.entity.OmsOrderOperateHistory;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderOperateHistoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrder;
+import org.nanguo.lemall.common.entity.OmsOrder;
 import org.nanguo.lemall.business.admin.order.mapper.OmsOrderMapper;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderService;
 import org.springframework.util.StringUtils;

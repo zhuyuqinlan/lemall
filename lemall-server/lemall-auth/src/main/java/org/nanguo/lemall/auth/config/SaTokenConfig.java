@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.auth.constant.AuthConstant;
 import org.nanguo.lemall.auth.util.StpMemberUtil;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

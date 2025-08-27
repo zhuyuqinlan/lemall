@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsCompanyAddressResponseDTO;
 import org.nanguo.lemall.business.admin.order.service.OmsCompanyAddressService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

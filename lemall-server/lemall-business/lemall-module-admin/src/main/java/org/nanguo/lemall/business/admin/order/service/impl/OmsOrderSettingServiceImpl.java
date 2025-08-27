@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.order.mapper.OmsOrderSettingMapper;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderSetting;
+import org.nanguo.lemall.common.entity.OmsOrderSetting;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderSettingService;
 @Service
 public class OmsOrderSettingServiceImpl extends ServiceImpl<OmsOrderSettingMapper, OmsOrderSetting> implements OmsOrderSettingService{

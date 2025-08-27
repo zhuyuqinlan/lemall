@@ -8,15 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.product.dto.request.PmsProductCategoryRequestDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem;
-import org.nanguo.lemall.business.admin.product.entity.PmsProduct;
-import org.nanguo.lemall.business.admin.product.entity.PmsProductCategoryAttributeRelation;
+import org.nanguo.lemall.common.entity.PmsProduct;
+import org.nanguo.lemall.common.entity.PmsProductCategoryAttributeRelation;
 import org.nanguo.lemall.business.admin.product.service.PmsProductCategoryAttributeRelationService;
 import org.nanguo.lemall.business.admin.product.service.PmsProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.product.mapper.PmsProductCategoryMapper;
-import org.nanguo.lemall.business.admin.product.entity.PmsProductCategory;
+import org.nanguo.lemall.common.entity.PmsProductCategory;
 import org.nanguo.lemall.business.admin.product.service.PmsProductCategoryService;
 import org.springframework.util.CollectionUtils;
 

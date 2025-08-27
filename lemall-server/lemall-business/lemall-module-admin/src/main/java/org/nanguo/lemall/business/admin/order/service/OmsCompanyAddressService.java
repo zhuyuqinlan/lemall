@@ -1,7 +1,7 @@
 package org.nanguo.lemall.business.admin.order.service;
 
 import org.nanguo.lemall.business.admin.order.dto.response.OmsCompanyAddressResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsCompanyAddress;
+import org.nanguo.lemall.common.entity.OmsCompanyAddress;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

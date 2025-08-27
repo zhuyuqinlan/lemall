@@ -2,7 +2,7 @@ package org.nanguo.lemall.business.admin.system.service;
 
 import org.nanguo.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsResourceCategory;
+import org.nanguo.lemall.common.entity.UmsResourceCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

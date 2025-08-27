@@ -5,7 +5,7 @@ import org.nanguo.lemall.business.admin.order.dto.request.OmsReturnApplyQueryPar
 import org.nanguo.lemall.business.admin.order.dto.request.OmsUpdateStatusParamRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResponseDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResultResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderReturnApply;
+import org.nanguo.lemall.common.entity.OmsOrderReturnApply;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

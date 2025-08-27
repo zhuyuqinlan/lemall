@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.product.dto.request.PmsBrandRequestDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsBrandResponseDTO;
 import org.nanguo.lemall.business.admin.product.service.PmsBrandService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

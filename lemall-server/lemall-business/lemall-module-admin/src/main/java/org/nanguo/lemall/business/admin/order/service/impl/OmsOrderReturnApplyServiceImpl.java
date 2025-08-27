@@ -11,7 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.order.mapper.OmsOrderReturnApplyMapper;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderReturnApply;
+import org.nanguo.lemall.common.entity.OmsOrderReturnApply;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderReturnApplyService;
 import org.springframework.util.StringUtils;
 

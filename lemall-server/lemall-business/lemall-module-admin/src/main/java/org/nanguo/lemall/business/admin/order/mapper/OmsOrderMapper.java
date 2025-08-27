@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderDeliveryParamRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrder;
+import org.nanguo.lemall.common.entity.OmsOrder;
 
 import java.util.List;
 

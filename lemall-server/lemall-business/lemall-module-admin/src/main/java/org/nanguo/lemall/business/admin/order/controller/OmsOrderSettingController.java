@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderSettingRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderSettingResponseDTO;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderSettingService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

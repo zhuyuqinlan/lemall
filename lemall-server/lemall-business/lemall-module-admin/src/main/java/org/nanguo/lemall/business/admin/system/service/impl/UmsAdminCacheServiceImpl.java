@@ -1,8 +1,8 @@
 package org.nanguo.lemall.business.admin.system.service.impl;
 
-import org.nanguo.lemall.business.admin.system.entity.UmsAdmin;
+import org.nanguo.lemall.common.entity.UmsAdmin;
 import org.nanguo.lemall.business.admin.system.service.UmsAdminCacheService;
-import org.nanguo.lemall.service.RedisService;
+import org.nanguo.lemall.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package org.nanguo.lemall.auth.component;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
 import org.nanguo.lemall.auth.constant.AuthConstant;
-import org.nanguo.lemall.dto.UserDto;
+import org.nanguo.lemall.common.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

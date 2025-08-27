@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.order.mapper.OmsOrderReturnReasonMapper;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderReturnReason;
+import org.nanguo.lemall.common.entity.OmsOrderReturnReason;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderReturnReasonService;
 
 import java.util.List;

@@ -6,13 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.product.dto.request.PmsBrandRequestDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsBrandResponseDTO;
-import org.nanguo.lemall.business.admin.product.entity.PmsProduct;
+import org.nanguo.lemall.common.entity.PmsProduct;
 import org.nanguo.lemall.business.admin.product.service.PmsProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.product.mapper.PmsBrandMapper;
-import org.nanguo.lemall.business.admin.product.entity.PmsBrand;
+import org.nanguo.lemall.common.entity.PmsBrand;
 import org.nanguo.lemall.business.admin.product.service.PmsBrandService;
 import org.springframework.util.StringUtils;
 

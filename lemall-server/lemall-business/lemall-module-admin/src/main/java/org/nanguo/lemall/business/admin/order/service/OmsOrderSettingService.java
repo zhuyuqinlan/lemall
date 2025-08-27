@@ -2,7 +2,7 @@ package org.nanguo.lemall.business.admin.order.service;
 
 import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderSettingRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderSettingResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrderSetting;
+import org.nanguo.lemall.common.entity.OmsOrderSetting;
 import com.baomidou.mybatisplus.extension.service.IService;
 public interface OmsOrderSettingService extends IService<OmsOrderSetting>{
 

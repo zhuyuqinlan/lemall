@@ -9,7 +9,7 @@ import org.nanguo.lemall.business.admin.product.dto.request.PmsProductParamReque
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductParamResultResponseDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductResponseDTO;
 import org.nanguo.lemall.business.admin.product.service.PmsProductService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

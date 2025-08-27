@@ -2,10 +2,9 @@ package org.nanguo.lemall.business.admin.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.nanguo.lemall.business.admin.system.entity.UmsAdmin;
-import org.nanguo.lemall.business.admin.system.entity.UmsAdminRoleRelation;
-import org.nanguo.lemall.business.admin.system.entity.UmsResource;
-import org.nanguo.lemall.business.admin.system.entity.UmsRole;
+import org.nanguo.lemall.common.entity.UmsAdmin;
+import org.nanguo.lemall.common.entity.UmsResource;
+import org.nanguo.lemall.common.entity.UmsRole;
 
 import java.util.List;
 

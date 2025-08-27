@@ -11,7 +11,7 @@ import org.nanguo.lemall.business.admin.order.dto.request.OmsReceiverInfoParamRe
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderResponseDTO;
 import org.nanguo.lemall.business.admin.order.service.OmsOrderService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

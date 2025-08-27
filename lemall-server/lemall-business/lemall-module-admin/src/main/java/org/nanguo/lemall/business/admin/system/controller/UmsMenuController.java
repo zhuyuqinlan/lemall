@@ -9,7 +9,7 @@ import org.nanguo.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuNodeResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
 import org.nanguo.lemall.business.admin.system.service.UmsMenuService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

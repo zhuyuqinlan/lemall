@@ -3,8 +3,8 @@ package org.nanguo.lemall.business.admin.product.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.product.dto.request.PmsBrandRequestDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsBrandResponseDTO;
-import org.nanguo.lemall.business.admin.product.entity.PmsBrand;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.nanguo.lemall.common.entity.PmsBrand;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

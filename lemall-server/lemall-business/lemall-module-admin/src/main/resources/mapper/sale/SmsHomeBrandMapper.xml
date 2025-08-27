@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.nanguo.lemall.business.admin.sale.mapper.SmsHomeBrandMapper">
+  <resultMap id="BaseResultMap" type="org.nanguo.lemall.common.entity.SmsHomeBrand">
+    <!--@mbg.generated-->
+    <!--@Table sms_home_brand-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="recommend_status" jdbcType="INTEGER" property="recommendStatus" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, brand_id, brand_name, recommend_status, sort
+  </sql>
+</mapper>

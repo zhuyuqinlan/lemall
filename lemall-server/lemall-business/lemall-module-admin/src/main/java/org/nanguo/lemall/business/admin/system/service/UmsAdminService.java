@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsAdmin;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.nanguo.lemall.common.entity.UmsAdmin;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

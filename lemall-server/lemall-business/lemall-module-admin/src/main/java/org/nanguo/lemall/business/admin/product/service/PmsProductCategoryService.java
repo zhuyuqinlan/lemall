@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.product.dto.request.PmsProductCategoryRequestDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem;
-import org.nanguo.lemall.business.admin.product.entity.PmsProductCategory;
+import org.nanguo.lemall.common.entity.PmsProductCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 

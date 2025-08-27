@@ -7,7 +7,7 @@ import org.nanguo.lemall.business.admin.order.dto.request.OmsOrderQueryParamRequ
 import org.nanguo.lemall.business.admin.order.dto.request.OmsReceiverInfoParamRequestDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
 import org.nanguo.lemall.business.admin.order.dto.response.OmsOrderResponseDTO;
-import org.nanguo.lemall.business.admin.order.entity.OmsOrder;
+import org.nanguo.lemall.common.entity.OmsOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 

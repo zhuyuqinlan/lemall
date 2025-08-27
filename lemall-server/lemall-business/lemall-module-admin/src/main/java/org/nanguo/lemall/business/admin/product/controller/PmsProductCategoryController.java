@@ -8,7 +8,7 @@ import org.nanguo.lemall.business.admin.product.dto.request.PmsProductCategoryRe
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO;
 import org.nanguo.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem;
 import org.nanguo.lemall.business.admin.product.service.PmsProductCategoryService;
-import org.nanguo.lemall.util.response.Result;
+import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

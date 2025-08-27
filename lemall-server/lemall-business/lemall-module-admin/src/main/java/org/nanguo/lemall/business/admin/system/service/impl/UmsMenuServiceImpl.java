@@ -7,13 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuNodeResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
-import org.nanguo.lemall.business.admin.system.entity.UmsRoleMenuRelation;
+import org.nanguo.lemall.common.entity.UmsRoleMenuRelation;
 import org.nanguo.lemall.business.admin.system.service.UmsRoleMenuRelationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nanguo.lemall.business.admin.system.mapper.UmsMenuMapper;
-import org.nanguo.lemall.business.admin.system.entity.UmsMenu;
+import org.nanguo.lemall.common.entity.UmsMenu;
 import org.nanguo.lemall.business.admin.system.service.UmsMenuService;
 
 import java.util.List;
