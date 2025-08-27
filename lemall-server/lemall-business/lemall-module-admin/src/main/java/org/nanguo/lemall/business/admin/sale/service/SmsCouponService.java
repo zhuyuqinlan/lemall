@@ -5,6 +5,8 @@ import org.nanguo.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDT
 import org.nanguo.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
 import org.nanguo.lemall.common.entity.SmsCoupon;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
+
 public interface SmsCouponService extends IService<SmsCoupon>{
 
 
@@ -13,6 +15,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param couponParam 参数
      * @return 成功标志
      */
+    @Transactional(rollbackFor = Exception.class)
     boolean create(SmsCouponParamRequestDTO couponParam);
 
     /**
@@ -20,6 +23,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param id id
      * @return 成功标志
      */
+    @Transactional(rollbackFor = Exception.class)
     boolean delete(Long id);
 
     /**
@@ -28,6 +32,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param couponParam 参数
      * @return 成功标志
      */
+    @Transactional(rollbackFor = Exception.class)
     boolean updateCoupon(Long id, SmsCouponParamRequestDTO couponParam);
 
     /**
