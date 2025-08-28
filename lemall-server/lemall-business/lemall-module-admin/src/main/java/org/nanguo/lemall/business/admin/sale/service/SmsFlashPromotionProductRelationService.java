@@ -3,6 +3,7 @@ package org.nanguo.lemall.business.admin.sale.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.sale.dto.request.SmsFlashPromotionProductRelationRequestDTO;
 import org.nanguo.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductRelationResponseDTO;
+import org.nanguo.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
 import org.nanguo.lemall.common.entity.SmsFlashPromotionProductRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -48,5 +49,13 @@ public interface SmsFlashPromotionProductRelationService extends IService<SmsFla
      * @param pageNum 页码
      * @return 结果
      */
-    IPage<SmsFlashPromotionProductRelationResponseDTO> listPage(Long flashPromotionId, Long flashPromotionSessionId, Integer pageSize, Integer pageNum);
+    IPage<SmsFlashPromotionProductResponseDTO> listPage(Long flashPromotionId, Long flashPromotionSessionId, Integer pageSize, Integer pageNum);
+
+    /**
+     * 根据活动和场次id获取商品关系数量
+     * @param flashPromotionId flashPromotionId
+     * @param id id
+     * @return 结果
+     */
+    long getCount(Long flashPromotionId, Long id);
 }

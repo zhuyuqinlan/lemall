@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.sale.dto.request.SmsFlashPromotionProductRelationRequestDTO;
 import org.nanguo.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductRelationResponseDTO;
+import org.nanguo.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
 import org.nanguo.lemall.business.admin.sale.service.SmsFlashPromotionProductRelationService;
 import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -52,11 +53,11 @@ public class SmsFlashPromotionProductRelationController {
 
     @Operation(summary = "分页查询不同场次关联及商品信息")
     @GetMapping("/list")
-    public Result<IPage<SmsFlashPromotionProductRelationResponseDTO>> list(@RequestParam(value = "flashPromotionId") Long flashPromotionId,
+    public Result<IPage<SmsFlashPromotionProductResponseDTO>> list(@RequestParam(value = "flashPromotionId") Long flashPromotionId,
                                                         @RequestParam(value = "flashPromotionSessionId") Long flashPromotionSessionId,
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsFlashPromotionProductRelationResponseDTO> flashPromotionProductList = relationService.listPage(flashPromotionId, flashPromotionSessionId, pageSize, pageNum);
+        IPage<SmsFlashPromotionProductResponseDTO> flashPromotionProductList = relationService.listPage(flashPromotionId, flashPromotionSessionId, pageSize, pageNum);
         return Result.success(flashPromotionProductList);
     }
 }

@@ -1,9 +1,7 @@
 package org.nanguo.lemall.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
 
 /**
@@ -41,7 +39,7 @@ public class SmsFlashPromotion {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time")
+    @TableField(value="create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**

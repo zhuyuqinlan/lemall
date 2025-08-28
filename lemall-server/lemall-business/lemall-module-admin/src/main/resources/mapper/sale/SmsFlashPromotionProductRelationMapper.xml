@@ -1,21 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.nanguo.lemall.business.admin.sale.mapper.SmsFlashPromotionProductRelationMapper">
-  <resultMap id="BaseResultMap" type="org.nanguo.lemall.common.entity.SmsFlashPromotionProductRelation">
-    <!--@mbg.generated-->
-    <!--@Table sms_flash_promotion_product_relation-->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="flash_promotion_id" jdbcType="BIGINT" property="flashPromotionId" />
-    <result column="flash_promotion_session_id" jdbcType="BIGINT" property="flashPromotionSessionId" />
-    <result column="product_id" jdbcType="BIGINT" property="productId" />
-    <result column="flash_promotion_price" jdbcType="DECIMAL" property="flashPromotionPrice" />
-    <result column="flash_promotion_count" jdbcType="INTEGER" property="flashPromotionCount" />
-    <result column="flash_promotion_limit" jdbcType="INTEGER" property="flashPromotionLimit" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, flash_promotion_id, flash_promotion_session_id, product_id, flash_promotion_price, 
-    flash_promotion_count, flash_promotion_limit, sort
-  </sql>
+    <resultMap id="BaseResultMap" type="org.nanguo.lemall.common.entity.SmsFlashPromotionProductRelation">
+        <!--@mbg.generated-->
+        <!--@Table sms_flash_promotion_product_relation-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="flash_promotion_id" jdbcType="BIGINT" property="flashPromotionId"/>
+        <result column="flash_promotion_session_id" jdbcType="BIGINT" property="flashPromotionSessionId"/>
+        <result column="product_id" jdbcType="BIGINT" property="productId"/>
+        <result column="flash_promotion_price" jdbcType="DECIMAL" property="flashPromotionPrice"/>
+        <result column="flash_promotion_count" jdbcType="INTEGER" property="flashPromotionCount"/>
+        <result column="flash_promotion_limit" jdbcType="INTEGER" property="flashPromotionLimit"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        flash_promotion_id,
+        flash_promotion_session_id,
+        product_id,
+        flash_promotion_price,
+        flash_promotion_count,
+        flash_promotion_limit,
+        sort
+    </sql>
+
+    <resultMap id="flashProductMap"
+               type="org.nanguo.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO"
+               extends="BaseResultMap">
+        <association property="product"
+                     resultMap="org.nanguo.lemall.business.admin.product.mapper.PmsProductMapper.BaseResultMap"
+                     columnPrefix="p_"/>
+    </resultMap>
+
+    <select id="getList" resultMap="flashProductMap">
+        SELECT r.id,
+               r.flash_promotion_price,
+               r.flash_promotion_count,
+               r.flash_promotion_limit,
+               r.flash_promotion_id,
+               r.flash_promotion_session_id,
+               r.product_id,
+               r.sort,
+               p.id         as p_id,
+               p.`name`     as p_name,
+               p.product_sn as p_product_sn,
+               p.price      as p_price,
+               p.stock      as p_stock
+        FROM sms_flash_promotion_product_relation r
+                 LEFT JOIN pms_product p ON r.product_id = p.id
+        WHERE r.flash_promotion_id = #{flashPromotionId}
+          AND r.flash_promotion_session_id = #{flashPromotionSessionId}
+        ORDER BY r.sort DESC
+    </select>
 </mapper>
