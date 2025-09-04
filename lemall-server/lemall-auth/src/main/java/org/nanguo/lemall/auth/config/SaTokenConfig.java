@@ -79,11 +79,6 @@ public class SaTokenConfig {
                             }
                         }
 
-                        // 没有配置权限则直接拒绝
-                        if (needPermissionList.isEmpty()) {
-                            throw new NotPermissionException("该路径未配置访问权限");
-                        }
-
                         // 校验权限
                         StpUtil.checkPermissionOr(Convert.toStrArray(needPermissionList));
                     }).stop();
