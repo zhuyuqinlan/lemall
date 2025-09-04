@@ -14,6 +14,3 @@ minio:
   endpoint: http://nanguo.io:9000 #MinIO服务所在地址
   accessKey: 8pox7jXJXi98WC5n2f1H #访问的key
   secretKey: a5J1qPkZfgua0N1UdyVNuIv1wk8okgbK5U8URkvM #访问的秘钥
-logging:
-  level:
-    root: info  # 所有包默认 DEBUG
