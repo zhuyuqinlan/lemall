@@ -96,7 +96,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
             umsMenu.setLevel(0);
         } else {
             //有父菜单时选择根据父菜单level设置
-            UmsMenu parentMenu = baseMapper.selectList(Wrappers.<UmsMenu>lambdaQuery().eq(UmsMenu::getParentId, umsMenu.getParentId())).get(0);
+            UmsMenu parentMenu = baseMapper.selectList(Wrappers.<UmsMenu>lambdaQuery().eq(UmsMenu::getId, umsMenu.getParentId())).get(0);
             if (parentMenu != null) {
                 umsMenu.setLevel(parentMenu.getLevel() + 1);
             } else {
