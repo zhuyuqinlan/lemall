@@ -35,6 +35,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public Result<?> exceptionHandler(Exception e) {
         log.error(e.getMessage(), e);
-        return Result.fail("系统异常");
+        return Result.fail(e.getMessage());
     }
 }
