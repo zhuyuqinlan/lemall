@@ -3,10 +3,9 @@ package org.nanguo.lemall.common.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.nanguo.lemall.common.entity.UmsMenu;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,8 +17,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AdminUserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -46,5 +43,5 @@ public class AdminUserDto implements Serializable {
 
     private List<String> resourceList; // 资源列表
 
-    private List<String> menuList; // 菜单列表
+    private List<UmsMenu> menuList; // 菜单列表
 }

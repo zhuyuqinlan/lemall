@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.nanguo.lemall.auth.service.UmsAdminCacheService;
 
 /**
  * sa-token配置类
@@ -49,7 +48,6 @@ public class SaTokenConfig {
     private final IgnoreUrlsConfig ignoreUrlsConfig;
     private final PathPatternParser patternParser = PathPatternParser.defaultInstance; // 路径解析器
     private final ConcurrentMap<String, PathPattern> patternCache = new ConcurrentHashMap<>(); // 缓存解析后的 PathPattern
-    private final UmsAdminCacheService umsAdminCacheService;
 
     @Bean
     public SaServletFilter getSaServletFilter() {
@@ -82,11 +80,7 @@ public class SaTokenConfig {
                         }
 
                         // 校验资源列
-                        AdminUserDto user = umsAdminCacheService.getAdmin(Long.valueOf(StpUtil.getLoginId().toString()));
-                        if (user == null) {
-                            StpUtil.logout();
-                            throw new NotLoginException("token已失效",AuthConstant.STP_ADMIN_LOGIN_TYPE,AuthConstant.STP_ADMIN_LOGIN_TYPE);
-                        }
+                        AdminUserDto user = (AdminUserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
                         List<String> resourceList = user.getResourceList();
                         for (String resource : needResourceList) {
                             if (!resourceList.contains(resource)) {

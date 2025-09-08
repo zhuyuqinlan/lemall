@@ -19,4 +19,14 @@ public interface AuthConstant {
      *  后台管理用户登录类型
      */
     String STP_ADMIN_LOGIN_TYPE = "login";
+
+    /**
+     * sa-token session中存储的会员信息
+     */
+    String STP_MEMBER_INFO = "memberInfo";
+
+    /**
+     * sa-token session中存储的后台管理员信息
+     */
+    String STP_ADMIN_INFO = "adminInfo";
 }

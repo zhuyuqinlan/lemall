@@ -8,13 +8,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.nanguo.lemall.auth.service.UmsAdminCacheService;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.nanguo.lemall.business.admin.system.mapper.UmsAdminLoginLogMapper;
 import org.nanguo.lemall.business.admin.system.service.UmsAdminRoleRelationService;
 import org.nanguo.lemall.business.admin.system.service.UmsRoleService;
+import org.nanguo.lemall.common.constant.AuthConstant;
 import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.entity.*;
 import org.nanguo.lemall.common.util.response.BizException;
@@ -37,7 +37,6 @@ import java.util.List;
 public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> implements UmsAdminService {
 
     private final UmsAdminLoginLogMapper loginLogMapper;
-    private final UmsAdminCacheService adminCacheService;
     private final UmsAdminRoleRelationService userRoleRelationService;
     private final UmsRoleService roleService;
 
@@ -72,7 +71,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public AdminUserDto getCurrentAdmin() {
         Long id = Long.valueOf(StpUtil.getLoginId().toString());
-        AdminUserDto admin = adminCacheService.getAdmin(id);
+        AdminUserDto admin = (AdminUserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
         if (admin == null) {
             return insertAdminUser(id);
         }
@@ -191,13 +190,6 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
             umsRole.setAdminCount(umsRole.getAdminCount() + 1);
         });
         roleService.updateBatchById(umsRoles2);
-        AdminUserDto admin = adminCacheService.getAdmin(adminId);
-        if (admin != null) {
-            List<UmsRole> roleList = baseMapper.getRoleList(adminId);
-            List<String> roleNameList = roleList.stream().map(e -> e.getId().toString()).toList();
-            admin.setRoleList(roleNameList);
-            adminCacheService.setAdmin(admin);
-        }
         return count;
     }
 
@@ -239,9 +231,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
         // 设置菜单信息
         List<UmsMenu> menuList = roleService.getMenuList(umsAdmin.getId());
-        List<String> menuIdList = menuList.stream().map(UmsMenu::getName).toList();
-        userDto.setMenuList(menuIdList);
-        adminCacheService.setAdmin(userDto);
+        userDto.setMenuList(menuList);
+        StpUtil.getSession().set(AuthConstant.STP_ADMIN_INFO,userDto);
         return userDto;
     }
 }
