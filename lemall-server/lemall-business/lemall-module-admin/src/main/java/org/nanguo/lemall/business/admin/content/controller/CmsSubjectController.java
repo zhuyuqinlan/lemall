@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/content/subject")
+@RequestMapping("${lemall.server.prefix.admin}/content/subject")
 @Tag(name = "商品专题管理", description = "CmsSubjectController")
 public class CmsSubjectController {
 

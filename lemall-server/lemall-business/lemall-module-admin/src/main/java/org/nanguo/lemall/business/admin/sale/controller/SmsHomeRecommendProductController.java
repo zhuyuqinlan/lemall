@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/home/recommendProduct")
+@RequestMapping("${lemall.server.prefix.admin}/sale/home/recommendProduct")
 @Tag(name = "首页人气推荐管理", description = "SmsHomeRecommendProductController")
 public class SmsHomeRecommendProductController {
 

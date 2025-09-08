@@ -1,6 +1,7 @@
 package org.nanguo.lemall.business.admin.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,11 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringDocAdminConfig {
 
+    @Value("${lemall.server.prefix.admin}")
+    private String adminPrefix;
+
     @Bean
     public GroupedOpenApi adminGroupApi() {
         return GroupedOpenApi.builder()
                 .group("后台管理")
-                .pathsToMatch("/lemall-admin/**")
+                .pathsToMatch(adminPrefix + "/**")
                 .build();
     }
 }

@@ -14,7 +14,7 @@ import org.nanguo.lemall.business.admin.sale.service.SmsCouponService;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/coupon")
+@RequestMapping("${lemall.server.prefix.admin}/sale/coupon")
 @Tag(name = "优惠券管理", description = "SmsCouponController")
 public class SmsCouponController {
 

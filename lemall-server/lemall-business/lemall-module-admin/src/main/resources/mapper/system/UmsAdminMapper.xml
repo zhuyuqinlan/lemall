@@ -50,4 +50,11 @@
                  left join ums_role r on ar.role_id = r.id
         where ar.admin_id = #{adminId}
     </select>
+
+    <select id="getPermissionList" resultType="org.nanguo.lemall.common.entity.UmsPermission">
+        SELECT p.*
+        FROM ums_admin_permission_relation ap
+        LEFT JOIN ums_permission p ON ap.permission_id = p.id
+        WHERE ap.admin_id = #{id}
+    </select>
 </mapper>

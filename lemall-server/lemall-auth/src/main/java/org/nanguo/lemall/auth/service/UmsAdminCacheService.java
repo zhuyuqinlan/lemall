@@ -1,6 +1,6 @@
-package org.nanguo.lemall.business.admin.system.service;
+package org.nanguo.lemall.auth.service;
 
-import org.nanguo.lemall.common.entity.UmsAdmin;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 
 public interface UmsAdminCacheService {
     /**
@@ -12,10 +12,10 @@ public interface UmsAdminCacheService {
     /**
      * 获取缓存后台用户信息
      */
-    UmsAdmin getAdmin(Long adminId);
+    AdminUserDto getAdmin(Long adminId);
 
     /**
      * 设置缓存后台用户信息
      */
-    void setAdmin(UmsAdmin admin);
+    void setAdmin(AdminUserDto admin);
 }

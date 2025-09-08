@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/system/menu")
+@RequestMapping("${lemall.server.prefix.admin}/system/menu")
 @Tag(name = "菜单管理", description = "UmsMenuController")
 public class UmsMenuController {
 

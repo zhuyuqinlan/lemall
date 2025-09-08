@@ -10,15 +10,22 @@
     <!-- =================== 生产环境日志 =================== -->
     <springProfile name="prod">
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- 相对路径 logs/ -->
+            <!-- 当前写入的文件 -->
             <file>logs/app.log</file>
             <encoder>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>
-            <!-- 按天分割，保留30天 -->
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- 按大小 + 时间分割，超过50MB自动生成新文件 -->
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- 切分后的文件名，带时间戳 -->
+                <fileNamePattern>logs/%d{yyyy-MM-dd_HH-mm-ss}.log</fileNamePattern>
+                <!-- 单个文件最大 50MB -->
+                <maxFileSize>50MB</maxFileSize>
+                <!-- 最多保留30天的日志文件 -->
                 <maxHistory>30</maxHistory>
+                <!-- 总日志大小上限，超过会删除旧文件 -->
+                <totalSizeCap>5GB</totalSizeCap>
             </rollingPolicy>
         </appender>
 
@@ -36,8 +43,10 @@
             <appender-ref ref="STDOUT"/>
         </root>
     </springProfile>
-    <!-- 测试环境：只控制台，不落盘 -->
+
+    <!-- =================== 测试环境日志 =================== -->
     <springProfile name="test">
+        <!-- 测试环境：只控制台，不落盘 -->
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
         </root>

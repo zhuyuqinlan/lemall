@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/couponHistory")
+@RequestMapping("${lemall.server.prefix.admin}/sale/couponHistory")
 @Tag(name = "优惠券领取记录管理", description = "SmsCouponHistoryController")
 public class SmsCouponHistoryController {
 

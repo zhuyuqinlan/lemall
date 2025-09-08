@@ -19,7 +19,7 @@ import java.util.Date;
 
 @Tag(name = "MinIO对象存储管理", description = "MinioController")
 @RestController
-@RequestMapping("/lemall-admin/system/minio")
+@RequestMapping("${lemall.server.prefix.admin}/system/minio")
 public class MinioController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MinioController.class);

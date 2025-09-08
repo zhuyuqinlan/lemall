@@ -64,10 +64,12 @@ public class Result<T> implements Serializable {
     }
 
     /**
-     * 链式调用：设置数据
+     * 失败响应（自定义消息和状态码）
      */
-    public Result<T> withData(T data) {
-        this.setData(data);
-        return this;
+    public static <T> Result<T> fail(int code, String message) {
+        Result<T> result = new Result<>();
+        result.setCode(code);
+        result.setMessage(message);
+        return result;
     }
 }

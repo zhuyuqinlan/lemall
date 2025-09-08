@@ -20,7 +20,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/system/role")
+@RequestMapping("${lemall.server.prefix.admin}/system/role")
 @Tag(name = "角色管理",description = "UmsRoleController")
 public class UmsRoleController {
 

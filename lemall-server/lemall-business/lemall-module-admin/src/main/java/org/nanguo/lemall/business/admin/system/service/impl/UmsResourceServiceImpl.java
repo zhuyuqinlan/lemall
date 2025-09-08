@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.nanguo.lemall.auth.constant.AuthConstant;
+import org.nanguo.lemall.common.constant.AuthConstant;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
 import org.nanguo.lemall.common.entity.UmsResource;
@@ -42,7 +42,7 @@ public class UmsResourceServiceImpl extends ServiceImpl<UmsResourceMapper, UmsRe
         Map<String, String> pathResourceMap = new TreeMap<>();
         List<UmsResource> resourceList = umsResourceMapper.selectList(null);
         for (UmsResource resource : resourceList) {
-            pathResourceMap.put("/" + adminPrefix + resource.getUrl(), resource.getId() + ":" + resource.getName());
+            pathResourceMap.put(adminPrefix + resource.getUrl(), resource.getId().toString());
         }
         redisService.del(AuthConstant.PATH_RESOURCE_MAP);
         redisService.hSetAll(AuthConstant.PATH_RESOURCE_MAP, pathResourceMap);

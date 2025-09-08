@@ -2,35 +2,42 @@ package org.nanguo.lemall.auth.component;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
-import org.nanguo.lemall.auth.constant.AuthConstant;
-import org.nanguo.lemall.common.dto.UserDto;
+import lombok.RequiredArgsConstructor;
+import org.nanguo.lemall.auth.service.UmsAdminCacheService;
+import org.nanguo.lemall.common.constant.AuthConstant;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  *  自定义权限验证接口扩展
  */
 @Component
+@RequiredArgsConstructor
 public class StpInterfaceImpl implements StpInterface {
+
+    private final UmsAdminCacheService umsAdminCacheService;
+
+    private AdminUserDto getAdminUser(String loginType) {
+        // 后台管理用户返回权限信息
+        if (AuthConstant.STP_ADMIN_LOGIN_TYPE.equals(loginType)) {
+            return umsAdminCacheService.getAdmin((Long) StpUtil.getLoginId());
+        }
+        return null;
+    }
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        // 返回此loginId拥有的权限码列表
-        if(StpUtil.getLoginType().equals(loginType)){
-            //后台用户需返回
-            UserDto userdto = (UserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
-            return userdto.getPermissionList();
-        }else{
-            //前台用户无需返回
-            return null;
-        }
+        AdminUserDto user = getAdminUser(loginType);
+        return user == null ? Collections.emptyList() : user.getPermissionList();
     }
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        // 返回此 loginId 拥有的角色码列表
-        return null;
+        AdminUserDto user = getAdminUser(loginType);
+        return user == null ? Collections.emptyList() : user.getRoleList();
     }
-
 }
+

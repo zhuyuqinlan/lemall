@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/order/orderSetting")
+@RequestMapping("${lemall.server.prefix.admin}/order/orderSetting")
 @Tag(name = "订单设置管理", description = "OmsOrderSettingController")
 public class OmsOrderSettingController {
 

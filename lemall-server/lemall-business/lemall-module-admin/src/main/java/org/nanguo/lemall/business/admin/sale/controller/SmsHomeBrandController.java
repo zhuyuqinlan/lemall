@@ -16,7 +16,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/home/brand")
+@RequestMapping("${lemall.server.prefix.admin}/sale/home/brand")
 @Tag(name = "首页品牌管理", description = "SmsHomeBrandController")
 public class SmsHomeBrandController {
     

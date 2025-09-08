@@ -6,6 +6,7 @@ import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.entity.UmsAdmin;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public interface UmsAdminService extends IService<UmsAdmin>{
      * 获取当前用户信息
      * @return 用户信息
      */
-    UmsAdmin getCurrentAdmin();
+    AdminUserDto getCurrentAdmin();
 
     /**
      * 获取用户对于角色
@@ -39,7 +40,7 @@ public interface UmsAdminService extends IService<UmsAdmin>{
      * @param pageNum 页码
      * @return 查询结果
      */
-    IPage<UmsAdminResponseDTO> list(String keyword, Integer pageSize, Integer pageNum);
+    IPage<UmsAdminResponseDTO> listPage(String keyword, Integer pageSize, Integer pageNum);
 
     /**
      * 用户注册

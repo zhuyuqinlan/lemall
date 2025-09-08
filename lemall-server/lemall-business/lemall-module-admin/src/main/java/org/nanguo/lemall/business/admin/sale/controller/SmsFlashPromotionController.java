@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/flash")
+@RequestMapping("${lemall.server.prefix.admin}/sale/flash")
 @Tag(name = "限时购活动管理", description = "SmsFlashPromotionController")
 public class SmsFlashPromotionController {
 

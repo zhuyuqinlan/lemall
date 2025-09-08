@@ -1,4 +1,4 @@
-package org.nanguo.lemall.business.admin.validator;
+package org.nanguo.lemall.business.admin.product.dto.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

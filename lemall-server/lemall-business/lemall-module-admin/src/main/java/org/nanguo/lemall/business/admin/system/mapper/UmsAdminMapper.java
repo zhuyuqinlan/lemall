@@ -3,6 +3,7 @@ package org.nanguo.lemall.business.admin.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.nanguo.lemall.common.entity.UmsAdmin;
+import org.nanguo.lemall.common.entity.UmsPermission;
 import org.nanguo.lemall.common.entity.UmsResource;
 import org.nanguo.lemall.common.entity.UmsRole;
 
@@ -22,4 +23,11 @@ public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
      * 获取用于所有角色
      */
     List<UmsRole> getRoleList(Long id);
+
+    /**
+     * 获取权限列表
+     * @param id 用户id
+     * @return 权限列表
+     */
+    List<UmsPermission> getPermissionList(@Param("id") Long id);
 }

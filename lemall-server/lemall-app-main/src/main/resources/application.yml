@@ -77,10 +77,10 @@ secure:
       - "/v3/api-docs/**"
       - "/webjars/**"
       - "/favicon.ico"
-      - "/lemall-admin/system/admin/login"
-      - "/lemall-admin/system/admin/logout"
+      - "${lemall.server.prefix.admin}/system/admin/login"
+      - "${lemall.server.prefix.admin}/system/admin/logout"
 lemall:
   server:
     prefix:
-      admin: lemall-admin
-      portal: lemall-portal
+      admin: /lemall-admin
+      portal: /lemall-portal

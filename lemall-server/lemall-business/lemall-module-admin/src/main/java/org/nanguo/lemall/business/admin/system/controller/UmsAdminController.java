@@ -2,7 +2,6 @@ package org.nanguo.lemall.business.admin.system.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,8 +13,7 @@ import org.nanguo.lemall.business.admin.system.dto.request.UserAdminLoginRequest
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.nanguo.lemall.business.admin.system.service.UmsAdminService;
-import org.nanguo.lemall.business.admin.system.service.UmsRoleService;
-import org.nanguo.lemall.common.entity.UmsAdmin;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -29,12 +27,11 @@ import java.util.Map;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/system/admin")
+@RequestMapping("${lemall.server.prefix.admin}/system/admin")
 @Tag(name = "用户管理",description = "AdminController")
 public class UmsAdminController {
 
     private final UmsAdminService adminService;
-    private final UmsRoleService roleService;
 
     @Value("${sa-token.token-prefix}")
     private String tokenHead;
@@ -63,18 +60,9 @@ public class UmsAdminController {
 
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/info")
-    public Result<?> getAdminInfo() {
-        UmsAdmin umsAdmin = adminService.getCurrentAdmin();
-        Map<String, Object> data = new HashMap<>();
-        data.put("username", umsAdmin.getUsername());
-        data.put("menus", roleService.getMenuList(umsAdmin.getId()));
-        data.put("icon", umsAdmin.getIcon());
-        List<UmsRoleResponseDTO> roleList = adminService.getRoleList(umsAdmin.getId());
-        if(CollUtil.isNotEmpty(roleList)){
-            List<String> roles = roleList.stream().map(UmsRoleResponseDTO::getName).toList();
-            data.put("roles",roles);
-        }
-        return Result.success(data);
+    public Result<AdminUserDto> getAdminInfo() {
+        AdminUserDto admin = adminService.getCurrentAdmin();
+        return Result.success(admin);
     }
 
     @Operation(summary = "根据用户名或姓名分页获取用户列表")
@@ -82,7 +70,7 @@ public class UmsAdminController {
     public Result<IPage<UmsAdminResponseDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<UmsAdminResponseDTO> adminList = adminService.list(keyword, pageSize, pageNum);
+        IPage<UmsAdminResponseDTO> adminList = adminService.listPage(keyword, pageSize, pageNum);
         return Result.success(adminList);
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/flashSession")
+@RequestMapping("${lemall.server.prefix.admin}/sale/flashSession")
 @Tag(name = "限时购场次管理", description = "SmsFlashPromotionSessionController")
 public class SmsFlashPromotionSessionController {
     private final SmsFlashPromotionSessionService flashPromotionSessionService;

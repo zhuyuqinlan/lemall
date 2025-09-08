@@ -20,7 +20,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/order/order")
+@RequestMapping("${lemall.server.prefix.admin}/order/order")
 @Tag(name = "订单管理", description = "OmsOrderController")
 public class OmsOrderController {
 

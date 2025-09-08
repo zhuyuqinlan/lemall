@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/order/companyAddress")
+@RequestMapping("${lemall.server.prefix.admin}/order/companyAddress")
 @Tag(name = "收货地址管理", description = "OmsCompanyAddressController")
 public class OmsCompanyAddressController {
     private final OmsCompanyAddressService companyAddressService;

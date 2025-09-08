@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/flashProductRelation")
+@RequestMapping("${lemall.server.prefix.admin}/sale/flashProductRelation")
 @Tag(name = "限时购和商品关系管理", description = "SmsFlashPromotionProductRelationController")
 public class SmsFlashPromotionProductRelationController {
     private final SmsFlashPromotionProductRelationService relationService;

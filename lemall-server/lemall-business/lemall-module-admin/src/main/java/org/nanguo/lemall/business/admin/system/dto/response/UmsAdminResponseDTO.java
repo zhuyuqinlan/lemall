@@ -24,6 +24,9 @@ public class UmsAdminResponseDTO implements Serializable {
     @Schema(description = "名字")
     private String nickName;
 
+    @Schema(description = "头像")
+    private String icon;
+
     @Schema(description = "邮箱")
     private String email;
 

@@ -8,15 +8,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.nanguo.lemall.auth.constant.AuthConstant;
+import org.nanguo.lemall.auth.service.UmsAdminCacheService;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.nanguo.lemall.business.admin.system.mapper.UmsAdminLoginLogMapper;
-import org.nanguo.lemall.business.admin.system.service.UmsAdminCacheService;
 import org.nanguo.lemall.business.admin.system.service.UmsAdminRoleRelationService;
 import org.nanguo.lemall.business.admin.system.service.UmsRoleService;
-import org.nanguo.lemall.common.dto.UserDto;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.entity.*;
 import org.nanguo.lemall.common.util.response.BizException;
 import org.springframework.beans.BeanUtils;
@@ -57,20 +56,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         if (umsAdmin.getStatus() != 1) {
             throw new BizException("该账号已被禁用！");
         }
-        // 2.校验成功后，存储登录信息，并返回token
+        // 2.校验成功后，存储登录信息
         StpUtil.login(umsAdmin.getId());
         // 记录登录信息
+        insertAdminUser(umsAdmin.getId());
         umsAdmin.setLoginTime(new Date());
         baseMapper.updateById(umsAdmin);
-        UserDto userDto = new UserDto();
-        userDto.setId(umsAdmin.getId());
-        userDto.setUsername(umsAdmin.getUsername());
-        userDto.setClientId(AuthConstant.ADMIN_CLIENT_ID);
-        List<UmsResource> resourceList = baseMapper.getResourceList(umsAdmin.getId());
-        List<String> permissionList = resourceList.stream().map(item -> item.getId() + ":" + item.getName()).toList();
-        userDto.setPermissionList(permissionList);
-        // 将用户信息存储到Session中
-        StpUtil.getSession().set(AuthConstant.STP_ADMIN_INFO, userDto);
         // 获取当前登录用户Token信息
         SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
         // 记录登录日志
@@ -79,12 +70,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public UmsAdmin getCurrentAdmin() {
-        UserDto userDto = (UserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
-        UmsAdmin admin = adminCacheService.getAdmin(userDto.getId());
+    public AdminUserDto getCurrentAdmin() {
+        Long id = (Long)StpUtil.getLoginId();
+        AdminUserDto admin = adminCacheService.getAdmin(id);
         if (admin == null) {
-            admin = baseMapper.selectById(userDto.getId());
-            adminCacheService.setAdmin(admin);
+            return insertAdminUser(id);
         }
         return admin;
     }
@@ -100,11 +90,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public IPage<UmsAdminResponseDTO> list(String keyword, Integer pageSize, Integer pageNum) {
+    public IPage<UmsAdminResponseDTO> listPage(String keyword, Integer pageSize, Integer pageNum) {
         Page<UmsAdmin> adminPage = super.page(new Page<>(pageNum, pageSize), Wrappers.<UmsAdmin>lambdaQuery()
-                .like(StringUtils.hasText(keyword), UmsAdmin::getUsername, keyword)
-                .or()
-                .like(StringUtils.hasText(keyword), UmsAdmin::getNickName, keyword)
+                .and(StringUtils.hasText(keyword), q -> q
+                        .like(UmsAdmin::getUsername, keyword)
+                        .or()
+                        .like(UmsAdmin::getNickName, keyword))
                 .orderByDesc(UmsAdmin::getCreateTime)
         );
         return adminPage.convert(admin -> {
@@ -207,5 +198,35 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         HttpServletRequest request = attributes.getRequest();
         loginLog.setIp(request.getRemoteAddr());
         loginLogMapper.insert(loginLog);
+    }
+
+    /**
+     * 添加用户信息
+     */
+    private AdminUserDto insertAdminUser(Long id) {
+        AdminUserDto userDto = new AdminUserDto();
+        UmsAdmin umsAdmin = super.getById(id);
+        BeanUtils.copyProperties(umsAdmin, userDto);
+        // 设置可访问资源信息
+        List<UmsResource> resourceList = baseMapper.getResourceList(umsAdmin.getId());
+        List<String> resourceListWithId = resourceList.stream().map(e -> e.getId().toString()).toList();
+        userDto.setResourceList(resourceListWithId);
+
+        // 设置角色信息
+        List<UmsRole> roleList = baseMapper.getRoleList(umsAdmin.getId());
+        List<String> roleNameList = roleList.stream().map(e -> e.getId().toString()).toList();
+        userDto.setRoleList(roleNameList);
+
+        // 设置权限信息
+        List<UmsPermission> permissionList = baseMapper.getPermissionList(umsAdmin.getId());
+        List<String> permissionNameList = permissionList.stream().map(e -> e.getId().toString()).toList();
+        userDto.setPermissionList(permissionNameList);
+
+        // 设置菜单信息
+        List<UmsMenu> menuList = roleService.getMenuList(umsAdmin.getId());
+        List<String> menuIdList = menuList.stream().map(UmsMenu::getName).toList();
+        userDto.setMenuList(menuIdList);
+        adminCacheService.setAdmin(userDto);
+        return userDto;
     }
 }

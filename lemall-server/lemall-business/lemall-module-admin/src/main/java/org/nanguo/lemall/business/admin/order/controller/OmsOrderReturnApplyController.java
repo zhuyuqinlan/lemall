@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/order/returnApply")
+@RequestMapping("${lemall.server.prefix.admin}/order/returnApply")
 @Tag(name = "订单退货申请管理", description = "OmsOrderReturnApplyController")
 public class OmsOrderReturnApplyController {
     private final OmsOrderReturnApplyService returnApplyService;

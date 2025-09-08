@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/order/returnReason")
+@RequestMapping("${lemall.server.prefix.admin}/order/returnReason")
 @Tag(name = "退货原因管理", description = "OmsOrderReturnReasonController")
 public class OmsOrderReturnReasonController {
 

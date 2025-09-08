@@ -16,7 +16,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/content/prefrenceArea")
+@RequestMapping("${lemall.server.prefix.admin}/content/prefrenceArea")
 @Tag(name = "商品优选管理", description = "CmsPrefrenceAreaController")
 public class CmsPrefrenceAreaController {
 

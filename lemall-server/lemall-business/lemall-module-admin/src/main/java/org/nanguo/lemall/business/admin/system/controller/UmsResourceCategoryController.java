@@ -16,7 +16,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/system/resourceCategory")
+@RequestMapping("${lemall.server.prefix.admin}/system/resourceCategory")
 @Tag(name = "资源分类管理")
 public class UmsResourceCategoryController {
 

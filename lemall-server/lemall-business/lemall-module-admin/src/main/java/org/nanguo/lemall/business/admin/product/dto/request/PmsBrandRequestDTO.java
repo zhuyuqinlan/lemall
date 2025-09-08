@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.nanguo.lemall.business.admin.validator.FlagValidator;
+import org.nanguo.lemall.business.admin.product.dto.validator.FlagValidator;
 
 import java.io.Serial;
 import java.io.Serializable;

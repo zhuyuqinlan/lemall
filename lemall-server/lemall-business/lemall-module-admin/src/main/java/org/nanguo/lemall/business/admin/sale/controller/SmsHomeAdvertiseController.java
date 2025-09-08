@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lemall-admin/sale/home/advertise")
+@RequestMapping("${lemall.server.prefix.admin}/sale/home/advertise")
 @Tag(name = "首页轮播广告管理", description = "SmsHomeAdvertiseController")
 public class SmsHomeAdvertiseController {
    

@@ -1,7 +1,7 @@
-package org.nanguo.lemall.business.admin.system.service.impl;
+package org.nanguo.lemall.auth.service.impl;
 
-import org.nanguo.lemall.common.entity.UmsAdmin;
-import org.nanguo.lemall.business.admin.system.service.UmsAdminCacheService;
+import org.nanguo.lemall.auth.service.UmsAdminCacheService;
+import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,13 +25,13 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     }
 
     @Override
-    public UmsAdmin getAdmin(Long adminId) {
+    public AdminUserDto getAdmin(Long adminId) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + adminId;
-        return (UmsAdmin) redisService.get(key);
+        return (AdminUserDto) redisService.get(key);
     }
 
     @Override
-    public void setAdmin(UmsAdmin admin) {
+    public void setAdmin(AdminUserDto admin) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getId();
         redisService.set(key, admin, REDIS_EXPIRE);
     }
