@@ -71,7 +71,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public AdminUserDto getCurrentAdmin() {
-        Long id = (Long)StpUtil.getLoginId();
+        Long id = Long.valueOf(StpUtil.getLoginId().toString());
         AdminUserDto admin = adminCacheService.getAdmin(id);
         if (admin == null) {
             return insertAdminUser(id);
@@ -137,6 +137,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
                 }
             }
         }
+
+        if (umsAdminRequestDTO.getStatus() == 0) {
+            // 让相关用户下线
+            StpUtil.logout(id);
+        }
+
         UmsAdmin umsAdmin = new UmsAdmin();
         umsAdmin.setId(id);
         BeanUtils.copyProperties(umsAdminRequestDTO, umsAdmin);
@@ -151,6 +157,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         });
         roleService.updateBatchById(roleList);
         userRoleRelationService.remove(Wrappers.<UmsAdminRoleRelation>lambdaQuery().eq(UmsAdminRoleRelation::getAdminId, id));
+        // 让用户下线
+        StpUtil.logout(id);
         return super.removeById(id);
     }
 
@@ -183,6 +191,13 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
             umsRole.setAdminCount(umsRole.getAdminCount() + 1);
         });
         roleService.updateBatchById(umsRoles2);
+        AdminUserDto admin = adminCacheService.getAdmin(adminId);
+        if (admin != null) {
+            List<UmsRole> roleList = baseMapper.getRoleList(adminId);
+            List<String> roleNameList = roleList.stream().map(e -> e.getId().toString()).toList();
+            admin.setRoleList(roleNameList);
+            adminCacheService.setAdmin(admin);
+        }
         return count;
     }
 

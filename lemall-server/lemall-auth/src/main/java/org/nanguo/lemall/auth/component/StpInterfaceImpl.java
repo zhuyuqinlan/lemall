@@ -23,7 +23,7 @@ public class StpInterfaceImpl implements StpInterface {
     private AdminUserDto getAdminUser(String loginType) {
         // 后台管理用户返回权限信息
         if (AuthConstant.STP_ADMIN_LOGIN_TYPE.equals(loginType)) {
-            return umsAdminCacheService.getAdmin((Long) StpUtil.getLoginId());
+            return umsAdminCacheService.getAdmin(Long.valueOf(StpUtil.getLoginId().toString()));
         }
         return null;
     }

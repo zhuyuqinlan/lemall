@@ -82,10 +82,10 @@ public class SaTokenConfig {
                         }
 
                         // 校验资源列
-                        AdminUserDto user = umsAdminCacheService.getAdmin((Long) StpUtil.getLoginId());
+                        AdminUserDto user = umsAdminCacheService.getAdmin(Long.valueOf(StpUtil.getLoginId().toString()));
                         if (user == null) {
                             StpUtil.logout();
-                            throw new NotLoginException("未登录",AuthConstant.STP_ADMIN_LOGIN_TYPE,AuthConstant.STP_ADMIN_LOGIN_TYPE);
+                            throw new NotLoginException("token已失效",AuthConstant.STP_ADMIN_LOGIN_TYPE,AuthConstant.STP_ADMIN_LOGIN_TYPE);
                         }
                         List<String> resourceList = user.getResourceList();
                         for (String resource : needResourceList) {
