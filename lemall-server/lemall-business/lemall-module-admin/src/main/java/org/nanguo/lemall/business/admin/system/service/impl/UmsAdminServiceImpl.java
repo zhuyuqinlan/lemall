@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
+import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.nanguo.lemall.business.admin.system.mapper.UmsAdminLoginLogMapper;
@@ -30,6 +31,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -69,13 +71,15 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     @Override
-    public AdminUserDto getCurrentAdmin() {
+    public UmsAdminInfoResponseDTO getCurrentAdmin() {
         Long id = Long.valueOf(StpUtil.getLoginId().toString());
         AdminUserDto admin = (AdminUserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
         if (admin == null) {
-            return insertAdminUser(id);
+            admin = insertAdminUser(id);
         }
-        return admin;
+        UmsAdminInfoResponseDTO res = new UmsAdminInfoResponseDTO();
+        BeanUtils.copyProperties(admin, res);
+        return res;
     }
 
     @Override

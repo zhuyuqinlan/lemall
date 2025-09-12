@@ -3,10 +3,10 @@ package org.nanguo.lemall.business.admin.system.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
+import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.entity.UmsAdmin;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +26,7 @@ public interface UmsAdminService extends IService<UmsAdmin>{
      * 获取当前用户信息
      * @return 用户信息
      */
-    AdminUserDto getCurrentAdmin();
+    UmsAdminInfoResponseDTO getCurrentAdmin();
 
     /**
      * 获取用户对于角色

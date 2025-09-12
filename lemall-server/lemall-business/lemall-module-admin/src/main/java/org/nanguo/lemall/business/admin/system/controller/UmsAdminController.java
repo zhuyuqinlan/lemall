@@ -10,10 +10,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.nanguo.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.nanguo.lemall.business.admin.system.dto.request.UserAdminLoginRequestDTO;
+import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.nanguo.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.nanguo.lemall.business.admin.system.service.UmsAdminService;
-import org.nanguo.lemall.common.dto.AdminUserDto;
 import org.nanguo.lemall.common.util.response.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -60,8 +60,8 @@ public class UmsAdminController {
 
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/info")
-    public Result<AdminUserDto> getAdminInfo() {
-        AdminUserDto admin = adminService.getCurrentAdmin();
+    public Result<UmsAdminInfoResponseDTO> getAdminInfo() {
+        UmsAdminInfoResponseDTO admin = adminService.getCurrentAdmin();
         return Result.success(admin);
     }
 
