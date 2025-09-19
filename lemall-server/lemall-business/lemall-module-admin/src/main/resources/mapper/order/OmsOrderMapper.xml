@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.nanguo.lemall.business.admin.order.mapper.OmsOrderMapper">
-    <resultMap id="BaseResultMap" type="org.nanguo.lemall.common.entity.OmsOrder">
+<mapper namespace="org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderMapper">
+    <resultMap id="BaseResultMap" type="org.zhuyuqinlan.lemall.common.entity.OmsOrder">
         <!--@mbg.generated-->
         <!--@Table oms_order-->
         <id column="id" jdbcType="BIGINT" property="id"/>
@@ -50,9 +50,9 @@
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
-    <resultMap id="orderDetailResultMap" type="org.nanguo.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO" extends="BaseResultMap">
-        <collection property="orderItemList" resultMap="org.nanguo.lemall.business.admin.order.mapper.OmsOrderItemMapper.BaseResultMap" columnPrefix="item_"/>
-        <collection property="historyList" resultMap="org.nanguo.lemall.business.admin.order.mapper.OmsOrderOperateHistoryMapper.BaseResultMap" columnPrefix="history_"/>
+    <resultMap id="orderDetailResultMap" type="org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO" extends="BaseResultMap">
+        <collection property="orderItemList" resultMap="org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderItemMapper.BaseResultMap" columnPrefix="item_"/>
+        <collection property="historyList" resultMap="org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderOperateHistoryMapper.BaseResultMap" columnPrefix="history_"/>
     </resultMap>
 
     <sql id="Base_Column_List">

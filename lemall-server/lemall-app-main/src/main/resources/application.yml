@@ -55,14 +55,15 @@ springdoc:
     description: lemall商城项目后端接口文档
     version: v0.0.1
     summary: 基于springboot
-    terms-of-service: https://nanguo.org
+    terms-of-service: https://zhuyuqinlan.org
     contact:
-      name: nanguo
-      url: https://nanguo.org
+      name: zhuyuqinlan
+      url: https://zhuyuqinlan.org
       email: echonanguo@qq.com
     license:
       name: Apache 2.0
       url: https://www.apache.org/licenses/LICENSE-2.0.html
+    securitySchemeName: ${sa-token.token-name}
 
 knife4j:
   enable: true

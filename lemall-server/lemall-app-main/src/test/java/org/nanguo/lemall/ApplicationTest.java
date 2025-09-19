@@ -1,4 +1,4 @@
-package org.nanguo.lemall;
+package org.zhuyuqinlan.lemall;
 
 import cn.hutool.crypto.digest.BCrypt;
 import org.junit.jupiter.api.Test;

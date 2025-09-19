@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.nanguo</groupId>
+    <groupId>org.zhuyuqinlan</groupId>
     <artifactId>lemall</artifactId>
     <version>v0.0.1</version>
     <packaging>pom</packaging> <!-- 修改为pom类型 -->
@@ -46,19 +46,19 @@
             </dependency>
 
             <dependency>
-                <groupId>org.nanguo</groupId>
+                <groupId>org.zhuyuqinlan</groupId>
                 <artifactId>lemall-common</artifactId>
                 <version>${lemall-common.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.nanguo</groupId>
+                <groupId>org.zhuyuqinlan</groupId>
                 <artifactId>lemall-auth</artifactId>
                 <version>${lemall-auth.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.nanguo</groupId>
+                <groupId>org.zhuyuqinlan</groupId>
                 <artifactId>lemall-module-admin</artifactId>
                 <version>${lemall-module-admin.version}</version>
             </dependency>

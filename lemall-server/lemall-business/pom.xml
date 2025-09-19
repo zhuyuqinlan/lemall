@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.nanguo</groupId>
+        <groupId>org.zhuyuqinlan</groupId>
         <artifactId>lemall</artifactId>
         <version>v0.0.1</version>
     </parent>
@@ -19,12 +19,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.nanguo</groupId>
+            <groupId>org.zhuyuqinlan</groupId>
             <artifactId>lemall-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.nanguo</groupId>
+            <groupId>org.zhuyuqinlan</groupId>
             <artifactId>lemall-auth</artifactId>
         </dependency>
     </dependencies>
