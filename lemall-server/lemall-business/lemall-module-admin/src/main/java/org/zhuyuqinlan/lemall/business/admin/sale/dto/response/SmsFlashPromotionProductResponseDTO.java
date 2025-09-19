@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "限时购及商品信息封装")
+@Schema(description = "限时购及商品信息封装")
 public class SmsFlashPromotionProductResponseDTO extends SmsFlashPromotionProductRelationResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

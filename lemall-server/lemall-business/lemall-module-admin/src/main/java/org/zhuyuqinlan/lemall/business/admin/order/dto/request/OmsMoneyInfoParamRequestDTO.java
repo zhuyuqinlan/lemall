@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "修改订单费用信息参数")
+@Schema(description = "修改订单费用信息参数")
 public class OmsMoneyInfoParamRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

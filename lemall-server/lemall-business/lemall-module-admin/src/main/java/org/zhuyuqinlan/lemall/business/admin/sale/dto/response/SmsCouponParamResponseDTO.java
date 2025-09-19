@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "优惠券信息封装，包括绑定商品和绑定分类响应DTO")
+@Schema(description = "优惠券信息封装，包括绑定商品和绑定分类响应DTO")
 public class SmsCouponParamResponseDTO extends SmsCouponResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "创建和修改商品时使用的参数")
+@Schema(description = "创建和修改商品时使用的参数")
 public class PmsProductParamRequestDTO extends PmsProductRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

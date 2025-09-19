@@ -11,36 +11,50 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 权限框架用的服装类
- */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
 @Getter
 @Setter
+@Schema(name = "AdminUserDto", description = "后台管理用户DTO")
 public class AdminUserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long id; // 用户id
+    @Schema(description = "用户id")
+    private Long id;
 
-    private String username; // 用户名
+    @Schema(description = "用户名")
+    private String username;
 
-    private String nickName; // 网名
+    @Schema(description = "网名")
+    private String nickName;
 
-    private String icon; // 头像
+    @Schema(description = "头像")
+    private String icon;
 
-    private String email; // 邮箱
+    @Schema(description = "邮箱")
+    private String email;
 
-    private Date createTime; // 创建时间
+    @Schema(description = "创建时间")
+    private Date createTime;
 
-    private Date loginTime; // 登录时间
+    @Schema(description = "登录时间")
+    private Date loginTime;
 
-    private Integer status; // 状态
+    @Schema(description = "状态")
+    private Integer status;
 
-    private List<String> permissionList; // 权限列表
+    @Schema(description = "权限列表")
+    private List<String> permissionList;
 
-    private List<String> roleList; // 角色列表
+    @Schema(description = "角色列表")
+    private List<String> roleList;
 
-    private List<String> resourceList; // 资源列表
+    @Schema(description = "资源列表")
+    private List<String> resourceList;
 
-    private List<UmsMenu> menuList; // 菜单列表
+    @Schema(description = "菜单列表")
+    private List<UmsMenu> menuList;
 }
+

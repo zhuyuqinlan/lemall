@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "产品分类请求DTO")
+@Schema(description = "产品分类请求DTO")
 public class PmsProductCategoryRequestDTO {
     private Long id;
 

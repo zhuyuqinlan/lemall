@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Setter
 @Getter
-@Schema(name = "菜单响应dto")
+@Schema(description = "菜单响应dto")
 public class UmsMenuResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

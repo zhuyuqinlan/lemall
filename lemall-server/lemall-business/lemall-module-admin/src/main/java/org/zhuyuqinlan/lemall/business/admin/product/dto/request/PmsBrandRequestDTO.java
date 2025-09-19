@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "品牌请求DTO")
+@Schema(description = "品牌请求DTO")
 public class PmsBrandRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

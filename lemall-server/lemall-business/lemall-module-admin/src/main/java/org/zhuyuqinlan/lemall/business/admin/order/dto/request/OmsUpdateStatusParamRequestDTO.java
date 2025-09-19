@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "确认收货提交参数")
+@Schema(description = "确认收货提交参数")
 public class OmsUpdateStatusParamRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "树结构的菜单响应dto")
+@Schema(description = "树结构的菜单响应dto")
 public class UmsMenuNodeResponseDTO extends UmsMenuResponseDTO {
 
     @Schema(description = "子菜单")

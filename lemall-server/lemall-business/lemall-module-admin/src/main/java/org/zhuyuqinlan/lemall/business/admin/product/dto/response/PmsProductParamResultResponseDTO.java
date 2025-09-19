@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "查询单个产品进行修改时返回的结果")
+@Schema(description = "查询单个产品进行修改时返回的结果")
 public class PmsProductParamResultResponseDTO extends PmsProductParamResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

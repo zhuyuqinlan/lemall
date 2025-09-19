@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "资源请求dto")
+@Schema(description = "资源请求dto")
 public class UmsResourceRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

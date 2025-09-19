@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Schema(name = "产品查询参数")
+@Schema(description = "产品查询参数")
 @Getter
 @Setter
 public class PmsProductQueryParamRequestDTO implements Serializable {

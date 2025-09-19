@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "当前用户信息响应dto")
+@Schema(description = "当前用户信息响应dto")
 public class UmsAdminInfoResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "专题商品关系请求DTO")
+@Schema(description = "专题商品关系请求DTO")
 public class CmsSubjectProductRelationRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

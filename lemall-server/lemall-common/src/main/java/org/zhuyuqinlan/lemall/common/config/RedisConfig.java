@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -24,41 +25,43 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
+    @Value("${redis.expire.common}")
+    private long defaultExpireSeconds;
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisSerializer<Object> serializer = redisSerializer();
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer()); // Key 使用字符串序列化
-        redisTemplate.setValueSerializer(serializer);   // Value 使用 JSON 序列化
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());   // Hash Key 使用字符串序列化
-        redisTemplate.setHashValueSerializer(serializer); // Hash Value 使用 JSON 序列化
-        redisTemplate.afterPropertiesSet(); // 初始化配置
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(serializer);
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 
     @Bean
     public RedisSerializer<Object> redisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper();
-        // 允许所有字段可见
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // 支持多态类型，避免反序列化为Map
         objectMapper.activateDefaultTyping(
                 LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL
         );
-
-        // 使用构造函数直接注入ObjectMapper，避免弃用方法
         return new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
     }
 
     @Bean
     public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
-        //设置Redis缓存有效期为1天
+
+        // 使用 yml 里的 redis.expire.common
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer())).entryTtl(Duration.ofDays(1));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer()))
+                .entryTtl(Duration.ofSeconds(defaultExpireSeconds));
+
         return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
     }
-
 }
+

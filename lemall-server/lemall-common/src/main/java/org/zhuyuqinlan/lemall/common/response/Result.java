@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@Schema(name = "统一API响应封装类")
+@Schema(description = "统一API响应封装类")
 public class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

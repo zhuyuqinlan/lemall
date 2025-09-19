@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "限时购商品关系响应DTO")
+@Schema(description = "限时购商品关系响应DTO")
 public class SmsFlashPromotionProductRelationRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

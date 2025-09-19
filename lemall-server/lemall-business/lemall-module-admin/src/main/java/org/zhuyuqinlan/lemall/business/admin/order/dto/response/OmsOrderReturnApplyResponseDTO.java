@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Schema(name = "订单退货申请响应DTO")
+@Schema(description = "订单退货申请响应DTO")
 public class OmsOrderReturnApplyResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

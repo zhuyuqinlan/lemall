@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "首页推荐专题响应DTO")
+@Schema(description = "首页推荐专题响应DTO")
 public class SmsHomeRecommendSubjectRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

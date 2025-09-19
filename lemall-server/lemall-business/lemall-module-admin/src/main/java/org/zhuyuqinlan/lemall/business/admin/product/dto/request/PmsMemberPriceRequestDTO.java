@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "商品会员价格请求DTO")
+@Schema(description = "商品会员价格请求DTO")
 public class PmsMemberPriceRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

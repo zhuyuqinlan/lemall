@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "订单详情信息")
+@Schema(description = "订单详情信息")
 public class OmsOrderDetailResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

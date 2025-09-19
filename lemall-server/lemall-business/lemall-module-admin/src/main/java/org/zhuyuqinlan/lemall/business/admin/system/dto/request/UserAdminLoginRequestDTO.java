@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "UserAdminLoginRequestDTO",description = "后台用户登录请求dto")
+@Schema(description = "后台用户登录请求dto")
 public class UserAdminLoginRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

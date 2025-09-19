@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Schema(name = "商品信息响应dto")
+@Schema(description = "商品信息响应dto")
 public class PmsProductResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

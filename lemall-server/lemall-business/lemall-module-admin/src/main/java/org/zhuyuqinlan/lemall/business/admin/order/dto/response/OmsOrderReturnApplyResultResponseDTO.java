@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "申请信息封装")
+@Schema(description = "申请信息封装")
 public class OmsOrderReturnApplyResultResponseDTO extends OmsOrderReturnApplyResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

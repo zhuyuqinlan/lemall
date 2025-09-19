@@ -11,7 +11,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-@Schema(name = "限时购场次响应DTO")
+@Schema(description = "限时购场次响应DTO")
 public class SmsFlashPromotionSessionResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

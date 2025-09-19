@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Schema(name = "资源响应dto")
+@Schema(description = "资源响应dto")
 public class UmsResourceResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "商品属性值请求DTO")
+@Schema(description = "商品属性值请求DTO")
 public class PmsProductAttributeValueRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

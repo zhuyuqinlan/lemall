@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "优惠券和产品关系请求DTO")
+@Schema(description = "优惠券和产品关系请求DTO")
 public class SmsCouponProductRelationRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

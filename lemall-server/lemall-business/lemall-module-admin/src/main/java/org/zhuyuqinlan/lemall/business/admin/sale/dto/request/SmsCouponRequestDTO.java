@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Schema(name = "优惠券请求DTO")
+@Schema(description = "优惠券请求DTO")
 public class SmsCouponRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

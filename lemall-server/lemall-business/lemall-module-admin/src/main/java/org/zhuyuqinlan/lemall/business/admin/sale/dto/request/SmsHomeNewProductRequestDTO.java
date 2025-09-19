@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "首页新鲜好物响应DTO")
+@Schema(description = "首页新鲜好物响应DTO")
 public class SmsHomeNewProductRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

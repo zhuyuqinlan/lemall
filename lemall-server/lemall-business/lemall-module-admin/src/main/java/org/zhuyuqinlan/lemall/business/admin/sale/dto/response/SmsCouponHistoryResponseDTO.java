@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Schema(name = "优惠券使用、领取历史响应DTO")
+@Schema(description = "优惠券使用、领取历史响应DTO")
 public class SmsCouponHistoryResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

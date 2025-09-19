@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "角色请求类")
+@Schema(description = "角色请求类")
 public class UmsRoleRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

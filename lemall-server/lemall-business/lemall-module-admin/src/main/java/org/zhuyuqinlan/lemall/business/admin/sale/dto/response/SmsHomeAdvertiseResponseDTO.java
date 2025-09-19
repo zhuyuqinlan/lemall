@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Schema(name = "首页轮播广告响应DTO")
+@Schema(description = "首页轮播广告响应DTO")
 public class SmsHomeAdvertiseResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

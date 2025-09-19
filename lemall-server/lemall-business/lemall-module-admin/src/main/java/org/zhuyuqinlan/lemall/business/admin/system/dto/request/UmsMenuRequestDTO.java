@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "菜单请求dto")
+@Schema(description = "菜单请求dto")
 public class UmsMenuRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

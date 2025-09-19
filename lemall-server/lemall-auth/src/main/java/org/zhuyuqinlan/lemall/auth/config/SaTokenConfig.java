@@ -12,6 +12,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
@@ -127,6 +128,14 @@ public class SaTokenConfig {
     @Bean
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForSimple();
+    }
+
+    /**
+     * 为 StpUserUtil 注入 StpLogicJwt 实现
+     */
+    @Autowired
+    public void setMemberStpLogic() {
+        StpMemberUtil.setStpLogic(new StpLogicJwtForSimple(StpMemberUtil.TYPE));
     }
 }
 

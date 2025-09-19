@@ -25,14 +25,19 @@
         </dependency>
 
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.zhuyuqinlan</groupId>
             <artifactId>lemall-module-admin</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <groupId>org.zhuyuqinlan</groupId>
+            <artifactId>lemall-module-portal</artifactId>
         </dependency>
 
     </dependencies>

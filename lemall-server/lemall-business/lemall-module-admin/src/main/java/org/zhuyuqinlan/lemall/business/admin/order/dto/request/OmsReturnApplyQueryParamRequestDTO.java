@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "订单退货申请查询参数")
+@Schema(description = "订单退货申请查询参数")
 public class OmsReturnApplyQueryParamRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

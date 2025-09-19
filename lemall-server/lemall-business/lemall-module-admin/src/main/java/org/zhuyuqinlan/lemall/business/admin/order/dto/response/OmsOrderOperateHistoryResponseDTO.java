@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Schema(name = "订单操作历史记录响应DTO")
+@Schema(description = "订单操作历史记录响应DTO")
 public class OmsOrderOperateHistoryResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Schema(name = "产品分类树节点")
+@Schema(description = "产品分类树节点")
 public class PmsProductCategoryWithChildrenItem extends PmsProductCategoryResponseDTO {
     @Serial
     private static final long serialVersionUID = 1L;

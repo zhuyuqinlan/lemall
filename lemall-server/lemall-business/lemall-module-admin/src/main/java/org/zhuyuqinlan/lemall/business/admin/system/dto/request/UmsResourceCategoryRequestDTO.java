@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Setter
 @Getter
-@Schema(name = "资源分类请求dto")
+@Schema(description = "资源分类请求dto")
 public class UmsResourceCategoryRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -32,6 +32,7 @@
         <mybatis-plus-spring-boot3-starter.version>3.5.4</mybatis-plus-spring-boot3-starter.version>
         <druid-spring-boot-starter.veresion>1.2.18</druid-spring-boot-starter.veresion>
         <minio.version>8.4.5</minio.version>
+        <lemall-moduel-portal.version>v0.0.1</lemall-moduel-portal.version>
     </properties>
 
     <!-- 将依赖管理保留在父POM中 -->
@@ -106,6 +107,12 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.zhuyuqinlan</groupId>
+                <artifactId>lemall-module-portal</artifactId>
+                <version>${lemall-moduel-portal.version}</version>
             </dependency>
 
         </dependencies>

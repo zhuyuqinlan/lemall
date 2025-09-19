@@ -18,9 +18,12 @@ spring:
 redis:
   database: lemall
   key:
-    admin: 'ums:admin'
+    authCode: authCode
+    authCodeLimit: authCodeLimit
   expire:
-    common: 86400 # 24小时
+    common: 86400   # 24小时
+    authCode: 300   # 5分钟
+    authCodeLimit: 60 # 1分钟
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token名称 (同时也是cookie名称)
@@ -80,6 +83,10 @@ secure:
       - "/favicon.ico"
       - "${lemall.server.prefix.admin}/system/admin/login"
       - "${lemall.server.prefix.admin}/system/admin/logout"
+      - "${lemall.server.prefix.portal}/sso/getAuthCode"
+      - "${lemall.server.prefix.portal}/sso/login"
+      - "${lemall.server.prefix.portal}/sso/logout"
+      - "${lemall.server.prefix.portal}/sso/register"
 lemall:
   server:
     prefix:

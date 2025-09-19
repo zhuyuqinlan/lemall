@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Schema(name = "SKU库存响应DTO")
+@Schema(description = "SKU库存响应DTO")
 public class PmsSkuStockResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

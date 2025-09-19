@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "订单设置响应DTO")
+@Schema(description = "订单设置响应DTO")
 public class OmsOrderSettingResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

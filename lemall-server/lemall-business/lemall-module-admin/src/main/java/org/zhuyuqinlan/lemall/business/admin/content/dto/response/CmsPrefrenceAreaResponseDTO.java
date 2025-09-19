@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(name = "优选专区响应DTO")
+@Schema(description = "优选专区响应DTO")
 public class CmsPrefrenceAreaResponseDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
