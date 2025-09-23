@@ -116,6 +116,16 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
     @Override
     public void updatePassword(String email, String password, String authCode) {
         // 1. 检查验证码
-        // 2. 检查该邮箱是否存在
+        if (!verifyAuthCode(email,authCode)) {
+            throw new BizException("验证码错误");
+        }
+        // 2. 检查该邮箱是否存在（兜底，防止恶意灌注数据）
+        UmsMember member = super.getOne(Wrappers.<UmsMember>lambdaQuery().eq(UmsMember::getEmail, email), false);
+        if (member == null) {
+            throw new BizException("邮箱不存在");
+        }
+        // 3. 修改密码
+        member.setPassword(BCrypt.hashpw(password));
+        super.updateById(member);
     }
 }

@@ -38,7 +38,6 @@ public interface UmsMemberService extends IService<UmsMember>{
     /**
      * 获取验证码
      * @param email 邮箱
-     * @return 验证码
      */
     void generateAuthCode(String email);
 
