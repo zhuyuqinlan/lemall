@@ -60,9 +60,7 @@ public class SaTokenConfig {
                     PathContainer pathToMatch = PathContainer.parsePath(requestPath);
 
                     // 1. 门户端：只检查登录
-                    SaRouter.match(portalPrefix + "/**", r -> {
-                        StpMemberUtil.checkLogin();
-                    }).stop();
+                    SaRouter.match(portalPrefix + "/**", r -> StpMemberUtil.checkLogin()).stop();
 
                     // 2. 管理端：先登录，再权限校验
                     SaRouter.match(adminPrefix + "/**", r -> {

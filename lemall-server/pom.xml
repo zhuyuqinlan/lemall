@@ -21,18 +21,17 @@
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.0.2</spring-boot.version>
         <lemall-common.version>v0.0.1</lemall-common.version>
         <lemall-auth.version>v0.0.1</lemall-auth.version>
         <lemall-module-admin.version>v0.0.1</lemall-module-admin.version>
-        <knife4j-openapi3-jakarta-spring-boot-starter.version>4.4.0</knife4j-openapi3-jakarta-spring-boot-starter.version>
-        <sa-token-spring-boot3-starter.version>1.37.0</sa-token-spring-boot3-starter.version>
-        <sa-token-jwt.version>1.37.0</sa-token-jwt.version>
-        <sa-token-redis-jackson.version>1.37.0</sa-token-redis-jackson.version>
-        <mybatis-plus-spring-boot3-starter.version>3.5.4</mybatis-plus-spring-boot3-starter.version>
-        <druid-spring-boot-starter.veresion>1.2.18</druid-spring-boot-starter.veresion>
-        <minio.version>8.4.5</minio.version>
         <lemall-moduel-portal.version>v0.0.1</lemall-moduel-portal.version>
+
+        <spring-boot.version>3.2.1</spring-boot.version>
+        <knife4j-openapi3-jakarta-spring-boot-starter.version>4.5.0</knife4j-openapi3-jakarta-spring-boot-starter.version>
+        <sa-token.version>1.37.0</sa-token.version>
+        <mybatis-plus-spring-boot3-starter.version>3.5.6</mybatis-plus-spring-boot3-starter.version>
+        <druid-spring-boot-3-starter.version>1.2.27</druid-spring-boot-3-starter.version>
+        <minio.version>8.4.5</minio.version>
     </properties>
 
     <!-- 将依赖管理保留在父POM中 -->
@@ -74,21 +73,21 @@
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
-                <version>${sa-token-spring-boot3-starter.version}</version>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <!-- Sa-Token 整合 jwt -->
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-jwt</artifactId>
-                <version>${sa-token-jwt.version}</version>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
             <dependency>
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-redis-jackson</artifactId>
-                <version>${sa-token-redis-jackson.version}</version>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <dependency>
@@ -97,10 +96,11 @@
                 <version>${mybatis-plus-spring-boot3-starter.version}</version>
             </dependency>
 
+            <!-- Druid 数据库连接池 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid-spring-boot-starter.veresion}</version>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid-spring-boot-3-starter.version}</version>
             </dependency>
 
             <dependency>
