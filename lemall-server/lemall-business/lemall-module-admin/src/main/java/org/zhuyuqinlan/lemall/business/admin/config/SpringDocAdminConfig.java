@@ -17,7 +17,7 @@ public class SpringDocAdminConfig {
     @Bean
     public GroupedOpenApi adminGroupApi() {
         return GroupedOpenApi.builder()
-                .group("后台管理")
+                .group("后台管理接口")
                 .pathsToMatch(adminPrefix + "/**")
                 .build();
     }
