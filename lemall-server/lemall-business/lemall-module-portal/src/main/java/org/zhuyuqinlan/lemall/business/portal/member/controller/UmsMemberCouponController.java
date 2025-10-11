@@ -12,7 +12,7 @@ import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionI
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryDetail;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryResponseDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponResponseDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.service.OmsCartItemServicePortal;
+import org.zhuyuqinlan.lemall.business.portal.member.service.OmsCartItemService;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberCouponService;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 import org.zhuyuqinlan.lemall.common.response.Result;
@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("${lemall.server.prefix.portal}/member/coupon")
 public class UmsMemberCouponController {
     private final UmsMemberService umsMemberService;
-    private final OmsCartItemServicePortal omsCartItemServicePortal;
+    private final OmsCartItemService omsCartItemServicePortal;
     private final UmsMemberCouponService umsMemberCouponService;
 
     @Operation(summary = "领取指定优惠券")

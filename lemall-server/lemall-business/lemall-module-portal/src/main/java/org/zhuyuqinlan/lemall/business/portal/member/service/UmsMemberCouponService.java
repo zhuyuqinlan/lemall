@@ -1,5 +1,6 @@
 package org.zhuyuqinlan.lemall.business.portal.member.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryDetail;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryResponseDTO;
@@ -11,6 +12,7 @@ public interface UmsMemberCouponService {
     /**
      * 会员添加优惠券
      */
+    @Transactional(rollbackFor = Exception.class)
     void add(Long couponId);
 
     /**

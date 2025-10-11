@@ -4,14 +4,13 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.UmsMemberReceiveAddressRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.UmsMemberReceiveAddressResponseDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddressMapper;
-import org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress;
+import org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddress;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberReceiveAddressService;
 
 import java.util.List;
 
 @Service
-public class UmsMemberReceiveAddressServiceImpl extends ServiceImpl<UmsMemberReceiveAddressMapper, UmsMemberReceiveAddress> implements UmsMemberReceiveAddressService{
+public class UmsMemberReceiveAddressServiceImpl extends ServiceImpl<UmsMemberReceiveAddress, org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress> implements UmsMemberReceiveAddressService{
 
     @Override
     public boolean add(UmsMemberReceiveAddressRequestDTO address) {

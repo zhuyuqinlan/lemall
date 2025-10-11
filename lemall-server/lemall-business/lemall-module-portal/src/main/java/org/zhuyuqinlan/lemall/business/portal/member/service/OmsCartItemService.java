@@ -6,7 +6,7 @@ import org.zhuyuqinlan.lemall.common.entity.OmsCartItem;
 
 import java.util.List;
 
-public interface OmsCartItemServicePortal extends IService<OmsCartItem>{
+public interface OmsCartItemService extends IService<OmsCartItem>{
 
 
     /**

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddressMapper">
+<mapper namespace="org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddress">
   <resultMap id="BaseResultMap" type="org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress">
     <!--@mbg.generated-->
     <!--@Table ums_member_receive_address-->

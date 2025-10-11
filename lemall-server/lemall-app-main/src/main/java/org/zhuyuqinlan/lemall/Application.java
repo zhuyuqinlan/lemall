@@ -1,20 +1,24 @@
 package org.zhuyuqinlan.lemall;
 
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.zhuyuqinlan.lemall.config.BusinessModuleConfig;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-@SpringBootApplication
-@EnableTransactionManagement
 @Slf4j
-@MapperScan("org.zhuyuqinlan.lemall.business.**.mapper")
+@EnableTransactionManagement
+@Import(BusinessModuleConfig.class)
+@SpringBootApplication(scanBasePackages = {
+        "org.zhuyuqinlan.lemall.common",
+        "org.zhuyuqinlan.lemall.auth"
+})
 public class Application {
 
     public static void main(String[] args) throws UnknownHostException {
