@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -40,10 +40,10 @@ public class SmsCouponResponseDTO implements Serializable {
     private BigDecimal minPoint;
 
     @Schema(description = "开始时间")
-    private LocalDateTime startTime;
+    private Date startTime;
 
     @Schema(description = "结束时间")
-    private LocalDateTime endTime;
+    private Date endTime;
 
     @Schema(description = "使用类型：0->全场通用；1->指定分类；2->指定商品")
     private Integer useType;
@@ -61,7 +61,7 @@ public class SmsCouponResponseDTO implements Serializable {
     private Integer receiveCount;
 
     @Schema(description = "可以领取的日期")
-    private LocalDateTime enableTime;
+    private Date enableTime;
 
     @Schema(description = "优惠码")
     private String code;

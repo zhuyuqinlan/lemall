@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -33,13 +33,13 @@ public class SmsCouponHistoryResponseDTO implements Serializable {
     private Integer getType;
 
     @Schema(description = "领取时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @Schema(description = "使用状态：0->未使用；1->已使用；2->已过期")
     private Integer useStatus;
 
     @Schema(description = "使用时间")
-    private LocalDateTime useTime;
+    private Date useTime;
 
     @Schema(description = "订单ID")
     private Long orderId;

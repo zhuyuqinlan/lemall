@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @Schema(description = "购物车中促销信息的封装")
-public class CartPromotionItem {
+public class CartPromotionItem extends OmsCartItemResponseDTO {
     @Schema(description = "促销活动信息")
     private String promotionMessage;
 
