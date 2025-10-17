@@ -54,6 +54,6 @@ public interface UmsMenuService extends IService<UmsMenu>{
      * @param id id
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean deleteMenu(Long id);
 }

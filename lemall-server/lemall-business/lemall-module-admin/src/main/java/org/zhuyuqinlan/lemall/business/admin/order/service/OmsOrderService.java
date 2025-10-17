@@ -30,7 +30,7 @@ public interface OmsOrderService extends IService<OmsOrder>{
      * @param deliveryParamList 批量操作列表
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean delivery(List<OmsOrderDeliveryParamRequestDTO> deliveryParamList);
 
     /**
@@ -39,7 +39,7 @@ public interface OmsOrderService extends IService<OmsOrder>{
      * @param note 记录
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean close(List<Long> ids, String note);
 
     /**
@@ -61,7 +61,7 @@ public interface OmsOrderService extends IService<OmsOrder>{
      * @param receiverInfoParam 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateReceiverInfo(OmsReceiverInfoParamRequestDTO receiverInfoParam);
 
     /**
@@ -69,7 +69,7 @@ public interface OmsOrderService extends IService<OmsOrder>{
      * @param moneyInfoParam 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateMoneyInfo(OmsMoneyInfoParamRequestDTO moneyInfoParam);
 
     /**
@@ -79,6 +79,6 @@ public interface OmsOrderService extends IService<OmsOrder>{
      * @param status 状态
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateNote(Long id, String note, Integer status);
 }

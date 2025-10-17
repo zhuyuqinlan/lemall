@@ -28,7 +28,7 @@ public interface PmsProductService extends IService<PmsProduct>{
      * @param requestDTO 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean create(PmsProductParamRequestDTO requestDTO);
 
     /**
@@ -44,7 +44,7 @@ public interface PmsProductService extends IService<PmsProduct>{
      * @param requestDTO 参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateProduct(Long id, PmsProductParamRequestDTO requestDTO);
 
     /**
@@ -61,7 +61,7 @@ public interface PmsProductService extends IService<PmsProduct>{
      * @param detail 审核详情
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateVerifyStatus(List<Long> ids, Integer verifyStatus, String detail);
 
     /**

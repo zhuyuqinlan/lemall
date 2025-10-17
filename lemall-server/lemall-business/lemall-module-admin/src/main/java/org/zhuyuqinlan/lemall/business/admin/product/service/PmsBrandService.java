@@ -40,7 +40,7 @@ public interface PmsBrandService extends IService<PmsBrand>{
      * @param requestDTO 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateBrand(Long id, PmsBrandRequestDTO requestDTO);
 
     /**

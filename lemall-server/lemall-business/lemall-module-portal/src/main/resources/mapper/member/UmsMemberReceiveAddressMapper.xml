@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddress">
+<mapper namespace="org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddressMapper">
   <resultMap id="BaseResultMap" type="org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress">
     <!--@mbg.generated-->
     <!--@Table ums_member_receive_address-->
@@ -17,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, member_id, `name`, phone_number, default_status, post_code, province, city, region, 
+    id, member_id, `name`, phone_number, default_status, post_code, province, city, region,
     detail_address
   </sql>
 </mapper>

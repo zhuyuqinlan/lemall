@@ -1,5 +1,6 @@
 package org.zhuyuqinlan.lemall.business.portal.member.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.UmsMemberReceiveAddressRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.UmsMemberReceiveAddressResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress;
@@ -26,6 +27,7 @@ public interface UmsMemberReceiveAddressService extends IService<UmsMemberReceiv
      * @param id 地址表的id
      * @param address 修改的收货地址信息
      */
+    @Transactional
     boolean updateAddress(Long id, UmsMemberReceiveAddressRequestDTO address);
 
     /**

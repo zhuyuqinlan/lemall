@@ -24,7 +24,7 @@ public interface PmsProductCategoryService extends IService<PmsProductCategory>{
      * @param pmsProductCategoryRequestDTO 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean create(PmsProductCategoryRequestDTO pmsProductCategoryRequestDTO);
 
     /**
@@ -33,7 +33,7 @@ public interface PmsProductCategoryService extends IService<PmsProductCategory>{
      * @param pmsProductCategoryRequestDTO 请求参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateCategory(Long id, PmsProductCategoryRequestDTO pmsProductCategoryRequestDTO);
 
     /**

@@ -12,7 +12,7 @@ public interface UmsMemberCouponService {
     /**
      * 会员添加优惠券
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     void add(Long couponId);
 
     /**

@@ -57,6 +57,6 @@ public interface UmsResourceService extends IService<UmsResource> {
      * @param id id
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean deleteRes(Long id);
 }

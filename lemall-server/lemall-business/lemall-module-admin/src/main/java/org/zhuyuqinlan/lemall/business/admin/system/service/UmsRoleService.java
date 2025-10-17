@@ -49,7 +49,7 @@ public interface UmsRoleService extends IService<UmsRole>{
      * @param ids 角色id
      * @return 删除标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean deleteRoles(List<Long> ids);
 
 
@@ -73,7 +73,7 @@ public interface UmsRoleService extends IService<UmsRole>{
      * @param menuIds 菜单列表
      * @return 分配的条数
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     int allocMenu(Long roleId, List<Long> menuIds);
 
     /**

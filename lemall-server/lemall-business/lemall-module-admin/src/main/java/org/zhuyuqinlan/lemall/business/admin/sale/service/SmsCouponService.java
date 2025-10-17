@@ -15,7 +15,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param couponParam 参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean create(SmsCouponParamRequestDTO couponParam);
 
     /**
@@ -23,7 +23,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param id id
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean delete(Long id);
 
     /**
@@ -32,7 +32,7 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param couponParam 参数
      * @return 成功标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean updateCoupon(Long id, SmsCouponParamRequestDTO couponParam);
 
     /**

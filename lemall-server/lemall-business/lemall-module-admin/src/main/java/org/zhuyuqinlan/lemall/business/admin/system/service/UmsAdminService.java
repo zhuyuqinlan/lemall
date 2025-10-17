@@ -63,7 +63,7 @@ public interface UmsAdminService extends IService<UmsAdmin>{
      * @param id 用户id
      * @return 删除标志
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     boolean deleteAdmin(Long id);
 
     /**
@@ -72,6 +72,6 @@ public interface UmsAdminService extends IService<UmsAdmin>{
      * @param roleIds 角色id
      * @return 受影响行数
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     int updateRole(Long adminId, List<Long> roleIds);
 }
