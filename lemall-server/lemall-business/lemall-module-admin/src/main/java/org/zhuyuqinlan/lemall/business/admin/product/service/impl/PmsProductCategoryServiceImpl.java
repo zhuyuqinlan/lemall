@@ -15,10 +15,11 @@ import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.product.mapper.PmsProductCategoryMapper;
+import org.zhuyuqinlan.lemall.business.admin.product.dao.PmsProductCategoryDao;
 import org.zhuyuqinlan.lemall.common.entity.PmsProductCategory;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductCategoryService;
 import org.springframework.util.CollectionUtils;
+import org.zhuyuqinlan.lemall.common.mapper.PmsProductCategoryMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,11 @@ public class PmsProductCategoryServiceImpl extends ServiceImpl<PmsProductCategor
 
     private final PmsProductCategoryAttributeRelationService productCategoryAttributeRelationService;
     private final PmsProductService productService;
+    private final PmsProductCategoryDao productCategoryDao;
 
     @Override
     public List<PmsProductCategoryWithChildrenItem> listWithChildren() {
-        return baseMapper.listWithChildren();
+        return productCategoryDao.listWithChildren();
     }
 
     @Override

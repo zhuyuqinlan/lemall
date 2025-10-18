@@ -8,7 +8,7 @@ import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeBrandRespo
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsHomeBrandMapper;
+import org.zhuyuqinlan.lemall.common.mapper.SmsHomeBrandMapper;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeBrand;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeBrandService;
 import org.springframework.util.StringUtils;

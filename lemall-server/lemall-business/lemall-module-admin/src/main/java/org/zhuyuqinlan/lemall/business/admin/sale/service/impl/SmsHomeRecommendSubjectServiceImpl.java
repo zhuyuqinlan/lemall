@@ -8,7 +8,7 @@ import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeRecommendS
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsHomeRecommendSubjectMapper;
+import org.zhuyuqinlan.lemall.common.mapper.SmsHomeRecommendSubjectMapper;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeRecommendSubject;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeRecommendSubjectService;
 import org.springframework.util.StringUtils;

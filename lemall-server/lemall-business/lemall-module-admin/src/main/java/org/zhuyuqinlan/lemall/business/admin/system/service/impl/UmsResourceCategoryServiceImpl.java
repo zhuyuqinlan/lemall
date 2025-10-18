@@ -11,7 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.UmsResourceCategory;
-import org.zhuyuqinlan.lemall.business.admin.system.mapper.UmsResourceCategoryMapper;
+import org.zhuyuqinlan.lemall.common.mapper.UmsResourceCategoryMapper;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsResourceCategoryService;
 
 import java.util.List;

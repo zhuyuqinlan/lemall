@@ -12,18 +12,18 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminRequestD
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.mapper.UmsAdminLoginLogMapper;
+import org.zhuyuqinlan.lemall.common.mapper.UmsAdminLoginLogMapper;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsAdminRoleRelationService;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsRoleService;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
 import org.zhuyuqinlan.lemall.common.entity.*;
-import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.mapper.UmsAdminMapper;
 import org.zhuyuqinlan.lemall.common.response.BizException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.system.mapper.UmsAdminMapper;
+import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsAdminDao;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsAdminService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -41,6 +41,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     private final UmsAdminLoginLogMapper loginLogMapper;
     private final UmsAdminRoleRelationService userRoleRelationService;
     private final UmsRoleService roleService;
+    private final UmsAdminDao umsAdminDao;
 
     @Override
     public SaTokenInfo login(String username, String password) {
@@ -84,7 +85,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public List<UmsRoleResponseDTO> getRoleList(Long id) {
-        List<UmsRole> roleList = baseMapper.getRoleList(id);
+        List<UmsRole> roleList = umsAdminDao.getRoleList(id);
         return roleList.stream().map(role -> {
             UmsRoleResponseDTO umsRoleResponseDTO = new UmsRoleResponseDTO();
             BeanUtils.copyProperties(role, umsRoleResponseDTO);
@@ -154,7 +155,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Override
     public boolean deleteAdmin(Long id) {
-        List<UmsRole> roleList = baseMapper.getRoleList(id);
+        List<UmsRole> roleList = umsAdminDao.getRoleList(id);
         roleList.forEach(role -> {
             role.setAdminCount(role.getAdminCount() - 1);
         });
@@ -169,7 +170,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public int updateRole(Long adminId, List<Long> roleIds) {
         int count = roleIds == null ? 0 : roleIds.size();
         // 原来的角色计数器-1
-        List<UmsRole> umsRoles1 = baseMapper.getRoleList(adminId);
+        List<UmsRole> umsRoles1 = umsAdminDao.getRoleList(adminId);
         umsRoles1.forEach(umsRole -> {
             umsRole.setAdminCount(umsRole.getAdminCount() - 1);
         });
@@ -219,17 +220,17 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         UmsAdmin umsAdmin = super.getById(id);
         BeanUtils.copyProperties(umsAdmin, userDto);
         // 设置可访问资源信息
-        List<UmsResource> resourceList = baseMapper.getResourceList(umsAdmin.getId());
+        List<UmsResource> resourceList = umsAdminDao.getResourceList(umsAdmin.getId());
         List<String> resourceListWithId = resourceList.stream().map(e -> e.getId().toString()).toList();
         userDto.setResourceList(resourceListWithId);
 
         // 设置角色信息
-        List<UmsRole> roleList = baseMapper.getRoleList(umsAdmin.getId());
+        List<UmsRole> roleList = umsAdminDao.getRoleList(umsAdmin.getId());
         List<String> roleNameList = roleList.stream().map(e -> e.getId().toString()).toList();
         userDto.setRoleList(roleNameList);
 
         // 设置权限信息
-        List<UmsPermission> permissionList = baseMapper.getPermissionList(umsAdmin.getId());
+        List<UmsPermission> permissionList = umsAdminDao.getPermissionList(umsAdmin.getId());
         List<String> permissionNameList = permissionList.stream().map(e -> e.getId().toString()).toList();
         userDto.setPermissionList(permissionNameList);
 

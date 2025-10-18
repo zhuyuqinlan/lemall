@@ -16,11 +16,10 @@ import org.zhuyuqinlan.lemall.business.admin.product.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.product.mapper.PmsProductMapper;
+import org.zhuyuqinlan.lemall.business.admin.product.dao.PmsProductDao;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.zhuyuqinlan.lemall.business.admin.product.service.*;
-import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.mapper.PmsProductMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ public class PmsProductServiceImpl extends ServiceImpl<PmsProductMapper, PmsProd
     private final CmsSubjectProductRelationService cmsSubjectProductRelationService;
     private final CmsPrefrenceAreaProductRelationService cmsPrefrenceAreaProductRelationService;
     private final PmsProductVertifyRecordService pmsProductVertifyRecordService;
+    private final PmsProductDao pmsProductDao;
 
     @Override
     public IPage<PmsProductResponseDTO> getList(PmsProductQueryParamRequestDTO productQueryParam, Integer pageSize, Integer pageNum) {
@@ -131,7 +131,7 @@ public class PmsProductServiceImpl extends ServiceImpl<PmsProductMapper, PmsProd
 
     @Override
     public PmsProductParamResultResponseDTO getUpdateInfo(Long id) {
-        return baseMapper.getUpdateInfo(id);
+        return pmsProductDao.getUpdateInfo(id);
     }
 
     @Override

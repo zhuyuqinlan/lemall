@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zhuyuqinlan.lemall.business.admin.system.dao.UmsRoleDao">
+
+  <select id="getMenuList" resultType="org.zhuyuqinlan.lemall.common.entity.UmsMenu">
+      SELECT m.id          as id,
+             m.parent_id   as parentId,
+             m.create_time as createTime,
+             m.title       as title,
+             m.level       as level,
+             m.sort        as sort,
+             m.name        as name,
+             m.icon        as icon,
+             m.hidden      as hidden
+      FROM ums_admin_role_relation arr
+               LEFT JOIN ums_role r ON arr.role_id = r.id
+               LEFT JOIN ums_role_menu_relation rmr ON r.id = rmr.role_id
+               LEFT JOIN ums_menu m ON rmr.menu_id = m.id
+      WHERE arr.admin_id = #{adminId}
+        AND m.id IS NOT NULL AND r.status = 1
+      GROUP BY m.id
+  </select>
+
+    <select id="getMenuListByRoleId"
+            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO">
+        SELECT m.id          as id,
+               m.parent_id   as parentId,
+               m.create_time as createTime,
+               m.title       as title,
+               m.level       as level,
+               m.name        as name,
+               m.icon        as icon,
+               m.hidden      as hidden
+        FROM ums_role_menu_relation rmr
+                 LEFT JOIN ums_menu m ON rmr.menu_id = m.id
+        WHERE rmr.role_id = #{roleId}
+          AND m.id IS NOT NULL
+        GROUP BY m.id
+    </select>
+
+  <select id="getResourceListByRoleId"
+            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO">
+      SELECT r.id          as id,
+             r.create_time as createTime,
+             r.`name`      as `name`,
+             r.url         as url,
+             r.description as description,
+             r.category_id as categoryId
+      FROM ums_role_resource_relation rrr
+               LEFT JOIN ums_resource r ON rrr.resource_id = r.id
+      WHERE rrr.role_id = #{roleId}
+        AND r.id IS NOT NULL
+      GROUP BY r.id
+  </select>
+</mapper>

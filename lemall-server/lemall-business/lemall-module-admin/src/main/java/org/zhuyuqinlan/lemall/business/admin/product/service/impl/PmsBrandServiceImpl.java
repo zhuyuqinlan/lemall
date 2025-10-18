@@ -11,7 +11,7 @@ import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.product.mapper.PmsBrandMapper;
+import org.zhuyuqinlan.lemall.common.mapper.PmsBrandMapper;
 import org.zhuyuqinlan.lemall.common.entity.PmsBrand;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsBrandService;
 import org.springframework.util.StringUtils;

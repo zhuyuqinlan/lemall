@@ -3,6 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.order.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReturnApplyQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsUpdateStatusParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResponseDTO;
@@ -10,16 +11,20 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnAp
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderReturnApplyMapper;
+import org.zhuyuqinlan.lemall.business.admin.order.dao.OmsOrderReturnApplyDao;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderReturnApply;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderReturnApplyService;
 import org.springframework.util.StringUtils;
+import org.zhuyuqinlan.lemall.common.mapper.OmsOrderReturnApplyMapper;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OmsOrderReturnApplyServiceImpl extends ServiceImpl<OmsOrderReturnApplyMapper, OmsOrderReturnApply> implements OmsOrderReturnApplyService {
+
+    private final OmsOrderReturnApplyDao omsOrderReturnApplyDao;
 
     @Override
     public IPage<OmsOrderReturnApplyResponseDTO> listPage(OmsReturnApplyQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
@@ -52,7 +57,7 @@ public class OmsOrderReturnApplyServiceImpl extends ServiceImpl<OmsOrderReturnAp
 
     @Override
     public OmsOrderReturnApplyResultResponseDTO getItem(Long id) {
-        return baseMapper.getDetail(id);
+        return omsOrderReturnApplyDao.getDetail(id);
     }
 
     @Override

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -54,8 +55,8 @@ public class SmsCouponController {
 
     @Operation(summary = "获取单个优惠券的详细信息")
     @GetMapping("/{id}")
-    public Result<SmsCouponParamRequestDTO> getItem(@PathVariable Long id) {
-        SmsCouponParamRequestDTO couponParam = couponService.getItem(id);
+    public Result<SmsCouponParamResponseDTO> getItem(@PathVariable Long id) {
+        SmsCouponParamResponseDTO couponParam = couponService.getItem(id);
         return Result.success(couponParam);
     }
 }

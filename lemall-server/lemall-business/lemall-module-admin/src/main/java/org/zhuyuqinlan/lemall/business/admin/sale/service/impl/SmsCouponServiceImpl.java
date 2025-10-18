@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponProductCategoryRelationRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponProductRelationRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsCouponProductCategoryRelationService;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsCouponProductRelationService;
@@ -15,16 +16,18 @@ import org.zhuyuqinlan.lemall.common.entity.SmsCouponProductRelation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsCouponMapper;
+import org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsCouponDao;
 import org.zhuyuqinlan.lemall.common.entity.SmsCoupon;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsCouponService;
 import org.springframework.util.StringUtils;
+import org.zhuyuqinlan.lemall.common.mapper.SmsCouponMapper;
 
 @Service
 @RequiredArgsConstructor
 public class SmsCouponServiceImpl extends ServiceImpl<SmsCouponMapper, SmsCoupon> implements SmsCouponService {
     private final SmsCouponProductRelationService smsCouponProductRelationService;
     private final SmsCouponProductCategoryRelationService smsCouponProductCategoryRelationService;
+    private final SmsCouponDao smsCouponDao;
 
     @Override
     public boolean create(SmsCouponParamRequestDTO couponParam) {
@@ -115,7 +118,7 @@ public class SmsCouponServiceImpl extends ServiceImpl<SmsCouponMapper, SmsCoupon
     }
 
     @Override
-    public SmsCouponParamRequestDTO getItem(Long id) {
-        return baseMapper.getItem(id);
+    public SmsCouponParamResponseDTO getItem(Long id) {
+        return smsCouponDao.getItem(id);
     }
 }

@@ -1,0 +1,8 @@
+package org.zhuyuqinlan.lemall.common.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.zhuyuqinlan.lemall.common.entity.OmsOrder;
+
+
+public interface OmsOrderMapper extends BaseMapper<OmsOrder> {
+}

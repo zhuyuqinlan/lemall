@@ -8,7 +8,7 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnRe
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderReturnReasonMapper;
+import org.zhuyuqinlan.lemall.common.mapper.OmsOrderReturnReasonMapper;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderReturnReason;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderReturnReasonService;
 

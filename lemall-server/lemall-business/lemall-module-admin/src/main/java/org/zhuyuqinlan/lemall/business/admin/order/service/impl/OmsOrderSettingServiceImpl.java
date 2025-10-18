@@ -5,7 +5,7 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderSettingR
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderSettingMapper;
+import org.zhuyuqinlan.lemall.common.mapper.OmsOrderSettingMapper;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderSetting;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderSettingService;
 @Service

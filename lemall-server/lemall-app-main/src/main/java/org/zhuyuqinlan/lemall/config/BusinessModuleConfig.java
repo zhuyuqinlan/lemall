@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
         nameGenerator = BusinessModuleConfig.BusinessBeanNameGenerator.class
 )
 @MapperScan(
-        basePackages = "org.zhuyuqinlan.lemall.business.**.mapper",
+        basePackages = "org.zhuyuqinlan.lemall.business.**.dao",
         nameGenerator = BusinessModuleConfig.BusinessMapperBeanNameGenerator.class
 )
 public class BusinessModuleConfig {

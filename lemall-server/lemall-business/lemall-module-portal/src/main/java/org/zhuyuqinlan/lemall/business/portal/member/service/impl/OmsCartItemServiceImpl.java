@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
-import org.zhuyuqinlan.lemall.business.portal.member.mapper.OmsCartItemMapper;
 import org.zhuyuqinlan.lemall.business.portal.member.service.OmsCartItemService;
 import org.zhuyuqinlan.lemall.common.entity.OmsCartItem;
+import org.zhuyuqinlan.lemall.common.mapper.OmsCartItemMapper;
 
 import java.util.List;
 

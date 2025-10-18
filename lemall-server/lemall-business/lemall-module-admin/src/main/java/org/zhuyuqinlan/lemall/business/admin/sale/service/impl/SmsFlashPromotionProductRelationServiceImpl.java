@@ -3,6 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.sale.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionProductRelationRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductRelationResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
@@ -10,14 +11,18 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotionProductRelation;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsFlashPromotionProductRelationMapper;
+import org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsFlashPromotionProductRelationDao;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionProductRelationService;
+import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionProductRelationMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SmsFlashPromotionProductRelationServiceImpl extends ServiceImpl<SmsFlashPromotionProductRelationMapper, SmsFlashPromotionProductRelation> implements SmsFlashPromotionProductRelationService {
+
+    private final SmsFlashPromotionProductRelationDao smsFlashPromotionProductRelationDao;
 
     @Override
     public boolean create(List<SmsFlashPromotionProductRelationRequestDTO> relationList) {
@@ -53,7 +58,7 @@ public class SmsFlashPromotionProductRelationServiceImpl extends ServiceImpl<Sms
 
     @Override
     public IPage<SmsFlashPromotionProductResponseDTO> listPage(Long flashPromotionId, Long flashPromotionSessionId, Integer pageSize, Integer pageNum) {
-        return baseMapper.getList(new Page<>(pageNum, pageSize), flashPromotionId, flashPromotionSessionId);
+        return smsFlashPromotionProductRelationDao.getList(new Page<>(pageNum, pageSize), flashPromotionId, flashPromotionSessionId);
     }
 
     @Override

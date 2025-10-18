@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.UmsMemberReceiveAddressRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.UmsMemberReceiveAddressResponseDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.mapper.UmsMemberReceiveAddressMapper;
+import org.zhuyuqinlan.lemall.common.mapper.UmsMemberReceiveAddressMapper;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberReceiveAddressService;
 import org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress;
 

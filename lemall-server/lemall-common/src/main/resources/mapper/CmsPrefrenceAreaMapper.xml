@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zhuyuqinlan.lemall.common.mapper.CmsPrefrenceAreaMapper">
+  <resultMap id="BaseResultMap" type="org.zhuyuqinlan.lemall.common.entity.CmsPrefrenceArea">
+    <!--@mbg.generated-->
+    <!--@Table cms_prefrence_area-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
+    <result column="pic" jdbcType="VARBINARY" property="pic" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="show_status" jdbcType="INTEGER" property="showStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, sub_title, pic, sort, show_status
+  </sql>
+</mapper>

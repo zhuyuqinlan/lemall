@@ -9,7 +9,7 @@ import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionProdu
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsFlashPromotionSessionMapper;
+import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionSessionMapper;
 import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotionSession;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionSessionService;
 

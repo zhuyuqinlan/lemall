@@ -10,7 +10,7 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceReque
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsResource;
 import org.zhuyuqinlan.lemall.common.entity.UmsRoleResourceRelation;
-import org.zhuyuqinlan.lemall.business.admin.system.mapper.UmsResourceMapper;
+import org.zhuyuqinlan.lemall.common.mapper.UmsResourceMapper;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsResourceService;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsRoleResourceRelationService;
 import org.zhuyuqinlan.lemall.common.service.RedisService;

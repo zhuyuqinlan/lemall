@@ -17,9 +17,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrder;
-import org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsOrderMapper;
+import org.zhuyuqinlan.lemall.business.admin.order.dao.OmsOrderDao;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderService;
 import org.springframework.util.StringUtils;
+import org.zhuyuqinlan.lemall.common.mapper.OmsOrderMapper;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> implements OmsOrderService {
 
     private final OmsOrderOperateHistoryService orderOperateHistoryService;
+    private final OmsOrderDao omsOrderDao;
 
     @Override
     public IPage<OmsOrderResponseDTO> listPage(OmsOrderQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
@@ -54,7 +56,7 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
     @Override
     public boolean delivery(List<OmsOrderDeliveryParamRequestDTO> deliveryParamList) {
         //批量发货
-        baseMapper.delivery(deliveryParamList);
+        omsOrderDao.delivery(deliveryParamList);
         //添加操作记录
         List<OmsOrderOperateHistory> operateHistoryList = deliveryParamList.stream()
                 .map(omsOrderDeliveryParam -> {
@@ -102,7 +104,7 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
 
     @Override
     public OmsOrderDetailResponseDTO detail(Long id) {
-        return baseMapper.getDetail(id);
+        return omsOrderDao.getDetail(id);
     }
 
     @Override

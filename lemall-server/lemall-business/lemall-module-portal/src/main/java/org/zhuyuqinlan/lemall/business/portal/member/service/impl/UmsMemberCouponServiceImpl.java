@@ -7,11 +7,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.*;
-import org.zhuyuqinlan.lemall.business.portal.member.mapper.*;
+import org.zhuyuqinlan.lemall.business.portal.member.dao.*;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberCouponService;
 import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.mapper.*;
 import org.zhuyuqinlan.lemall.common.response.BizException;
 
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
     private final SmsCouponProductRelationMapper couponProductRelationMapper;
     private final SmsCouponProductCategoryRelationMapper couponProductCategoryRelationMapper;
     private final PmsProductMapper productMapper;
+    private final SmsCouponHistoryDao smsCouponHistoryDao;
 
     @Override
     public void add(Long couponId) {
@@ -56,6 +58,7 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
         UmsMemberResponseDTO currentMember = memberService.getCurrentMember();
         SmsCouponHistory smsCouponHistory = new SmsCouponHistory();
         smsCouponHistory.setCouponId(couponId);
+        smsCouponHistory.setCouponCode(generateCouponCode(currentMember.getId()));
         smsCouponHistory.setCreateTime(now);
         smsCouponHistory.setMemberId(currentMember.getId());
         smsCouponHistory.setMemberNickname(currentMember.getNickname());
@@ -103,14 +106,14 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
 
     @Override
     public List<SmsCouponResponseDTO> list(Integer useStatus) {
-        return couponHistoryMapperPortal.getCouponList(Long.parseLong(StpMemberUtil.getLoginId().toString()), useStatus);
+        return smsCouponHistoryDao.getCouponList(Long.parseLong(StpMemberUtil.getLoginId().toString()), useStatus);
     }
 
     @Override
     public List<SmsCouponHistoryDetail> listCart(List<CartPromotionItem> cartPromotionItems, Integer type) {
         Date now = new Date();
         //获取该用户所有优惠券
-        List<SmsCouponHistoryDetail> allList = couponHistoryMapperPortal.getDetailList(Long.parseLong(StpMemberUtil.getLoginId().toString()));
+        List<SmsCouponHistoryDetail> allList = smsCouponHistoryDao.getDetailList(Long.parseLong(StpMemberUtil.getLoginId().toString()));
         //根据优惠券使用类型来判断优惠券是否可用
         List<SmsCouponHistoryDetail> enableList = new ArrayList<>();
         List<SmsCouponHistoryDetail> disableList = new ArrayList<>();

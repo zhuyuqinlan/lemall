@@ -2,7 +2,7 @@ package org.zhuyuqinlan.lemall.business.admin.content.service.impl;
 
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.content.mapper.CmsSubjectProductRelationMapper;
+import org.zhuyuqinlan.lemall.common.mapper.CmsSubjectProductRelationMapper;
 import org.zhuyuqinlan.lemall.common.entity.CmsSubjectProductRelation;
 import org.zhuyuqinlan.lemall.business.admin.content.service.CmsSubjectProductRelationService;
 @Service

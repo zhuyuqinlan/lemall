@@ -10,14 +10,13 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResp
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.business.admin.system.service.*;
-import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.mapper.UmsRoleMapper;
 import org.zhuyuqinlan.lemall.common.response.BizException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.system.mapper.UmsRoleMapper;
+import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsRoleDao;
 import org.springframework.util.StringUtils;
-import org.zhuyuqinlan.lemall.business.admin.system.service.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +30,11 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
     private final UmsAdminRoleRelationService umsAdminRoleRelationService;
     private final UmsRoleResourceRelationService umsRoleResourceRelationService;
     private final UmsResourceService umsResourceService;
+    private final UmsRoleDao umsRoleDao;
 
     @Override
     public List<UmsMenu> getMenuList(Long id) {
-        return baseMapper.getMenuList(id);
+        return umsRoleDao.getMenuList(id);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
 
     @Override
     public List<UmsMenuResponseDTO> listMenu(Long roleId) {
-        return baseMapper.getMenuListByRoleId(roleId);
+        return umsRoleDao.getMenuListByRoleId(roleId);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
 
     @Override
     public List<UmsResourceResponseDTO> listResource(Long roleId) {
-        return baseMapper.getResourceListByRoleId(roleId);
+        return umsRoleDao.getResourceListByRoleId(roleId);
     }
 
     @Override

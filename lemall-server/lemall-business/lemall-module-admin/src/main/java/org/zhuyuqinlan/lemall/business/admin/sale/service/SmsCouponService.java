@@ -2,6 +2,7 @@ package org.zhuyuqinlan.lemall.business.admin.sale.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsCoupon;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -50,5 +51,5 @@ public interface SmsCouponService extends IService<SmsCoupon>{
      * @param id id
      * @return 结果
      */
-    SmsCouponParamRequestDTO getItem(Long id);
+    SmsCouponParamResponseDTO getItem(Long id);
 }

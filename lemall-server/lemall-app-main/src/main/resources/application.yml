@@ -112,3 +112,7 @@ lemall:
     prefix:
       admin: /lemall-admin
       portal: /lemall-portal
+mybatis-plus:
+  mapper-locations:
+    - classpath*:mapper/**/*.xml
+    - classpath*:dao/**/*.xml

@@ -14,7 +14,7 @@ import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberCacheService;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberLevelService;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.entity.UmsMember;
-import org.zhuyuqinlan.lemall.business.portal.sso.mapper.UmsMemberMapper;
+import org.zhuyuqinlan.lemall.common.mapper.UmsMemberMapper;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 import org.zhuyuqinlan.lemall.common.entity.UmsMemberLevel;
 import org.zhuyuqinlan.lemall.common.response.BizException;

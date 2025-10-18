@@ -5,7 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.OmsCompanyAddress;
-import org.zhuyuqinlan.lemall.business.admin.order.mapper.OmsCompanyAddressMapper;
+import org.zhuyuqinlan.lemall.common.mapper.OmsCompanyAddressMapper;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsCompanyAddressService;
 
 import java.util.List;

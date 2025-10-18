@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeAdvertise;
-import org.zhuyuqinlan.lemall.business.admin.sale.mapper.SmsHomeAdvertiseMapper;
+import org.zhuyuqinlan.lemall.common.mapper.SmsHomeAdvertiseMapper;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeAdvertiseService;
 import org.springframework.util.StringUtils;
 
