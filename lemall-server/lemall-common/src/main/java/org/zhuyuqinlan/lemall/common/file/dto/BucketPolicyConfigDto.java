@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.business.admin.system.dto;
+package org.zhuyuqinlan.lemall.common.file.dto;
 
 import lombok.Builder;
 import lombok.Data;

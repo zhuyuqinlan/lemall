@@ -4,12 +4,14 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.common.captcha.constant.CaptchaConstant;
+import org.zhuyuqinlan.lemall.common.captcha.service.CaptchaService;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.entity.UmsMember;
 import org.zhuyuqinlan.lemall.common.entity.UmsMemberLevel;
@@ -18,14 +20,18 @@ import org.zhuyuqinlan.lemall.common.response.BizException;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
 
     private final UmsMemberLevelService memberLevelService;
-    private final UmsMemberCacheService memberCacheService;
+    private final CaptchaService captchaService;
+
+    public UmsMemberService(UmsMemberLevelService memberLevelService,
+                       @Qualifier("captchaEmailServiceImpl") CaptchaService captchaService) {
+        this.memberLevelService = memberLevelService;
+        this.captchaService = captchaService;
+    }
 
     // ======================= 注册 =======================
-
     public void register(String username, String password, String email, String authCode) {
         if (!verifyAuthCode(email, authCode)) {
             throw new BizException("验证码错误");
@@ -53,7 +59,7 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
     }
 
     private boolean verifyAuthCode(String email, String authCode) {
-        String code = memberCacheService.getAuthCode(email);
+        String code = captchaService.getAuthCode(CaptchaConstant.EMAIL,email);
         return StringUtils.hasText(code) && code.equals(authCode);
     }
 
@@ -90,12 +96,11 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
     // ======================= 验证码 =======================
 
     public void generateAuthCode(String email) {
-        if (!memberCacheService.canSendAuthCode(email)) {
+        if (!captchaService.canSendAuthCode(CaptchaConstant.EMAIL, email)) {
             throw new BizException("请勿频繁获取验证码");
         }
-        String auth = String.format("%04d", (int)(Math.random() * 10000));
-        log.info("验证码为：{}", auth);
-        memberCacheService.setAuthCode(email, auth);
+        String code = captchaService.setAuthCode(email, CaptchaConstant.EMAIL, 300, 60);
+        log.info("验证码为：{}", code);
     }
 
     // ======================= 密码更新 =======================
