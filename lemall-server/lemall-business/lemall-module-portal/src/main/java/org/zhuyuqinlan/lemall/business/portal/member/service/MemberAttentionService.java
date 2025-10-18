@@ -1,34 +1,84 @@
 package org.zhuyuqinlan.lemall.business.portal.member.service;
 
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberBrandAttention;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberBrandAttentionRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberBrandAttentionResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.repository.MemberBrandAttentionRepository;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 
-public interface MemberAttentionService {
+import java.util.Date;
 
-    /**
-     * 添加关注
-     */
-    int add(MemberBrandAttentionRequestDTO memberBrandAttention);
 
-    /**
-     * 取消关注
-     */
-    int delete(Long brandId);
+@Service
+@RequiredArgsConstructor
+public class MemberAttentionService {
 
-    /**
-     * 获取用户关注列表
-     */
-    Page<MemberBrandAttentionResponseDTO> list(Integer pageNum, Integer pageSize);
+    private final MemberBrandAttentionRepository memberBrandAttentionRepository;
+    private final UmsMemberService memberService;
 
-    /**
-     * 获取用户关注详情
-     */
-    MemberBrandAttentionResponseDTO detail(Long brandId);
+    // ======================= 添加关注 =======================
+    public int add(MemberBrandAttentionRequestDTO memberBrandAttention) {
+        int count = 0;
+        UmsMemberResponseDTO currentMember = memberService.getCurrentMember();
+        memberBrandAttention.setMemberId(currentMember.getId());
+        memberBrandAttention.setMemberNickname(currentMember.getNickname());
+        memberBrandAttention.setMemberIcon(currentMember.getIcon());
+        memberBrandAttention.setCreateTime(new Date());
 
-    /**
-     * 清空关注列表
-     */
-    void clear();
+        MemberBrandAttention findAttention = memberBrandAttentionRepository.findByMemberIdAndBrandId(
+                memberBrandAttention.getMemberId(), memberBrandAttention.getBrandId()
+        );
+        if (findAttention == null) {
+            MemberBrandAttention entity = new MemberBrandAttention();
+            BeanUtils.copyProperties(memberBrandAttention, entity);
+            memberBrandAttentionRepository.save(entity);
+            count = 1;
+        }
+        return count;
+    }
+
+    // ======================= 取消关注 =======================
+    public int delete(Long brandId) {
+        return memberBrandAttentionRepository.deleteByMemberIdAndBrandId(
+                Long.parseLong(StpMemberUtil.getLoginId().toString()), brandId
+        );
+    }
+
+    // ======================= 获取关注列表 =======================
+    public Page<MemberBrandAttentionResponseDTO> list(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+
+        Page<MemberBrandAttention> page = memberBrandAttentionRepository.findByMemberId(
+                Long.parseLong(StpMemberUtil.getLoginId().toString()), pageable
+        );
+
+        return page.map(entity -> {
+            MemberBrandAttentionResponseDTO dto = new MemberBrandAttentionResponseDTO();
+            BeanUtils.copyProperties(entity, dto);
+            return dto;
+        });
+    }
+
+    // ======================= 获取关注详情 =======================
+    public MemberBrandAttentionResponseDTO detail(Long brandId) {
+        MemberBrandAttention entity = memberBrandAttentionRepository.findByMemberIdAndBrandId(
+                Long.parseLong(StpMemberUtil.getLoginId().toString()), brandId
+        );
+        MemberBrandAttentionResponseDTO dto = new MemberBrandAttentionResponseDTO();
+        BeanUtils.copyProperties(entity, dto);
+        return dto;
+    }
+
+    // ======================= 清空关注 =======================
+    public void clear() {
+        memberBrandAttentionRepository.deleteAllByMemberId(Long.parseLong(StpMemberUtil.getLoginId().toString()));
+    }
 }

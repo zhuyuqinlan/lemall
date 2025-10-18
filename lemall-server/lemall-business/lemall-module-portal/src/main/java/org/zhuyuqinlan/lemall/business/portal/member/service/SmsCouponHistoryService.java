@@ -1,8 +1,12 @@
 package org.zhuyuqinlan.lemall.business.portal.member.service;
 
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.SmsCouponHistory;
-import com.baomidou.mybatisplus.extension.service.IService;
-public interface SmsCouponHistoryService extends IService<SmsCouponHistory>{
+import org.zhuyuqinlan.lemall.common.mapper.SmsCouponHistoryMapper;
 
+
+@Service
+public class SmsCouponHistoryService extends ServiceImpl<SmsCouponHistoryMapper, SmsCouponHistory> {
 
 }

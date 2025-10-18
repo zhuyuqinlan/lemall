@@ -1,181 +1,174 @@
 package org.zhuyuqinlan.lemall.common.service;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
- * redis操作service
+ * Redis操作Service
  */
-public interface RedisService {
+@Service
+public class RedisService {
 
-    /**
-     * 保存属性
-     */
-    void set(String key, Object value, long time);
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    /**
-     * 保存属性
-     */
-    void set(String key, Object value);
+    public RedisService(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
-    /**
-     * 获取属性
-     */
-    Object get(String key);
+    // ======================= 通用操作 =======================
 
-    /**
-     * 删除属性
-     */
-    Boolean del(String key);
+    public void set(String key, Object value, long time) {
+        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    }
 
-    /**
-     * 批量删除属性
-     */
-    Long del(List<String> keys);
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
 
-    /**
-     * 设置过期时间
-     */
-    Boolean expire(String key, long time);
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
 
-    /**
-     * 获取过期时间
-     */
-    Long getExpire(String key);
+    public Boolean del(String key) {
+        return redisTemplate.delete(key);
+    }
 
-    /**
-     * 判断是否有该属性
-     */
-    Boolean hasKey(String key);
+    public Long del(List<String> keys) {
+        return redisTemplate.delete(keys);
+    }
 
-    /**
-     * 按delta递增
-     */
-    Long incr(String key, long delta);
+    public Boolean expire(String key, long time) {
+        return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    }
 
-    /**
-     * 按delta递减
-     */
-    Long decr(String key, long delta);
+    public Long getExpire(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
 
-    /**
-     * 获取Hash结构中的属性
-     */
-    Object hGet(String key, String hashKey);
+    public Boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
 
-    /**
-     * 向Hash结构中放入一个属性
-     */
-    Boolean hSet(String key, String hashKey, Object value, long time);
+    public Long incr(String key, long delta) {
+        return redisTemplate.opsForValue().increment(key, delta);
+    }
 
-    /**
-     * 向Hash结构中放入一个属性
-     */
-    void hSet(String key, String hashKey, Object value);
+    public Long decr(String key, long delta) {
+        return redisTemplate.opsForValue().increment(key, -delta);
+    }
 
-    /**
-     * 直接获取整个Hash结构
-     */
-    Map<Object, Object> hGetAll(String key);
+    // ======================= Hash操作 =======================
 
-    /**
-     * 直接设置整个Hash结构
-     */
-    Boolean hSetAll(String key, Map<String, Object> map, long time);
+    public Object hGet(String key, String hashKey) {
+        return redisTemplate.opsForHash().get(key, hashKey);
+    }
 
-    /**
-     * 直接设置整个Hash结构
-     */
-    void hSetAll(String key, Map<String, ?> map);
+    public Boolean hSet(String key, String hashKey, Object value, long time) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+        return expire(key, time);
+    }
 
-    /**
-     * 删除Hash结构中的属性
-     */
-    void hDel(String key, Object... hashKey);
+    public void hSet(String key, String hashKey, Object value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
 
-    /**
-     * 判断Hash结构中是否有该属性
-     */
-    Boolean hHasKey(String key, String hashKey);
+    public Map<Object, Object> hGetAll(String key) {
+        return redisTemplate.opsForHash().entries(key);
+    }
 
-    /**
-     * Hash结构中属性递增
-     */
-    Long hIncr(String key, String hashKey, Long delta);
+    public Boolean hSetAll(String key, Map<String, Object> map, long time) {
+        redisTemplate.opsForHash().putAll(key, map);
+        return expire(key, time);
+    }
 
-    /**
-     * Hash结构中属性递减
-     */
-    Long hDecr(String key, String hashKey, Long delta);
+    public void hSetAll(String key, Map<String, ?> map) {
+        redisTemplate.opsForHash().putAll(key, map);
+    }
 
-    /**
-     * 获取Set结构
-     */
-    Set<Object> sMembers(String key);
+    public void hDel(String key, Object... hashKey) {
+        redisTemplate.opsForHash().delete(key, hashKey);
+    }
 
-    /**
-     * 向Set结构中添加属性
-     */
-    Long sAdd(String key, Object... values);
+    public Boolean hHasKey(String key, String hashKey) {
+        return redisTemplate.opsForHash().hasKey(key, hashKey);
+    }
 
-    /**
-     * 向Set结构中添加属性
-     */
-    Long sAdd(String key, long time, Object... values);
+    public Long hIncr(String key, String hashKey, Long delta) {
+        return redisTemplate.opsForHash().increment(key, hashKey, delta);
+    }
 
-    /**
-     * 是否为Set中的属性
-     */
-    Boolean sIsMember(String key, Object value);
+    public Long hDecr(String key, String hashKey, Long delta) {
+        return redisTemplate.opsForHash().increment(key, hashKey, -delta);
+    }
 
-    /**
-     * 获取Set结构的长度
-     */
-    Long sSize(String key);
+    // ======================= Set操作 =======================
 
-    /**
-     * 删除Set结构中的属性
-     */
-    Long sRemove(String key, Object... values);
+    public Set<Object> sMembers(String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
 
-    /**
-     * 获取List结构中的属性
-     */
-    List<Object> lRange(String key, long start, long end);
+    public Long sAdd(String key, Object... values) {
+        return redisTemplate.opsForSet().add(key, values);
+    }
 
-    /**
-     * 获取List结构的长度
-     */
-    Long lSize(String key);
+    public Long sAdd(String key, long time, Object... values) {
+        Long count = redisTemplate.opsForSet().add(key, values);
+        expire(key, time);
+        return count;
+    }
 
-    /**
-     * 根据索引获取List中的属性
-     */
-    Object lIndex(String key, long index);
+    public Boolean sIsMember(String key, Object value) {
+        return redisTemplate.opsForSet().isMember(key, value);
+    }
 
-    /**
-     * 向List结构中添加属性
-     */
-    Long lPush(String key, Object value);
+    public Long sSize(String key) {
+        return redisTemplate.opsForSet().size(key);
+    }
 
-    /**
-     * 向List结构中添加属性
-     */
-    Long lPush(String key, Object value, long time);
+    public Long sRemove(String key, Object... values) {
+        return redisTemplate.opsForSet().remove(key, values);
+    }
 
-    /**
-     * 向List结构中批量添加属性
-     */
-    Long lPushAll(String key, Object... values);
+    // ======================= List操作 =======================
 
-    /**
-     * 向List结构中批量添加属性
-     */
-    Long lPushAll(String key, Long time, Object... values);
+    public List<Object> lRange(String key, long start, long end) {
+        return redisTemplate.opsForList().range(key, start, end);
+    }
 
-    /**
-     * 从List结构中移除属性
-     */
-    Long lRemove(String key, long count, Object value);
+    public Long lSize(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    public Object lIndex(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
+
+    public Long lPush(String key, Object value) {
+        return redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    public Long lPush(String key, Object value, long time) {
+        Long index = redisTemplate.opsForList().rightPush(key, value);
+        expire(key, time);
+        return index;
+    }
+
+    public Long lPushAll(String key, Object... values) {
+        return redisTemplate.opsForList().rightPushAll(key, values);
+    }
+
+    public Long lPushAll(String key, Long time, Object... values) {
+        Long count = redisTemplate.opsForList().rightPushAll(key, values);
+        expire(key, time);
+        return count;
+    }
+
+    public Long lRemove(String key, long count, Object value) {
+        return redisTemplate.opsForList().remove(key, count, value);
+    }
 }

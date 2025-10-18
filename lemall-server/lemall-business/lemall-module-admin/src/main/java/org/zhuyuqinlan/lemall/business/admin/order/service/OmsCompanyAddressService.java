@@ -1,17 +1,26 @@
 package org.zhuyuqinlan.lemall.business.admin.order.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsCompanyAddressResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.OmsCompanyAddress;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.zhuyuqinlan.lemall.common.mapper.OmsCompanyAddressMapper;
 
 import java.util.List;
 
-public interface OmsCompanyAddressService extends IService<OmsCompanyAddress>{
-
+@Service
+public class OmsCompanyAddressService extends ServiceImpl<OmsCompanyAddressMapper, OmsCompanyAddress> {
 
     /**
      * 获取所有收货地址
      * @return 结果
      */
-    List<OmsCompanyAddressResponseDTO> listAll();
+    public List<OmsCompanyAddressResponseDTO> listAll() {
+        return super.list().stream().map(e -> {
+            OmsCompanyAddressResponseDTO dto = new OmsCompanyAddressResponseDTO();
+            BeanUtils.copyProperties(e, dto);
+            return dto;
+        }).toList();
+    }
 }

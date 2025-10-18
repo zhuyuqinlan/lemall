@@ -1,22 +1,38 @@
 package org.zhuyuqinlan.lemall.business.admin.sale.service;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionSessionRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionDetailResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotionSession;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionSessionMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface SmsFlashPromotionSessionService extends IService<SmsFlashPromotionSession>{
+/**
+ * 秒杀活动场次管理 Service
+ */
+@Service
+@RequiredArgsConstructor
+public class SmsFlashPromotionSessionService extends ServiceImpl<SmsFlashPromotionSessionMapper, SmsFlashPromotionSession> {
 
+    private final SmsFlashPromotionProductRelationService relationService;
 
     /**
      * 添加场次
      * @param promotionSession 请求参数
      * @return 成功标志
      */
-    boolean create(SmsFlashPromotionSessionRequestDTO promotionSession);
+    public boolean create(SmsFlashPromotionSessionRequestDTO promotionSession) {
+        SmsFlashPromotionSession smsFlashPromotionSession = new SmsFlashPromotionSession();
+        BeanUtils.copyProperties(promotionSession, smsFlashPromotionSession);
+        return save(smsFlashPromotionSession);
+    }
 
     /**
      * 修改场次
@@ -24,7 +40,12 @@ public interface SmsFlashPromotionSessionService extends IService<SmsFlashPromot
      * @param promotionSession 请求参数
      * @return 成功标志
      */
-    boolean updateFlash(Long id, SmsFlashPromotionSessionRequestDTO promotionSession);
+    public boolean updateFlash(Long id, SmsFlashPromotionSessionRequestDTO promotionSession) {
+        SmsFlashPromotionSession smsFlashPromotionSession = new SmsFlashPromotionSession();
+        BeanUtils.copyProperties(promotionSession, smsFlashPromotionSession);
+        smsFlashPromotionSession.setId(id);
+        return updateById(smsFlashPromotionSession);
+    }
 
     /**
      * 修改启用状态
@@ -32,32 +53,63 @@ public interface SmsFlashPromotionSessionService extends IService<SmsFlashPromot
      * @param status 修改状态
      * @return 成功标志
      */
-    boolean updateStatus(Long id, Integer status);
+    public boolean updateStatus(Long id, Integer status) {
+        return update(Wrappers.<SmsFlashPromotionSession>lambdaUpdate()
+                .eq(SmsFlashPromotionSession::getId, id)
+                .set(SmsFlashPromotionSession::getStatus, status)
+        );
+    }
 
     /**
      * 删除场次
      * @param id id
      * @return 成功标志
      */
-    boolean delete(Long id);
+    public boolean delete(Long id) {
+        return removeById(id);
+    }
 
     /**
      * 获取场次详情
      * @param id id
      * @return 结果
      */
-    SmsFlashPromotionSessionResponseDTO getItem(Long id);
+    public SmsFlashPromotionSessionResponseDTO getItem(Long id) {
+        SmsFlashPromotionSessionResponseDTO responseDTO = new SmsFlashPromotionSessionResponseDTO();
+        SmsFlashPromotionSession smsFlashPromotionSession = getById(id);
+        BeanUtils.copyProperties(smsFlashPromotionSession, responseDTO);
+        return responseDTO;
+    }
 
     /**
      * 获取全部场次
      * @return 结果
      */
-    List<SmsFlashPromotionSessionResponseDTO> listAll();
+    public List<SmsFlashPromotionSessionResponseDTO> listAll() {
+        return list().stream().map(e -> {
+            SmsFlashPromotionSessionResponseDTO responseDTO = new SmsFlashPromotionSessionResponseDTO();
+            BeanUtils.copyProperties(e, responseDTO);
+            return responseDTO;
+        }).toList();
+    }
 
     /**
      * 获取全部可选场次及其数量
      * @param flashPromotionId id
      * @return 结果
      */
-    List<SmsFlashPromotionSessionDetailResponseDTO> selectList(Long flashPromotionId);
+    public List<SmsFlashPromotionSessionDetailResponseDTO> selectList(Long flashPromotionId) {
+        List<SmsFlashPromotionSession> list = list(Wrappers.<SmsFlashPromotionSession>lambdaQuery()
+                .eq(SmsFlashPromotionSession::getStatus, 1)
+        );
+        List<SmsFlashPromotionSessionDetailResponseDTO> result = new ArrayList<>();
+        for (SmsFlashPromotionSession promotionSession : list) {
+            SmsFlashPromotionSessionDetailResponseDTO detail = new SmsFlashPromotionSessionDetailResponseDTO();
+            BeanUtils.copyProperties(promotionSession, detail);
+            long count = relationService.getCount(flashPromotionId, promotionSession.getId());
+            detail.setProductCount(count);
+            result.add(detail);
+        }
+        return result;
+    }
 }

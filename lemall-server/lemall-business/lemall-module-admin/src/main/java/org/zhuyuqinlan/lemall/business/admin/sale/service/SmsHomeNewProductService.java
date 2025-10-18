@@ -1,22 +1,40 @@
 package org.zhuyuqinlan.lemall.business.admin.sale.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeNewProductRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeNewProductResponseDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeNewProduct;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.zhuyuqinlan.lemall.common.mapper.SmsHomeNewProductMapper;
 
 import java.util.List;
 
-public interface SmsHomeNewProductService extends IService<SmsHomeNewProduct>{
-
+/**
+ * 首页新品推荐管理 Service
+ */
+@Service
+public class SmsHomeNewProductService extends ServiceImpl<SmsHomeNewProductMapper, SmsHomeNewProduct> {
 
     /**
-     * 添加首页推荐品牌
-     * @param homeBrandList 请求参数
+     * 添加首页新品推荐
+     * @param homeBrandList 请求参数列表
      * @return 成功标志
      */
-    boolean create(List<SmsHomeNewProductRequestDTO> homeBrandList);
+    public boolean create(List<SmsHomeNewProductRequestDTO> homeBrandList) {
+        List<SmsHomeNewProduct> smsHomeNewProducts = homeBrandList.stream().map(e -> {
+            SmsHomeNewProduct smsHomeNewProduct = new SmsHomeNewProduct();
+            BeanUtils.copyProperties(e, smsHomeNewProduct);
+            smsHomeNewProduct.setRecommendStatus(1);
+            smsHomeNewProduct.setSort(0);
+            return smsHomeNewProduct;
+        }).toList();
+        return saveBatch(smsHomeNewProducts);
+    }
 
     /**
      * 修改推荐排序
@@ -24,14 +42,21 @@ public interface SmsHomeNewProductService extends IService<SmsHomeNewProduct>{
      * @param sort 排序
      * @return 成功标志
      */
-    boolean updateSort(Long id, Integer sort);
+    public boolean updateSort(Long id, Integer sort) {
+        return update(Wrappers.<SmsHomeNewProduct>lambdaUpdate()
+                .eq(SmsHomeNewProduct::getId, id)
+                .set(SmsHomeNewProduct::getSort, sort)
+        );
+    }
 
     /**
      * 批量删除推荐
      * @param ids ids
      * @return 成功标志
      */
-    boolean delete(List<Long> ids);
+    public boolean delete(List<Long> ids) {
+        return removeByIds(ids);
+    }
 
     /**
      * 批量修改推荐状态
@@ -39,7 +64,12 @@ public interface SmsHomeNewProductService extends IService<SmsHomeNewProduct>{
      * @param recommendStatus 推荐状态
      * @return 成功标志
      */
-    boolean updateRecommendStatus(List<Long> ids, Integer recommendStatus);
+    public boolean updateRecommendStatus(List<Long> ids, Integer recommendStatus) {
+        return update(Wrappers.<SmsHomeNewProduct>lambdaUpdate()
+                .in(SmsHomeNewProduct::getId, ids)
+                .set(SmsHomeNewProduct::getRecommendStatus, recommendStatus)
+        );
+    }
 
     /**
      * 分页查询推荐
@@ -49,5 +79,15 @@ public interface SmsHomeNewProductService extends IService<SmsHomeNewProduct>{
      * @param pageNum 页码
      * @return 结果
      */
-    IPage<SmsHomeNewProductResponseDTO> listPage(String productName, Integer recommendStatus, Integer pageSize, Integer pageNum);
+    public IPage<SmsHomeNewProductResponseDTO> listPage(String productName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
+        return page(new Page<>(pageNum, pageSize), Wrappers.<SmsHomeNewProduct>lambdaQuery()
+                .like(StringUtils.hasText(productName), SmsHomeNewProduct::getProductName, productName)
+                .eq(recommendStatus != null, SmsHomeNewProduct::getRecommendStatus, recommendStatus)
+                .orderByDesc(SmsHomeNewProduct::getSort)
+        ).convert(e -> {
+            SmsHomeNewProductResponseDTO responseDTO = new SmsHomeNewProductResponseDTO();
+            BeanUtils.copyProperties(e, responseDTO);
+            return responseDTO;
+        });
+    }
 }

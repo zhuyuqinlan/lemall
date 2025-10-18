@@ -1,93 +1,119 @@
 package org.zhuyuqinlan.lemall.business.admin.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsRoleDao;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsRoleRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
-import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
-import org.zhuyuqinlan.lemall.common.entity.UmsRole;
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.transaction.annotation.Transactional;
+import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.mapper.UmsRoleMapper;
+import org.zhuyuqinlan.lemall.common.response.BizException;
 
 import java.util.List;
+import java.util.Objects;
 
-public interface UmsRoleService extends IService<UmsRole>{
+/**
+ * 后台角色管理Service
+ */
+@Service
+@RequiredArgsConstructor
+public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
 
+    private final UmsRoleMenuRelationService umsRoleMenuRelationService;
+    private final UmsAdminRoleRelationService umsAdminRoleRelationService;
+    private final UmsRoleResourceRelationService umsRoleResourceRelationService;
+    private final UmsResourceService umsResourceService;
+    private final UmsRoleDao umsRoleDao;
 
-    /**
-     * 根据管理员ID获取对应菜单
-     */
-    List<UmsMenu> getMenuList(Long id);
+    public List<UmsMenu> getMenuList(Long id) {
+        return umsRoleDao.getMenuList(id);
+    }
 
-    /**
-     * 分页查询角色列表
-     * @param keyword 关键字
-     * @param pageSize 每页条数
-     * @param pageNum 页码
-     * @return 查询结果
-     */
-    IPage<UmsRoleResponseDTO> pageRole(String keyword, Integer pageSize, Integer pageNum);
+    public IPage<UmsRoleResponseDTO> pageRole(String keyword, Integer pageSize, Integer pageNum) {
+        return baseMapper.selectPage(new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(pageNum, pageSize),
+                com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRole>lambdaQuery()
+                        .like(StringUtils.hasText(keyword), UmsRole::getName, keyword)
+                        .orderByDesc(UmsRole::getSort)
+                        .orderByDesc(UmsRole::getCreateTime)
+        ).convert(umsRole -> {
+            UmsRoleResponseDTO dto = new UmsRoleResponseDTO();
+            org.springframework.beans.BeanUtils.copyProperties(umsRole, dto);
+            return dto;
+        });
+    }
 
+    public int updateRole(Long id, UmsRoleRequestDTO umsRole) {
+        if (umsRole.getName() != null) {
+            List<UmsRole> umsRoles = baseMapper.selectList(com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRole>lambdaQuery().eq(UmsRole::getName, umsRole.getName()));
+            if (!umsRoles.isEmpty()) {
+                Long tempId = umsRoles.get(0).getId();
+                if (!Objects.equals(tempId, id)) {
+                    throw new BizException("该角色名称已存在");
+                }
+            }
+        }
+        UmsRole role = new UmsRole();
+        role.setId(id);
+        org.springframework.beans.BeanUtils.copyProperties(umsRole, role);
+        return baseMapper.updateById(role);
+    }
 
-    /**
-     * 修改角色信息
-     * @param id 角色id
-     * @param umsRole 内容
-     * @return 受影响的行数
-     */
-    int updateRole(Long id, UmsRoleRequestDTO umsRole);
+    public List<UmsRoleResponseDTO> listAll() {
+        return super.list().stream().map(umsRole -> {
+            UmsRoleResponseDTO dto = new UmsRoleResponseDTO();
+            org.springframework.beans.BeanUtils.copyProperties(umsRole, dto);
+            return dto;
+        }).toList();
+    }
 
-    /**
-     * 返回所有角色
-     * @return 角色
-     */
-    List<UmsRoleResponseDTO> listAll();
+    public boolean deleteRoles(List<Long> ids) {
+        umsRoleMenuRelationService.remove(com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRoleMenuRelation>lambdaQuery().in(UmsRoleMenuRelation::getRoleId, ids));
+        umsAdminRoleRelationService.remove(com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsAdminRoleRelation>lambdaQuery().in(UmsAdminRoleRelation::getRoleId, ids));
+        return super.removeByIds(ids);
+    }
 
-    /**
-     * 删除角色
-     * @param ids 角色id
-     * @return 删除标志
-     */
-    @Transactional
-    boolean deleteRoles(List<Long> ids);
+    public boolean create(UmsRoleRequestDTO role) {
+        UmsRole umsRole = new UmsRole();
+        org.springframework.beans.BeanUtils.copyProperties(role, umsRole);
+        umsRole.setAdminCount(0);
+        return super.save(umsRole);
+    }
 
+    public List<UmsMenuResponseDTO> listMenu(Long roleId) {
+        return umsRoleDao.getMenuListByRoleId(roleId);
+    }
 
-    /**
-     * 添加角色
-     * @param role 角色dto
-     * @return 是否成功
-     */
-    boolean create(UmsRoleRequestDTO role);
+    public int allocMenu(Long roleId, List<Long> menuIds) {
+        umsRoleMenuRelationService.remove(com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRoleMenuRelation>lambdaQuery().eq(UmsRoleMenuRelation::getRoleId, roleId));
+        List<UmsRoleMenuRelation> relationList = menuIds.stream().map(id -> {
+            UmsRoleMenuRelation rel = new UmsRoleMenuRelation();
+            rel.setRoleId(roleId);
+            rel.setMenuId(id);
+            return rel;
+        }).toList();
+        umsRoleMenuRelationService.saveBatch(relationList);
+        return menuIds.size();
+    }
 
-    /**
-     * 根据角色id查菜单
-     * @param roleId 角色id
-     * @return 菜单
-     */
-    List<UmsMenuResponseDTO> listMenu(Long roleId);
+    public List<UmsResourceResponseDTO> listResource(Long roleId) {
+        return umsRoleDao.getResourceListByRoleId(roleId);
+    }
 
-    /**
-     * 跟角色分配菜单
-     * @param roleId 角色id
-     * @param menuIds 菜单列表
-     * @return 分配的条数
-     */
-    @Transactional
-    int allocMenu(Long roleId, List<Long> menuIds);
-
-    /**
-     * 根据角色id查资源
-     * @param roleId 角色id
-     * @return 资源列表
-     */
-    List<UmsResourceResponseDTO> listResource(Long roleId);
-
-    /**
-     * 给用户分配资源
-     * @param roleId 用户id
-     * @param resourceIds 资源id列表
-     * @return 受影响的行数
-     */
-    int allocResource(Long roleId, List<Long> resourceIds);
+    public int allocResource(Long roleId, List<Long> resourceIds) {
+        umsRoleResourceRelationService.remove(com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRoleResourceRelation>lambdaQuery().eq(UmsRoleResourceRelation::getRoleId, roleId));
+        List<UmsRoleResourceRelation> relationList = resourceIds.stream().map(id -> {
+            UmsRoleResourceRelation rel = new UmsRoleResourceRelation();
+            rel.setRoleId(roleId);
+            rel.setResourceId(id);
+            return rel;
+        }).toList();
+        umsRoleResourceRelationService.saveBatch(relationList);
+        umsResourceService.initPathResourceMap();
+        return resourceIds.size();
+    }
 }

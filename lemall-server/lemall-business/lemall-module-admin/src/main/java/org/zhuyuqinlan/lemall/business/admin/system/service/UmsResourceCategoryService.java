@@ -1,40 +1,71 @@
 package org.zhuyuqinlan.lemall.business.admin.system.service;
 
-import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
-import org.zhuyuqinlan.lemall.common.entity.UmsResourceCategory;
-import com.baomidou.mybatisplus.extension.service.IService;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import java.util.List;
 
-public interface UmsResourceCategoryService extends IService<UmsResourceCategory>{
+import org.zhuyuqinlan.lemall.common.entity.UmsResourceCategory;
+import org.zhuyuqinlan.lemall.common.mapper.UmsResourceCategoryMapper;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
+import org.zhuyuqinlan.lemall.common.entity.UmsResource;
+import org.zhuyuqinlan.lemall.common.response.BizException;
 
+/**
+ * 资源分类服务类
+ */
+@Service
+@RequiredArgsConstructor
+public class UmsResourceCategoryService extends ServiceImpl<UmsResourceCategoryMapper, UmsResourceCategory> {
+
+    private final UmsResourceService umsResourceService;
 
     /**
      * 列出所有资源分类
-     * @return 资源分类列表
      */
-    List<UmsResourceCategoryResponseDTO> listAllResourceCategory();
+    public List<UmsResourceCategoryResponseDTO> listAllResourceCategory() {
+        return super.list(Wrappers.<UmsResourceCategory>lambdaQuery()
+                        .orderByDesc(UmsResourceCategory::getSort)
+                        .orderByDesc(UmsResourceCategory::getCreateTime))
+                .stream().map(e -> {
+                    UmsResourceCategoryResponseDTO dto = new UmsResourceCategoryResponseDTO();
+                    BeanUtils.copyProperties(e, dto);
+                    return dto;
+                }).toList();
+    }
 
     /**
      * 添加资源分类
-     * @param umsResourceCategoryRequestDTO 参数
-     * @return 成功标志
      */
-    boolean create(UmsResourceCategoryRequestDTO umsResourceCategoryRequestDTO);
+    public boolean create(UmsResourceCategoryRequestDTO umsResourceCategoryRequestDTO) {
+        UmsResourceCategory umsResourceCategory = new UmsResourceCategory();
+        BeanUtils.copyProperties(umsResourceCategoryRequestDTO, umsResourceCategory);
+        return super.save(umsResourceCategory);
+    }
 
     /**
      * 修改资源分类
-     * @param id id
-     * @param umsResourceCategoryRequestDTO 参数
-     * @return 成功标志
      */
-    boolean updateRes(Long id, UmsResourceCategoryRequestDTO umsResourceCategoryRequestDTO);
+    public boolean updateRes(Long id, UmsResourceCategoryRequestDTO umsResourceCategoryRequestDTO) {
+        UmsResourceCategory umsResourceCategory = new UmsResourceCategory();
+        BeanUtils.copyProperties(umsResourceCategoryRequestDTO, umsResourceCategory);
+        umsResourceCategory.setId(id);
+        return super.updateById(umsResourceCategory);
+    }
 
     /**
      * 删除资源分类
-     * @param id id
-     * @return 成功标志
      */
-    boolean delete(Long id);
+    public boolean delete(Long id) {
+        List<UmsResource> list = umsResourceService.list(
+                Wrappers.<UmsResource>lambdaQuery().eq(UmsResource::getCategoryId, id)
+        );
+        if (list != null && !list.isEmpty()) {
+            throw new BizException("该菜单分类下还有菜单项");
+        }
+        return super.removeById(id);
+    }
 }
