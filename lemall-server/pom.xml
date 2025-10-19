@@ -15,6 +15,7 @@
         <module>lemall-business</module>
         <module>lemall-common</module>
         <module>lemall-auth</module>
+        <module>lemall-common-web</module>
     </modules>
 
     <properties>
@@ -25,6 +26,7 @@
         <lemall-auth.version>v0.0.1</lemall-auth.version>
         <lemall-module-admin.version>v0.0.1</lemall-module-admin.version>
         <lemall-moduel-portal.version>v0.0.1</lemall-moduel-portal.version>
+        <lemall-common-web.version>v0.0.1</lemall-common-web.version>
 
         <spring-boot.version>3.2.1</spring-boot.version>
         <knife4j-openapi3-jakarta-spring-boot-starter.version>4.5.0</knife4j-openapi3-jakarta-spring-boot-starter.version>
@@ -61,6 +63,12 @@
                 <groupId>org.zhuyuqinlan</groupId>
                 <artifactId>lemall-module-admin</artifactId>
                 <version>${lemall-module-admin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.zhuyuqinlan</groupId>
+                <artifactId>lemall-common-web</artifactId>
+                <version>${lemall-common-web.version}</version>
             </dependency>
 
             <dependency>

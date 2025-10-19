@@ -93,16 +93,6 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
         StpMemberUtil.logout();
     }
 
-    // ======================= 验证码 =======================
-
-    public void generateAuthCode(String email) {
-        if (!captchaService.canSendAuthCode(CaptchaConstant.EMAIL, email)) {
-            throw new BizException("请勿频繁获取验证码");
-        }
-        String code = captchaService.setAuthCode(email, CaptchaConstant.EMAIL, 300, 60);
-        log.info("验证码为：{}", code);
-    }
-
     // ======================= 密码更新 =======================
 
     public void updatePassword(String email, String password, String authCode) {

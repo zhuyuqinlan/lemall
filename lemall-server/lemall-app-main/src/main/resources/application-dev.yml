@@ -13,6 +13,7 @@ spring:
     mongodb:
       uri: mongodb://root:123456@zhuyuqinlan.io:27017/lemall-portal?authSource=admin&authMechanism=SCRAM-SHA-1
 minio:
-  endpoint: http://zhuyuqinlan.io:9000 #MinIO服务所在地址
-  accessKey: 8pox7jXJXi98WC5n2f1H #访问的key
-  secretKey: a5J1qPkZfgua0N1UdyVNuIv1wk8okgbK5U8URkvM #访问的秘钥
+  endpoint: http://zhuyuqinlan.io:9000 #MinIO服务所在地址(局域网)
+  publicEndpoint: http://zhuyuqinlan.io:9000 # 前端直传和回显时使用(公网)开发环境都用局域网
+  accessKey: wud5C5TvSdXzVTUk51Mh #访问的key
+  secretKey: dvkNmUKGYRBBKXFXKR7RJHLCbz1v81kp0O0ciEkF #访问的秘钥

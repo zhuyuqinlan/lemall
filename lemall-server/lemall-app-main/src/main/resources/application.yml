@@ -3,6 +3,10 @@ spring:
     name: lemall
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB # 单个文件最大
+      max-request-size: 200MB # 总文件最大
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -99,8 +103,8 @@ secure:
       - "/v3/api-docs/**"
       - "/webjars/**"
       - "/favicon.ico"
+      - "/lemall/common/**"
       - "${lemall.server.prefix.admin}/system/admin/login"
-      - "${lemall.server.prefix.portal}/sso/getAuthCode"
       - "${lemall.server.prefix.portal}/sso/login"
       - "${lemall.server.prefix.portal}/sso/register"
 lemall:

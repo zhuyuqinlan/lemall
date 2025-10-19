@@ -60,13 +60,6 @@ public class UmsMemberController {
         return Result.success();
     }
 
-    @Operation(summary = "获取验证码")
-    @GetMapping("/getAuthCode")
-    public Result<?> getAuthCode(@RequestParam String email) {
-        memberService.generateAuthCode(email);
-        return Result.success();
-    }
-
     @Operation(summary = "修改密码")
     @PostMapping("/updatePassword")
     public Result<?> updatePassword(@RequestParam String email,
