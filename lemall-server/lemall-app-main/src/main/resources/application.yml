@@ -39,6 +39,9 @@ spring:
         wall: # 防火墙
           config:
             multi-statement-allow: true
+  data:
+    redis:
+      database: 1 # 设置redis使用的数据库编号
 redis:
   database: lemall
   key:

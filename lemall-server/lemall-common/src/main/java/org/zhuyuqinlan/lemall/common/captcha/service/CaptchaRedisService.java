@@ -61,8 +61,8 @@ public class CaptchaRedisService {
      * @return 验证码字符串，如果不存在返回 null
      */
     public String getAuthCode(String target, String type) {
-        String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + type + ":" + target;
-        return (String) redisService.get(key);
+        String authCodeKey = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + type + ":" + target;
+        return (String) redisService.get(authCodeKey);
     }
 
     /**

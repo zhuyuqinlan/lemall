@@ -59,7 +59,7 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
     }
 
     private boolean verifyAuthCode(String email, String authCode) {
-        String code = captchaService.getAuthCode(CaptchaConstant.EMAIL,email);
+        String code = captchaService.getAuthCode(email,CaptchaConstant.EMAIL);
         return StringUtils.hasText(code) && code.equals(authCode);
     }
 

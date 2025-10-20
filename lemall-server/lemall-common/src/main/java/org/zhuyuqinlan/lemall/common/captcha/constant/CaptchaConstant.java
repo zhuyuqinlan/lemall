@@ -5,7 +5,7 @@ package org.zhuyuqinlan.lemall.common.captcha.constant;
  */
 public interface CaptchaConstant {
     /**
-     * 邮箱类型
+     * 验证码邮箱类型
      */
-    String EMAIL = "EMAIL";
+    String EMAIL = "email";
  }

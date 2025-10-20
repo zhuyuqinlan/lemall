@@ -29,7 +29,7 @@ public class CaptchaEmailController {
     @Operation(summary = "获取验证码")
     @GetMapping("/getAuthCode")
     public Result<?> getAuthCode(@RequestParam String email) {
-        if (!captchaService.canSendAuthCode(CaptchaConstant.EMAIL, email)) {
+        if (!captchaService.canSendAuthCode(email, CaptchaConstant.EMAIL)) {
             throw new BizException("请勿频繁获取验证码");
         }
         String code = captchaService.setAuthCode(email, CaptchaConstant.EMAIL, 300, 60);
