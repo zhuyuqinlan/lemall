@@ -17,3 +17,7 @@ minio:
   publicEndpoint: http://zhuyuqinlan.io:9000 # 前端直传和回显时使用(公网)开发环境都用局域网
   accessKey: wud5C5TvSdXzVTUk51Mh #访问的key
   secretKey: dvkNmUKGYRBBKXFXKR7RJHLCbz1v81kp0O0ciEkF #访问的秘钥
+localFile:
+  base-path: D:/upload/lemall # 文件上传目录
+  local-download-prefix: /file-dev/local-download # 开发环境使用本地上传，文件访问url的前缀
+  access-url-prefix: "http://localhost:8080${localFile.local-download-prefix}" # 网络访问

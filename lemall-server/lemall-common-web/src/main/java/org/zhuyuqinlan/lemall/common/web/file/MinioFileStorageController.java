@@ -19,12 +19,12 @@ import java.util.Map;
 @Validated
 @RestController
 @Tag(name = "minio文件", description = "FileStorageController")
-@RequestMapping("/lemall/common/file/minio")
-public class FileStorageController {
+@RequestMapping("${lemall.server.prefix.common}/file/minio")
+public class MinioFileStorageController {
 
     private final FileStorageService fileStorageService;
 
-    public FileStorageController(@Qualifier("minIOService") FileStorageService fileStorageService) {
+    public MinioFileStorageController(@Qualifier("minIOService") FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 

@@ -20,3 +20,6 @@ minio:
   publicEndpoint: https://zhuyuqinlan.org:9000 # 前端直传和回显时使用(公网)
   accessKey: wud5C5TvSdXzVTUk51Mh #访问的key
   secretKey: dvkNmUKGYRBBKXFXKR7RJHLCbz1v81kp0O0ciEkF #访问的秘钥
+localFile:
+  base-path: /usr/local/upload/lemall # 文件上传目录
+  access-url-prefix: https://zhuyuqinlan.org/lemall-nginx/file-prod/local-download # 网络访问前缀（这里用nginx反代访问和nginx约定访问路径，如果nginx和后端不在同一台服务器，那要让后端将文件上传到共享目录中）

@@ -1,6 +1,7 @@
 package org.zhuyuqinlan.lemall.common.web.config;
 
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,11 +10,15 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SpringDocLemallCommonConfig {
+
+    @Value("${lemall.server.prefix.common}")
+    private String prefixCommon;
+
     @Bean
     public GroupedOpenApi lemallCommonWebApi() {
         return GroupedOpenApi.builder()
                 .group("公共接口")
-                .pathsToMatch("/lemall/common/**")
+                .pathsToMatch(prefixCommon + "/**")
                 .build();
     }
 }

@@ -18,7 +18,7 @@ import org.zhuyuqinlan.lemall.common.response.Result;
 @Validated
 @RestController
 @Tag(name = "邮箱验证码", description = "CaptchaController")
-@RequestMapping("/lemall/common/captcha/email")
+@RequestMapping("${lemall.server.prefix.common}/captcha/email")
 public class CaptchaEmailController {
     private final CaptchaService captchaService;
 
