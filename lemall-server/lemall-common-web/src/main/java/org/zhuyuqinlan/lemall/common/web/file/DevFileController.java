@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 @Slf4j
 @Validated
 @RestController
-@Tag(name = "文件操作开发环境专用", description = "LocalFileStorageController")
+@Tag(name = "文件操作(开发环境专用)", description = "LocalFileStorageController")
 public class DevFileController {
 
     private final FileStorageService localFileStorageService;
