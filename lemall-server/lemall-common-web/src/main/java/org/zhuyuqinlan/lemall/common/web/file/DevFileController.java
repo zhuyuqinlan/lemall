@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -25,7 +25,6 @@ import java.nio.file.Paths;
 
 @Profile("dev")  // 只在 dev 环境生效
 @Slf4j
-@Validated
 @RestController
 @Tag(name = "文件操作(开发环境专用)", description = "LocalFileStorageController")
 public class DevFileController {
@@ -93,6 +92,39 @@ public class DevFileController {
         } catch (Exception e) {
             log.error("删除minio文件失败", e);
             return Result.fail("删除minio文件失败: " + e.getMessage());
+        }
+    }
+
+    @Operation(summary = "上传文件")
+    @PostMapping("${lemall.server.prefix.common}/file/dev/minio/upload")
+    public Result<String> upload(@RequestParam("file") MultipartFile file) {
+        try {
+            // 生成当天文件夹名
+            String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+
+            // 获取原文件名后缀
+            String originalFilename = file.getOriginalFilename();
+            String suffix = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
+            }
+
+            // 用 UUID 重命名文件
+            String newFileName = java.util.UUID.randomUUID() + suffix;
+
+            // 拼接文件路径：日期文件夹 + 文件名
+            String objectName = dateFolder + "/" + newFileName;
+
+            InputStream inputStream = file.getInputStream();
+            long size = file.getSize();
+            String contentType = file.getContentType();
+
+            // 上传
+            String url = minioFileStorageService.uploadFile(objectName, inputStream, size, contentType);
+            return Result.success(url);
+        } catch (Exception e) {
+            log.error("上传文件失败", e);
+            return Result.fail("上传文件失败: " + e.getMessage());
         }
     }
 }

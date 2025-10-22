@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.util.Map;
 
 @Slf4j
-@Validated
 @RestController
 @Tag(name = "minio文件", description = "FileStorageController")
 @RequestMapping("${lemall.server.prefix.common}/file/minio")
@@ -26,39 +25,6 @@ public class MinioFileStorageController {
 
     public MinioFileStorageController(@Qualifier("minIOService") FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
-    }
-
-    @Operation(summary = "上传文件")
-    @PostMapping("/upload")
-    public Result<String> upload(@RequestParam("file") MultipartFile file) {
-        try {
-            // 生成当天文件夹名
-            String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-
-            // 获取原文件名后缀
-            String originalFilename = file.getOriginalFilename();
-            String suffix = "";
-            if (originalFilename != null && originalFilename.contains(".")) {
-                suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
-            }
-
-            // 用 UUID 重命名文件
-            String newFileName = java.util.UUID.randomUUID() + suffix;
-
-            // 拼接文件路径：日期文件夹 + 文件名
-            String objectName = dateFolder + "/" + newFileName;
-
-            InputStream inputStream = file.getInputStream();
-            long size = file.getSize();
-            String contentType = file.getContentType();
-
-            // 上传
-            String url = fileStorageService.uploadFile(objectName, inputStream, size, contentType);
-            return Result.success(url);
-        } catch (Exception e) {
-            log.error("上传文件失败", e);
-            return Result.fail("上传文件失败: " + e.getMessage());
-        }
     }
 
     @Operation(summary = "获取文件 URL")

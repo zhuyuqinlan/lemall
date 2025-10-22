@@ -47,6 +47,7 @@ redis:
   key:
     authCode: authCode
     authCodeLimit: authCodeLimit
+    localFileAccess: localFileAccess
   expire:
     common: 7776000 # redis默认过期时间（3个月左右）
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
@@ -99,6 +100,12 @@ knife4j:
     language: zh-CN
     swagger-model-name: 实体类列表
     enable-host-text: localhost:8080
+lemall:
+  server:
+    prefix:
+      common: /api/lemall-common
+      admin: /api/lemall-admin
+      portal: /api/lemall-portal
 secure:
   ignore:
     urls: #配置白名单路径
@@ -106,16 +113,10 @@ secure:
       - "/v3/api-docs/**"
       - "/webjars/**"
       - "/favicon.ico"
-      - "${lemall.server.prefix.common}/**"
+      - "${localFile.local-download-prefix}/**"
       - "${lemall.server.prefix.admin}/system/admin/login"
       - "${lemall.server.prefix.portal}/sso/login"
       - "${lemall.server.prefix.portal}/sso/register"
-lemall:
-  server:
-    prefix:
-      common: /api/lemall-common
-      admin: /api/lemall-admin
-      portal: /api/lemall-portal
 mybatis-plus:
   mapper-locations:
     - classpath*:mapper/**/*.xml

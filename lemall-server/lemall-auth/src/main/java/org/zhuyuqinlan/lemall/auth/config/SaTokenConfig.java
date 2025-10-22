@@ -86,9 +86,16 @@ public class SaTokenConfig {
                                 throw new NotPermissionException("无权限访问资源: " + resource);
                             }
                         }
-
                         // 如果needResourceList中没有配置相关路径，那就不需要鉴权，直接访问...
+                    }).stop();
 
+                    // 3. 全局兜底：检查是否有 token
+                    SaRouter.match("/**", r -> {
+                        boolean hasMemberToken = StpMemberUtil.isLogin();
+                        boolean hasAdminToken = StpUtil.isLogin();
+                        if (!hasMemberToken && !hasAdminToken) {
+                            throw new NotLoginException("请求未携带有效token，访问被拒绝",null,null);
+                        }
                     }).stop();
                 })
                 .setBeforeAuth(obj -> {
