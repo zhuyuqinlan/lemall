@@ -14,7 +14,7 @@ import org.zhuyuqinlan.lemall.common.response.Result;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "会员关注品牌管理", description = "会员关注品牌管理")
+@Tag(name = "会员关注品牌管理", description = "MemberAttentionController")
 @RequestMapping("${lemall.server.prefix.portal}/member/attention")
 public class MemberAttentionController {
 
