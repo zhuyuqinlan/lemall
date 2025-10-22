@@ -18,8 +18,8 @@
 
             <!-- 按大小 + 时间分割，超过50MB自动生成新文件 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- 切分后的文件名，带时间戳 -->
-                <fileNamePattern>logs/%d{yyyy-MM-dd_HH-mm-ss}.log</fileNamePattern>
+                <!-- 修正：加入 %i 占位符 -->
+                <fileNamePattern>logs/app-%d{yyyy-MM-dd_HH-mm-ss}-%i.log</fileNamePattern>
                 <!-- 单个文件最大 50MB -->
                 <maxFileSize>50MB</maxFileSize>
                 <!-- 最多保留30天的日志文件 -->
