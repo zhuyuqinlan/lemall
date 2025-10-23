@@ -34,3 +34,6 @@ secure:
       - "${lemall.server.prefix.admin}/system/admin/login"
       - "${lemall.server.prefix.portal}/sso/login"
       - "${lemall.server.prefix.portal}/sso/register"
+logging:
+  level:
+    root: INFO

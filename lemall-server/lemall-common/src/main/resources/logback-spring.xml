@@ -61,7 +61,7 @@
             </encoder>
         </appender>
 
-        <root level="INFO">
+        <root>
             <appender-ref ref="STDOUT"/>
             <appender-ref ref="FILE-INFO"/>
             <appender-ref ref="FILE-ERROR"/>
@@ -71,7 +71,7 @@
 
     <!-- ===== dev/test 环境只打印控制台 ===== -->
     <springProfile name="!prod">
-        <root level="INFO">
+        <root>
             <appender-ref ref="STDOUT"/>
         </root>
     </springProfile>
