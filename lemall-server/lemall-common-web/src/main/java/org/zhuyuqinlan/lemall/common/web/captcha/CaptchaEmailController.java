@@ -2,6 +2,7 @@ package org.zhuyuqinlan.lemall.common.web.captcha;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +29,7 @@ public class CaptchaEmailController {
 
     @Operation(summary = "获取验证码")
     @GetMapping("/getAuthCode")
-    public Result<?> getAuthCode(@RequestParam String email) {
+    public Result<?> getAuthCode(@RequestParam @Email String email) {
         if (!captchaService.canSendAuthCode(email, CaptchaConstant.EMAIL)) {
             throw new BizException("请勿频繁获取验证码");
         }

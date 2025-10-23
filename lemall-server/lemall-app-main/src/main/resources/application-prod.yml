@@ -30,7 +30,7 @@ secure:
       - "/v3/api-docs/**"
       - "/webjars/**"
       - "/favicon.ico"
-      - "/api/lemall-common/file/local/access-code"
+      - "${lemall.server.prefix.common}/captcha/email/getAuthCode"
       - "${lemall.server.prefix.admin}/system/admin/login"
       - "${lemall.server.prefix.portal}/sso/login"
       - "${lemall.server.prefix.portal}/sso/register"
