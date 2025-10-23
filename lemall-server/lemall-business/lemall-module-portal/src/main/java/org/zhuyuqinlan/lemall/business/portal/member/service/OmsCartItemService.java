@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.CartProduct;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.OmsCartItemRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.OmsCartItemResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.CartPromotionItem;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.OmsCartItemDTO;
 import org.zhuyuqinlan.lemall.common.entity.OmsCartItem;
 import org.zhuyuqinlan.lemall.common.mapper.OmsCartItemMapper;
 
@@ -28,13 +28,13 @@ public class OmsCartItemService extends ServiceImpl<OmsCartItemMapper, OmsCartIt
      * 获取包含促销活动信息的购物车列表
      */
     public List<CartPromotionItem> listPromotion(Long id, List<Long> cartIds) {
-        List<OmsCartItemResponseDTO> omsCartItemResponseDTOS = listCartItemResponseDTO(id);
-        if (CollUtil.isNotEmpty(omsCartItemResponseDTOS)) {
-            omsCartItemResponseDTOS = omsCartItemResponseDTOS.stream().filter(item -> cartIds.contains(item.getId())).toList();
+        List<OmsCartItemDTO> omsCartItemDTOS = listCartItemResponseDTO(id);
+        if (CollUtil.isNotEmpty(omsCartItemDTOS)) {
+            omsCartItemDTOS = omsCartItemDTOS.stream().filter(item -> cartIds.contains(item.getId())).toList();
         }
         List<CartPromotionItem> cartPromotionItems = new ArrayList<>();
-        if (!CollectionUtil.isEmpty(omsCartItemResponseDTOS)) {
-            cartPromotionItems = promotionService.calcCartPromotion(omsCartItemResponseDTOS.stream().map(e -> {
+        if (!CollectionUtil.isEmpty(omsCartItemDTOS)) {
+            cartPromotionItems = promotionService.calcCartPromotion(omsCartItemDTOS.stream().map(e -> {
                 OmsCartItemRequestDTO cartItemRequestDTO = new OmsCartItemRequestDTO();
                 BeanUtils.copyProperties(e, cartItemRequestDTO);
                 return cartItemRequestDTO;
@@ -46,12 +46,12 @@ public class OmsCartItemService extends ServiceImpl<OmsCartItemMapper, OmsCartIt
     /**
      * 根据会员编号获取购物车列表
      */
-    public List<OmsCartItemResponseDTO> listCartItemResponseDTO(Long memberId) {
+    public List<OmsCartItemDTO> listCartItemResponseDTO(Long memberId) {
         return super.list(Wrappers.<OmsCartItem>lambdaQuery()
                 .eq(OmsCartItem::getDeleteStatus, 0)
                 .eq(OmsCartItem::getMemberId, memberId)
         ).stream().map(e -> {
-            OmsCartItemResponseDTO responseDTO = new OmsCartItemResponseDTO();
+            OmsCartItemDTO responseDTO = new OmsCartItemDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         }).toList();

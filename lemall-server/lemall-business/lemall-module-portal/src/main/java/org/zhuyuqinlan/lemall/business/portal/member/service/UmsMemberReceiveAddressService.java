@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.UmsMemberReceiveAddressRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.UmsMemberReceiveAddressResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.UmsMemberReceiveAddressDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsMemberReceiveAddress;
 import org.zhuyuqinlan.lemall.common.mapper.UmsMemberReceiveAddressMapper;
 
@@ -66,12 +66,12 @@ public class UmsMemberReceiveAddressService extends ServiceImpl<UmsMemberReceive
     /**
      * 返回当前用户的收货地址列表
      */
-    public List<UmsMemberReceiveAddressResponseDTO> listAddress() {
+    public List<UmsMemberReceiveAddressDTO> listAddress() {
         Long memberId = Long.parseLong(StpMemberUtil.getLoginId().toString());
         return super.list(Wrappers.<UmsMemberReceiveAddress>lambdaQuery()
                         .eq(UmsMemberReceiveAddress::getMemberId, memberId))
                 .stream().map(e -> {
-                    UmsMemberReceiveAddressResponseDTO dto = new UmsMemberReceiveAddressResponseDTO();
+                    UmsMemberReceiveAddressDTO dto = new UmsMemberReceiveAddressDTO();
                     BeanUtils.copyProperties(e, dto);
                     return dto;
                 }).toList();
@@ -80,14 +80,14 @@ public class UmsMemberReceiveAddressService extends ServiceImpl<UmsMemberReceive
     /**
      * 获取单个地址详情
      */
-    public UmsMemberReceiveAddressResponseDTO getItem(Long id) {
+    public UmsMemberReceiveAddressDTO getItem(Long id) {
         Long memberId = Long.parseLong(StpMemberUtil.getLoginId().toString());
         UmsMemberReceiveAddress entity = super.getOne(Wrappers.<UmsMemberReceiveAddress>lambdaQuery()
                         .eq(UmsMemberReceiveAddress::getMemberId, memberId)
                         .eq(UmsMemberReceiveAddress::getId, id),
                 false
         );
-        UmsMemberReceiveAddressResponseDTO dto = new UmsMemberReceiveAddressResponseDTO();
+        UmsMemberReceiveAddressDTO dto = new UmsMemberReceiveAddressDTO();
         if (entity != null) {
             BeanUtils.copyProperties(entity, dto);
         }

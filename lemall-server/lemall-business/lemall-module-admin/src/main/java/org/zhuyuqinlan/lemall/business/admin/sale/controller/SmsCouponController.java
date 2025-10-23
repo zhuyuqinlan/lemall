@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponParamDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponDTO;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,19 +44,19 @@ public class SmsCouponController {
 
     @Operation(summary = "根据优惠券名称和类型分页获取优惠券列表")
     @GetMapping("/list")
-    public Result<IPage<SmsCouponResponseDTO>> list(
+    public Result<IPage<SmsCouponDTO>> list(
             @RequestParam(value = "name",required = false) String name,
             @RequestParam(value = "type",required = false) Integer type,
             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsCouponResponseDTO> couponList = couponService.listPage(name,type,pageSize,pageNum);
+        IPage<SmsCouponDTO> couponList = couponService.listPage(name,type,pageSize,pageNum);
         return Result.success(couponList);
     }
 
     @Operation(summary = "获取单个优惠券的详细信息")
     @GetMapping("/{id}")
-    public Result<SmsCouponParamResponseDTO> getItem(@PathVariable Long id) {
-        SmsCouponParamResponseDTO couponParam = couponService.getItem(id);
+    public Result<SmsCouponParamDTO> getItem(@PathVariable Long id) {
+        SmsCouponParamDTO couponParam = couponService.getItem(id);
         return Result.success(couponParam);
     }
 }

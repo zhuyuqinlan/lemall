@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderReturnReasonRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnReasonResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnReasonDTO;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderReturnReason;
 import org.zhuyuqinlan.lemall.common.mapper.OmsOrderReturnReasonMapper;
 
@@ -45,9 +45,9 @@ public class OmsOrderReturnReasonService extends ServiceImpl<OmsOrderReturnReaso
     /**
      * 分页查询全部退货原因
      */
-    public IPage<OmsOrderReturnReasonResponseDTO> listPage(Integer pageSize, Integer pageNum) {
+    public IPage<OmsOrderReturnReasonDTO> listPage(Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize)).convert(e -> {
-            OmsOrderReturnReasonResponseDTO re = new OmsOrderReturnReasonResponseDTO();
+            OmsOrderReturnReasonDTO re = new OmsOrderReturnReasonDTO();
             BeanUtils.copyProperties(e, re);
             return re;
         });
@@ -56,9 +56,9 @@ public class OmsOrderReturnReasonService extends ServiceImpl<OmsOrderReturnReaso
     /**
      * 获取单个退货原因详情信息
      */
-    public OmsOrderReturnReasonResponseDTO getItem(Long id) {
+    public OmsOrderReturnReasonDTO getItem(Long id) {
         OmsOrderReturnReason omsOrderReturnReason = super.getById(id);
-        OmsOrderReturnReasonResponseDTO re = new OmsOrderReturnReasonResponseDTO();
+        OmsOrderReturnReasonDTO re = new OmsOrderReturnReasonDTO();
         BeanUtils.copyProperties(omsOrderReturnReason, re);
         return re;
     }

@@ -7,11 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
-import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberProductCollection;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.MemberProductCollection;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberProductCollectionRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberProductCollectionResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberProductCollectionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.repository.MemberProductCollectionRepository;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 
 
@@ -25,7 +25,7 @@ public class MemberCollectionService {
     // ======================= 添加收藏 =======================
     public int add(MemberProductCollectionRequestDTO productCollection) {
         int count = 0;
-        UmsMemberResponseDTO currentMember = umsMemberService.getCurrentMember();
+        UmsMemberDTO currentMember = umsMemberService.getCurrentMember();
         productCollection.setMemberId(currentMember.getId());
         productCollection.setMemberNickname(currentMember.getNickname());
         productCollection.setMemberIcon(currentMember.getIcon());
@@ -50,7 +50,7 @@ public class MemberCollectionService {
     }
 
     // ======================= 收藏列表 =======================
-    public Page<MemberProductCollectionResponseDTO> list(Integer pageNum, Integer pageSize) {
+    public Page<MemberProductCollectionDTO> list(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
 
         Page<MemberProductCollection> page = productCollectionRepository.findByMemberId(
@@ -58,18 +58,18 @@ public class MemberCollectionService {
         );
 
         return page.map(entity -> {
-            MemberProductCollectionResponseDTO dto = new MemberProductCollectionResponseDTO();
+            MemberProductCollectionDTO dto = new MemberProductCollectionDTO();
             BeanUtils.copyProperties(entity, dto);
             return dto;
         });
     }
 
     // ======================= 收藏详情 =======================
-    public MemberProductCollectionResponseDTO detail(Long productId) {
+    public MemberProductCollectionDTO detail(Long productId) {
         MemberProductCollection entity = productCollectionRepository.findByMemberIdAndProductId(
                 Long.parseLong(StpMemberUtil.getLoginId().toString()), productId
         );
-        MemberProductCollectionResponseDTO dto = new MemberProductCollectionResponseDTO();
+        MemberProductCollectionDTO dto = new MemberProductCollectionDTO();
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }

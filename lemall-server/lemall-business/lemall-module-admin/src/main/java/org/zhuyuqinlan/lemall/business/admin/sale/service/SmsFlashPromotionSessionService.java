@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionSessionRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionDetailResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionSessionDetailDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionSessionDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotionSession;
 import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionSessionMapper;
 
@@ -74,8 +74,8 @@ public class SmsFlashPromotionSessionService extends ServiceImpl<SmsFlashPromoti
      * @param id id
      * @return 结果
      */
-    public SmsFlashPromotionSessionResponseDTO getItem(Long id) {
-        SmsFlashPromotionSessionResponseDTO responseDTO = new SmsFlashPromotionSessionResponseDTO();
+    public SmsFlashPromotionSessionDTO getItem(Long id) {
+        SmsFlashPromotionSessionDTO responseDTO = new SmsFlashPromotionSessionDTO();
         SmsFlashPromotionSession smsFlashPromotionSession = getById(id);
         BeanUtils.copyProperties(smsFlashPromotionSession, responseDTO);
         return responseDTO;
@@ -85,9 +85,9 @@ public class SmsFlashPromotionSessionService extends ServiceImpl<SmsFlashPromoti
      * 获取全部场次
      * @return 结果
      */
-    public List<SmsFlashPromotionSessionResponseDTO> listAll() {
+    public List<SmsFlashPromotionSessionDTO> listAll() {
         return list().stream().map(e -> {
-            SmsFlashPromotionSessionResponseDTO responseDTO = new SmsFlashPromotionSessionResponseDTO();
+            SmsFlashPromotionSessionDTO responseDTO = new SmsFlashPromotionSessionDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         }).toList();
@@ -98,13 +98,13 @@ public class SmsFlashPromotionSessionService extends ServiceImpl<SmsFlashPromoti
      * @param flashPromotionId id
      * @return 结果
      */
-    public List<SmsFlashPromotionSessionDetailResponseDTO> selectList(Long flashPromotionId) {
+    public List<SmsFlashPromotionSessionDetailDTO> selectList(Long flashPromotionId) {
         List<SmsFlashPromotionSession> list = list(Wrappers.<SmsFlashPromotionSession>lambdaQuery()
                 .eq(SmsFlashPromotionSession::getStatus, 1)
         );
-        List<SmsFlashPromotionSessionDetailResponseDTO> result = new ArrayList<>();
+        List<SmsFlashPromotionSessionDetailDTO> result = new ArrayList<>();
         for (SmsFlashPromotionSession promotionSession : list) {
-            SmsFlashPromotionSessionDetailResponseDTO detail = new SmsFlashPromotionSessionDetailResponseDTO();
+            SmsFlashPromotionSessionDetailDTO detail = new SmsFlashPromotionSessionDetailDTO();
             BeanUtils.copyProperties(promotionSession, detail);
             long count = relationService.getCount(flashPromotionId, promotionSession.getId());
             detail.setProductCount(count);

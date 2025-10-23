@@ -22,7 +22,7 @@
     use_time, order_id, order_sn
   </sql>
 
-    <resultMap id="couponHistoryDetailMap" type="org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryDetail"
+    <resultMap id="couponHistoryDetailMap" type="org.zhuyuqinlan.lemall.business.portal.member.dto.SmsCouponHistoryDetail"
                extends="org.zhuyuqinlan.lemall.business.portal.member.dao.SmsCouponHistoryDao.BaseResultMap">
         <association property="coupon" resultMap="org.zhuyuqinlan.lemall.common.mapper.SmsCouponMapper.BaseResultMap" columnPrefix="c_">
         </association>
@@ -32,7 +32,7 @@
         </collection>
     </resultMap>
 
-  <select id="getCouponList" resultType="org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponResponseDTO">
+  <select id="getCouponList" resultType="org.zhuyuqinlan.lemall.business.portal.member.dto.SmsCouponDTO">
       SELECT
       c.*
       FROM

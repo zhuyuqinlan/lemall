@@ -1,6 +1,6 @@
 package org.zhuyuqinlan.lemall.business.admin.product.dao;
 
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductParamResultResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductParamResultDTO;
 
 public interface PmsProductDao {
     /**
@@ -8,5 +8,5 @@ public interface PmsProductDao {
      * @param id id
      * @return 结果
      */
-    PmsProductParamResultResponseDTO getUpdateInfo(Long id);
+    PmsProductParamResultDTO getUpdateInfo(Long id);
 }

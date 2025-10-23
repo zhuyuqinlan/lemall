@@ -3,7 +3,7 @@
 <mapper namespace="org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsFlashPromotionProductRelationDao">
 
     <resultMap id="flashProductMap"
-               type="org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO"
+               type="org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductResponseDTO"
                extends="org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionProductRelationMapper.BaseResultMap">
         <association property="product"
                      resultMap="org.zhuyuqinlan.lemall.business.admin.product.dao.PmsProductDao.BaseResultMap"

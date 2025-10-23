@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.business.portal.member.dao.PortalProductDao;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.PromotionProduct;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.OmsCartItemRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.CartPromotionItem;
 import org.zhuyuqinlan.lemall.common.entity.OmsCartItem;
 import org.zhuyuqinlan.lemall.common.entity.PmsProductFullReduction;
 import org.zhuyuqinlan.lemall.common.entity.PmsProductLadder;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectDTO;
 import org.zhuyuqinlan.lemall.business.admin.content.service.CmsSubjectService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -26,17 +26,17 @@ public class CmsSubjectController {
 
     @Operation(summary = "获取全部商品专题")
     @GetMapping("/listAll")
-    public Result<List<CmsSubjectResponseDTO>> listAll() {
-        List<CmsSubjectResponseDTO> res = cmsSubjectService.listAll();
+    public Result<List<CmsSubjectDTO>> listAll() {
+        List<CmsSubjectDTO> res = cmsSubjectService.listAll();
         return Result.success(res);
     }
 
     @Operation(summary = "根据专题名称分页获取专题")
     @GetMapping("/list")
-    public Result<IPage<CmsSubjectResponseDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-            IPage<CmsSubjectResponseDTO> res = cmsSubjectService.listPage(keyword, pageNum, pageSize);
+    public Result<IPage<CmsSubjectDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+            IPage<CmsSubjectDTO> res = cmsSubjectService.listPage(keyword, pageNum, pageSize);
             return Result.success(res);
     }
 

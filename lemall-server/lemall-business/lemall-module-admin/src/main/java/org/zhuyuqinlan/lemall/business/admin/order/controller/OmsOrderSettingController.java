@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderSettingRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderSettingResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderSettingDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderSettingService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -22,8 +22,8 @@ public class OmsOrderSettingController {
 
     @Operation(summary = "获取指定订单设置")
     @GetMapping("/{id}")
-    public Result<OmsOrderSettingResponseDTO> getItem(@PathVariable Long id) {
-        OmsOrderSettingResponseDTO orderSetting = orderSettingService.getItem(id);
+    public Result<OmsOrderSettingDTO> getItem(@PathVariable Long id) {
+        OmsOrderSettingDTO orderSetting = orderSettingService.getItem(id);
         return Result.success(orderSetting);
     }
 

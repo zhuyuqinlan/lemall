@@ -10,9 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UserAdminLoginRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminInfoDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsAdminService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,25 +60,25 @@ public class UmsAdminController {
 
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/info")
-    public Result<UmsAdminInfoResponseDTO> getAdminInfo() {
-        UmsAdminInfoResponseDTO admin = adminService.getCurrentAdmin();
+    public Result<UmsAdminInfoDTO> getAdminInfo() {
+        UmsAdminInfoDTO admin = adminService.getCurrentAdmin();
         return Result.success(admin);
     }
 
     @Operation(summary = "根据用户名或姓名分页获取用户列表")
     @GetMapping("/list")
-    public Result<IPage<UmsAdminResponseDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<UmsAdminResponseDTO> adminList = adminService.listPage(keyword, pageSize, pageNum);
+    public Result<IPage<UmsAdminDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<UmsAdminDTO> adminList = adminService.listPage(keyword, pageSize, pageNum);
         return Result.success(adminList);
     }
 
     //TODO 添加用户时，允许上传头像
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public Result<UmsAdminResponseDTO> register(@RequestBody @Validated UmsAdminRequestDTO umsAdminParam) {
-        UmsAdminResponseDTO umsAdmin = adminService.register(umsAdminParam);
+    public Result<UmsAdminDTO> register(@RequestBody @Validated UmsAdminRequestDTO umsAdminParam) {
+        UmsAdminDTO umsAdmin = adminService.register(umsAdminParam);
         if (umsAdmin == null) {
             return Result.fail("注册失败");
         }
@@ -110,8 +110,8 @@ public class UmsAdminController {
 
     @Operation(summary = "获取指定用户的角色")
     @GetMapping("/role/{adminId}")
-    public Result<List<UmsRoleResponseDTO>> getRoleList(@PathVariable @NotNull Long adminId) {
-        List<UmsRoleResponseDTO> roleList = adminService.getRoleList(adminId);
+    public Result<List<UmsRoleDTO>> getRoleList(@PathVariable @NotNull Long adminId) {
+        List<UmsRoleDTO> roleList = adminService.getRoleList(adminId);
         return Result.success(roleList);
     }
 

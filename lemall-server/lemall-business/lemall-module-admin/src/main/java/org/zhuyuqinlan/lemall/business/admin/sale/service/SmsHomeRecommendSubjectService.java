@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeRecommendSubjectRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeRecommendSubjectResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeRecommendSubjectDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeRecommendSubject;
 import org.zhuyuqinlan.lemall.common.mapper.SmsHomeRecommendSubjectMapper;
 
@@ -79,13 +79,13 @@ public class SmsHomeRecommendSubjectService extends ServiceImpl<SmsHomeRecommend
      * @param pageNum 页码
      * @return 结果
      */
-    public IPage<SmsHomeRecommendSubjectResponseDTO> listPage(String subjectName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
+    public IPage<SmsHomeRecommendSubjectDTO> listPage(String subjectName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
         return page(new Page<>(pageNum, pageSize), Wrappers.<SmsHomeRecommendSubject>lambdaQuery()
                 .like(StringUtils.hasText(subjectName), SmsHomeRecommendSubject::getSubjectName, subjectName)
                 .eq(recommendStatus != null, SmsHomeRecommendSubject::getRecommendStatus, recommendStatus)
                 .orderByDesc(SmsHomeRecommendSubject::getSort)
         ).convert(e -> {
-            SmsHomeRecommendSubjectResponseDTO responseDTO = new SmsHomeRecommendSubjectResponseDTO();
+            SmsHomeRecommendSubjectDTO responseDTO = new SmsHomeRecommendSubjectDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         });

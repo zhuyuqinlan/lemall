@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeNewProductRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeNewProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeNewProductDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeNewProductService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -53,11 +53,11 @@ public class SmsHomeNewProductController {
 
     @Operation(summary = "分页查询推荐")
     @GetMapping("/list")
-    public Result<IPage<SmsHomeNewProductResponseDTO>> list(@RequestParam(value = "productName", required = false) String productName,
-                                                            @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
-                                                            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsHomeNewProductResponseDTO> homeBrandList = homeNewProductService.listPage(productName, recommendStatus, pageSize, pageNum);
+    public Result<IPage<SmsHomeNewProductDTO>> list(@RequestParam(value = "productName", required = false) String productName,
+                                                    @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
+                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<SmsHomeNewProductDTO> homeBrandList = homeNewProductService.listPage(productName, recommendStatus, pageSize, pageNum);
         return Result.success(homeBrandList);
     }
 }

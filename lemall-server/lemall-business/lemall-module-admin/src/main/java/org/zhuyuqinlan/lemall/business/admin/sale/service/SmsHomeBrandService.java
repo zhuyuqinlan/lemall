@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeBrandRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeBrandResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeBrandDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeBrand;
 import org.zhuyuqinlan.lemall.common.mapper.SmsHomeBrandMapper;
 
@@ -77,13 +77,13 @@ public class SmsHomeBrandService extends ServiceImpl<SmsHomeBrandMapper, SmsHome
      * @param pageNum 页码
      * @return 结果
      */
-    public IPage<SmsHomeBrandResponseDTO> listPage(String brandName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
+    public IPage<SmsHomeBrandDTO> listPage(String brandName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
         return page(new Page<>(pageNum, pageSize), Wrappers.<SmsHomeBrand>lambdaQuery()
                 .like(StringUtils.hasText(brandName), SmsHomeBrand::getBrandName, brandName)
                 .eq(recommendStatus != null, SmsHomeBrand::getRecommendStatus, recommendStatus)
                 .orderByDesc(SmsHomeBrand::getSort)
         ).convert(e -> {
-            SmsHomeBrandResponseDTO dto = new SmsHomeBrandResponseDTO();
+            SmsHomeBrandDTO dto = new SmsHomeBrandDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         });

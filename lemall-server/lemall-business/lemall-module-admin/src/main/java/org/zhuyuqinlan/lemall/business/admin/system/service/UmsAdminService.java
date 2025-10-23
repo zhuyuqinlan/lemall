@@ -15,12 +15,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminInfoResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsAdminResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminInfoDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsAdminDao;
-import org.zhuyuqinlan.lemall.business.admin.system.service.UmsAdminRoleRelationService;
-import org.zhuyuqinlan.lemall.business.admin.system.service.UmsRoleService;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
 import org.zhuyuqinlan.lemall.common.entity.*;
@@ -68,12 +66,12 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
      * 获取当前用户信息
      * @return 用户信息
      */
-    public UmsAdminInfoResponseDTO getCurrentAdmin() {
+    public UmsAdminInfoDTO getCurrentAdmin() {
         Long id = Long.valueOf(StpUtil.getLoginId().toString());
         AdminUserDto admin = (AdminUserDto) StpUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
         if (admin == null) admin = insertAdminUser(id);
 
-        UmsAdminInfoResponseDTO res = new UmsAdminInfoResponseDTO();
+        UmsAdminInfoDTO res = new UmsAdminInfoDTO();
         BeanUtils.copyProperties(admin, res);
         return res;
     }
@@ -81,10 +79,10 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     /**
      * 获取用户角色列表
      */
-    public List<UmsRoleResponseDTO> getRoleList(Long id) {
+    public List<UmsRoleDTO> getRoleList(Long id) {
         List<UmsRole> roleList = umsAdminDao.getRoleList(id);
         return roleList.stream().map(role -> {
-            UmsRoleResponseDTO dto = new UmsRoleResponseDTO();
+            UmsRoleDTO dto = new UmsRoleDTO();
             BeanUtils.copyProperties(role, dto);
             return dto;
         }).toList();
@@ -93,7 +91,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     /**
      * 分页查询所有用户
      */
-    public IPage<UmsAdminResponseDTO> listPage(String keyword, Integer pageSize, Integer pageNum) {
+    public IPage<UmsAdminDTO> listPage(String keyword, Integer pageSize, Integer pageNum) {
         Page<UmsAdmin> adminPage = super.page(new Page<>(pageNum, pageSize), Wrappers.<UmsAdmin>lambdaQuery()
                 .and(StringUtils.hasText(keyword), q -> q
                         .like(UmsAdmin::getUsername, keyword)
@@ -102,7 +100,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
                 .orderByDesc(UmsAdmin::getCreateTime)
         );
         return adminPage.convert(admin -> {
-            UmsAdminResponseDTO dto = new UmsAdminResponseDTO();
+            UmsAdminDTO dto = new UmsAdminDTO();
             BeanUtils.copyProperties(admin, dto);
             return dto;
         });
@@ -111,7 +109,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     /**
      * 用户注册
      */
-    public UmsAdminResponseDTO register(UmsAdminRequestDTO umsAdminParam) {
+    public UmsAdminDTO register(UmsAdminRequestDTO umsAdminParam) {
         UmsAdmin umsAdmin = new UmsAdmin();
         BeanUtils.copyProperties(umsAdminParam, umsAdmin);
         umsAdmin.setCreateTime(new Date());
@@ -125,7 +123,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
         baseMapper.insert(umsAdmin);
 
-        UmsAdminResponseDTO dto = new UmsAdminResponseDTO();
+        UmsAdminDTO dto = new UmsAdminDTO();
         BeanUtils.copyProperties(umsAdmin, dto);
         return dto;
     }

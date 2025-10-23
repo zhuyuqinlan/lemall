@@ -32,14 +32,14 @@
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="receive_note" jdbcType="VARCHAR" property="receiveNote" />
   </resultMap>
-  <resultMap id="returnApplyDetailResultMap" type="org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResultResponseDTO" extends="BaseResultMap">
+  <resultMap id="returnApplyDetailResultMap" type="org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyResultDTO" extends="BaseResultMap">
     <association property="companyAddress" resultMap="org.zhuyuqinlan.lemall.common.mapper.OmsCompanyAddressMapper.BaseResultMap" columnPrefix="ca_"/>
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, order_id, company_address_id, product_id, order_sn, create_time, member_username, 
-    return_amount, return_name, return_phone, `status`, handle_time, product_pic, product_name, 
-    product_brand, product_attr, product_count, product_price, product_real_price, reason, 
+    id, order_id, company_address_id, product_id, order_sn, create_time, member_username,
+    return_amount, return_name, return_phone, `status`, handle_time, product_pic, product_name,
+    product_brand, product_attr, product_count, product_price, product_real_price, reason,
     description, proof_pics, handle_note, handle_man, receive_man, receive_time, receive_note
   </sql>
 

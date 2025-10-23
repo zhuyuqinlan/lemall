@@ -1,7 +1,7 @@
 package org.zhuyuqinlan.lemall.business.admin.order.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResultResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyResultDTO;
 
 public interface OmsOrderReturnApplyDao {
     /**
@@ -9,5 +9,5 @@ public interface OmsOrderReturnApplyDao {
      * @param id id
      * @return 结果
      */
-    OmsOrderReturnApplyResultResponseDTO getDetail(@Param("id") Long id);
+    OmsOrderReturnApplyResultDTO getDetail(@Param("id") Long id);
 }

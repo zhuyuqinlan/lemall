@@ -3,7 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.sale.dao;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductResponseDTO;
 
 public interface SmsFlashPromotionProductRelationDao {
     /**

@@ -15,9 +15,8 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsMoneyInfoParam
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderDeliveryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReceiverInfoParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderOperateHistoryService;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDetailDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDTO;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrder;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderOperateHistory;
 import org.zhuyuqinlan.lemall.common.mapper.OmsOrderMapper;
@@ -32,7 +31,7 @@ public class OmsOrderService extends ServiceImpl<OmsOrderMapper, OmsOrder> {
     private final OmsOrderOperateHistoryService orderOperateHistoryService;
     private final OmsOrderDao omsOrderDao;
 
-    public IPage<OmsOrderResponseDTO> listPage(OmsOrderQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
+    public IPage<OmsOrderDTO> listPage(OmsOrderQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<OmsOrder>lambdaQuery()
                 .eq(OmsOrder::getDeleteStatus, 0)
                 .eq(StringUtils.hasText(queryParam.getOrderSn()), OmsOrder::getOrderSn, queryParam.getOrderSn())
@@ -46,7 +45,7 @@ public class OmsOrderService extends ServiceImpl<OmsOrderMapper, OmsOrder> {
                                 .like(OmsOrder::getReceiverPhone, queryParam.getReceiverKeyword())
                 )
         ).convert(e -> {
-            OmsOrderResponseDTO responseDTO = new OmsOrderResponseDTO();
+            OmsOrderDTO responseDTO = new OmsOrderDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         });
@@ -97,7 +96,7 @@ public class OmsOrderService extends ServiceImpl<OmsOrderMapper, OmsOrder> {
         );
     }
 
-    public OmsOrderDetailResponseDTO detail(Long id) {
+    public OmsOrderDetailDTO detail(Long id) {
         return omsOrderDao.getDetail(id);
     }
 

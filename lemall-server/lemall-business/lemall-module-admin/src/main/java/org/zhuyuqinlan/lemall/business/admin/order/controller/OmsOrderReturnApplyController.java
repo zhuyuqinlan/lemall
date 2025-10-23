@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReturnApplyQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsUpdateStatusParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResultResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyResultDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderReturnApplyService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -25,10 +25,10 @@ public class OmsOrderReturnApplyController {
 
     @Operation(summary = "分页查询退货申请")
     @GetMapping("/list")
-    public Result<IPage<OmsOrderReturnApplyResponseDTO>> list(OmsReturnApplyQueryParamRequestDTO queryParam,
-                                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<OmsOrderReturnApplyResponseDTO> returnApplyList = returnApplyService.listPage(queryParam, pageSize, pageNum);
+    public Result<IPage<OmsOrderReturnApplyDTO>> list(OmsReturnApplyQueryParamRequestDTO queryParam,
+                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<OmsOrderReturnApplyDTO> returnApplyList = returnApplyService.listPage(queryParam, pageSize, pageNum);
         return Result.success(returnApplyList);
     }
 
@@ -42,7 +42,7 @@ public class OmsOrderReturnApplyController {
     @Operation(summary = "获取退货申请详情")
     @GetMapping("/{id}")
     public Result<?> getItem(@PathVariable Long id) {
-        OmsOrderReturnApplyResultResponseDTO result = returnApplyService.getItem(id);
+        OmsOrderReturnApplyResultDTO result = returnApplyService.getItem(id);
         return Result.success(result);
     }
 

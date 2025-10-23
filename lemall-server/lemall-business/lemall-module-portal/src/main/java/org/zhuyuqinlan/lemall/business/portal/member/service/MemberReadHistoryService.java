@@ -7,11 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
-import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberReadHistory;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.MemberReadHistory;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberReadHistoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberReadHistoryResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberReadHistoryDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.repository.MemberReadHistoryRepository;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class MemberReadHistoryService {
      * 生成浏览记录
      */
     public int create(MemberReadHistoryRequestDTO memberReadHistory) {
-        UmsMemberResponseDTO currentMember = umsMemberService.getCurrentMember();
+        UmsMemberDTO currentMember = umsMemberService.getCurrentMember();
         memberReadHistory.setMemberId(currentMember.getId());
         memberReadHistory.setMemberNickname(currentMember.getNickname());
         memberReadHistory.setMemberIcon(currentMember.getIcon());
@@ -57,7 +57,7 @@ public class MemberReadHistoryService {
     /**
      * 分页获取用户浏览历史记录
      */
-    public Page<MemberReadHistoryResponseDTO> list(Integer pageNum, Integer pageSize) {
+    public Page<MemberReadHistoryDTO> list(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Page<MemberReadHistory> page = memberReadHistoryRepository
                 .findByMemberIdOrderByCreateTimeDesc(
@@ -67,7 +67,7 @@ public class MemberReadHistoryService {
 
         // 转换实体到 DTO
         return page.map(history -> {
-            MemberReadHistoryResponseDTO dto = new MemberReadHistoryResponseDTO();
+            MemberReadHistoryDTO dto = new MemberReadHistoryDTO();
             BeanUtils.copyProperties(history, dto);
             return dto;
         });

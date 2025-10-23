@@ -2,7 +2,7 @@ package org.zhuyuqinlan.lemall.business.portal.member.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberBrandAttention;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.MemberBrandAttention;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface MemberBrandAttentionRepository extends MongoRepository<MemberBrandAttention,String> {

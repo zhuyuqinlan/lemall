@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsRoleRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsRoleService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -28,17 +28,17 @@ public class UmsRoleController {
 
     @Operation(summary = "获取所有角色")
     @GetMapping("/listAll")
-    public Result<List<UmsRoleResponseDTO>> listAll() {
-        List<UmsRoleResponseDTO> roleList = umsRoleService.listAll();
+    public Result<List<UmsRoleDTO>> listAll() {
+        List<UmsRoleDTO> roleList = umsRoleService.listAll();
         return Result.success(roleList);
     }
 
     @Operation(summary = "根据角色名称分页获取角色列表")
     @GetMapping("list")
-    public Result<IPage<UmsRoleResponseDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<UmsRoleResponseDTO> umsRoleIPage = umsRoleService.pageRole(keyword,pageSize,pageNum);
+    public Result<IPage<UmsRoleDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<UmsRoleDTO> umsRoleIPage = umsRoleService.pageRole(keyword,pageSize,pageNum);
         return Result.success(umsRoleIPage);
     }
 
@@ -74,8 +74,8 @@ public class UmsRoleController {
 
     @Operation(summary = "获取角色相关菜单")
     @GetMapping("/listMenu/{roleId}")
-    public Result<List<UmsMenuResponseDTO>> listMenu(@PathVariable @NotNull Long roleId) {
-        List<UmsMenuResponseDTO> umsMenuNodeResponseDTOS = umsRoleService.listMenu(roleId);
+    public Result<List<UmsMenuDTO>> listMenu(@PathVariable @NotNull Long roleId) {
+        List<UmsMenuDTO> umsMenuNodeResponseDTOS = umsRoleService.listMenu(roleId);
         return Result.success(umsMenuNodeResponseDTOS);
     }
 
@@ -88,8 +88,8 @@ public class UmsRoleController {
 
     @Operation(summary = "获取角色相关资源")
     @GetMapping("/listResource/{roleId}")
-    public Result<List<UmsResourceResponseDTO>> getResourceList(@PathVariable @NotNull Long roleId) {
-        List<UmsResourceResponseDTO> umsResourceResponseDTOS = umsRoleService.listResource(roleId);
+    public Result<List<UmsResourceDTO>> getResourceList(@PathVariable @NotNull Long roleId) {
+        List<UmsResourceDTO> umsResourceResponseDTOS = umsRoleService.listResource(roleId);
         return Result.success(umsResourceResponseDTOS);
     }
 

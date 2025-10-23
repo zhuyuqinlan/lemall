@@ -1,7 +1,7 @@
 package org.zhuyuqinlan.lemall.business.admin.system.dao;
 
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 
 import java.util.List;
@@ -17,10 +17,10 @@ public interface UmsRoleDao {
      * @param roleId 角色id
      * @return 菜单列表
      */
-    List<UmsMenuResponseDTO> getMenuListByRoleId(Long roleId);
+    List<UmsMenuDTO> getMenuListByRoleId(Long roleId);
 
     /**
      * 根据角色ID获取资源
      */
-    List<UmsResourceResponseDTO> getResourceListByRoleId(Long roleId);
+    List<UmsResourceDTO> getResourceListByRoleId(Long roleId);
 }

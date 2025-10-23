@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeBrandRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeBrandResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeBrandDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeBrandService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("${lemall.server.prefix.admin}/sale/home/brand")
 @Tag(name = "首页品牌管理", description = "SmsHomeBrandController")
 public class SmsHomeBrandController {
-    
+
     private final SmsHomeBrandService homeBrandService;
 
     @Operation(summary = "添加首页推荐品牌")
@@ -52,12 +52,12 @@ public class SmsHomeBrandController {
 
     @Operation(summary = "分页查询推荐品牌")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    
-    public Result<IPage<SmsHomeBrandResponseDTO>> list(@RequestParam(value = "brandName", required = false) String brandName,
-                                                       @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
-                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsHomeBrandResponseDTO> homeBrandList = homeBrandService.listPage(brandName, recommendStatus, pageSize, pageNum);
+
+    public Result<IPage<SmsHomeBrandDTO>> list(@RequestParam(value = "brandName", required = false) String brandName,
+                                               @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
+                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<SmsHomeBrandDTO> homeBrandList = homeBrandService.listPage(brandName, recommendStatus, pageSize, pageNum);
         return Result.success(homeBrandList);
     }
 }

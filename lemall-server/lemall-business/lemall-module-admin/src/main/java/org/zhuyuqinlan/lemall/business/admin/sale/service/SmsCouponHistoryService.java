@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.zhuyuqinlan.lemall.common.entity.SmsCouponHistory;
 import org.zhuyuqinlan.lemall.common.mapper.SmsCouponHistoryMapper;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponHistoryResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponHistoryDTO;
 
 
 @Service
@@ -24,14 +24,14 @@ public class SmsCouponHistoryService extends ServiceImpl<SmsCouponHistoryMapper,
      * @param pageNum 页码
      * @return 分页结果
      */
-    public IPage<SmsCouponHistoryResponseDTO> listPage(Long couponId, Integer useStatus, String orderSn, Integer pageSize, Integer pageNum) {
+    public IPage<SmsCouponHistoryDTO> listPage(Long couponId, Integer useStatus, String orderSn, Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<SmsCouponHistory>lambdaQuery()
                         .eq(couponId != null, SmsCouponHistory::getCouponId, couponId)
                         .eq(useStatus != null, SmsCouponHistory::getUseStatus, useStatus)
                         .eq(StringUtils.hasText(orderSn), SmsCouponHistory::getOrderSn, orderSn)
                 )
                 .convert(e -> {
-                    SmsCouponHistoryResponseDTO dto = new SmsCouponHistoryResponseDTO();
+                    SmsCouponHistoryDTO dto = new SmsCouponHistoryDTO();
                     BeanUtils.copyProperties(e, dto);
                     return dto;
                 });

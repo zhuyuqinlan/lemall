@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeAdvertiseRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeAdvertiseResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeAdvertiseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeAdvertiseService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("${lemall.server.prefix.admin}/sale/home/advertise")
 @Tag(name = "首页轮播广告管理", description = "SmsHomeAdvertiseController")
 public class SmsHomeAdvertiseController {
-   
+
     private final SmsHomeAdvertiseService advertiseService;
 
     @Operation(summary = "添加广告")
@@ -46,8 +46,8 @@ public class SmsHomeAdvertiseController {
 
     @Operation(summary = "获取广告详情")
     @GetMapping("/{id}")
-    public Result<SmsHomeAdvertiseResponseDTO> getItem(@PathVariable Long id) {
-        SmsHomeAdvertiseResponseDTO advertise = advertiseService.getItem(id);
+    public Result<SmsHomeAdvertiseDTO> getItem(@PathVariable Long id) {
+        SmsHomeAdvertiseDTO advertise = advertiseService.getItem(id);
         return Result.success(advertise);
     }
 
@@ -60,12 +60,12 @@ public class SmsHomeAdvertiseController {
 
     @Operation(summary = "分页查询广告")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<IPage<SmsHomeAdvertiseResponseDTO>> list(@RequestParam(value = "name", required = false) String name,
-                                                @RequestParam(value = "type", required = false) Integer type,
-                                                @RequestParam(value = "endTime", required = false) String endTime,
-                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsHomeAdvertiseResponseDTO> advertiseList = advertiseService.listPage(name, type, endTime, pageSize, pageNum);
+    public Result<IPage<SmsHomeAdvertiseDTO>> list(@RequestParam(value = "name", required = false) String name,
+                                                   @RequestParam(value = "type", required = false) Integer type,
+                                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<SmsHomeAdvertiseDTO> advertiseList = advertiseService.listPage(name, type, endTime, pageSize, pageNum);
         return Result.success(advertiseList);
     }
 }

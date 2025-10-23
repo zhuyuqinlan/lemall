@@ -11,8 +11,8 @@ import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotionProductRelation;
 import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionProductRelationMapper;
 import org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsFlashPromotionProductRelationDao;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionProductRelationRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductRelationResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductRelationDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductResponseDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,10 +67,10 @@ public class SmsFlashPromotionProductRelationService extends ServiceImpl<SmsFlas
      * @param id id
      * @return 返回结果
      */
-    public SmsFlashPromotionProductRelationResponseDTO getItem(Long id) {
+    public SmsFlashPromotionProductRelationDTO getItem(Long id) {
         SmsFlashPromotionProductRelation relation = getById(id);
         if (relation == null) return null;
-        SmsFlashPromotionProductRelationResponseDTO dto = new SmsFlashPromotionProductRelationResponseDTO();
+        SmsFlashPromotionProductRelationDTO dto = new SmsFlashPromotionProductRelationDTO();
         BeanUtils.copyProperties(relation, dto);
         return dto;
     }

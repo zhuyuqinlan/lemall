@@ -2,7 +2,7 @@ package org.zhuyuqinlan.lemall.business.admin.order.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderDeliveryParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDetailDTO;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface OmsOrderDao {
      * @param id id
      * @return 结果
      */
-    OmsOrderDetailResponseDTO getDetail(Long id);
+    OmsOrderDetailDTO getDetail(Long id);
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -49,7 +49,7 @@ public class UmsMemberController {
     @Operation(summary = "获取会员信息")
     @GetMapping("/info")
     public Result<?> info() {
-        UmsMemberResponseDTO member = memberService.getCurrentMember();
+        UmsMemberDTO member = memberService.getCurrentMember();
         return Result.success(member);
     }
 

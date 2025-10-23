@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductCategoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryWithChildrenItem;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductCategoryService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -48,17 +48,17 @@ public class PmsProductCategoryController {
 
     @Operation(summary = "分页查询商品分类")
     @GetMapping("/list/{parentId}")
-    public Result<IPage<PmsProductCategoryResponseDTO>> getList(@PathVariable Long parentId,
-                                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<PmsProductCategoryResponseDTO> res = pmsProductCategoryService.getList(parentId,pageNum,pageSize);
+    public Result<IPage<PmsProductCategoryDTO>> getList(@PathVariable Long parentId,
+                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<PmsProductCategoryDTO> res = pmsProductCategoryService.getList(parentId,pageNum,pageSize);
         return Result.success(res);
     }
 
     @Operation(summary = "根据id获取商品分类")
     @GetMapping("/{id}")
-    public Result<PmsProductCategoryResponseDTO> getById(@PathVariable Long id) {
-        PmsProductCategoryResponseDTO res = pmsProductCategoryService.getItemById(id);
+    public Result<PmsProductCategoryDTO> getById(@PathVariable Long id) {
+        PmsProductCategoryDTO res = pmsProductCategoryService.getItemById(id);
         return Result.success(res);
     }
 

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberProductCollectionRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberProductCollectionResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberProductCollectionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.MemberCollectionService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -44,16 +44,16 @@ public class MemberProductCollectionController {
 
     @Operation(summary = "显示收藏列表")
     @GetMapping("/list")
-    public Result<Page<MemberProductCollectionResponseDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        Page<MemberProductCollectionResponseDTO> page = memberCollectionService.list(pageNum,pageSize);
+    public Result<Page<MemberProductCollectionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        Page<MemberProductCollectionDTO> page = memberCollectionService.list(pageNum,pageSize);
         return Result.success(page);
     }
 
     @Operation(summary = "显示收藏商品详情")
     @GetMapping("/detail")
-    public Result<MemberProductCollectionResponseDTO> detail(@RequestParam Long productId) {
-        MemberProductCollectionResponseDTO memberProductCollection = memberCollectionService.detail(productId);
+    public Result<MemberProductCollectionDTO> detail(@RequestParam Long productId) {
+        MemberProductCollectionDTO memberProductCollection = memberCollectionService.detail(productId);
         return Result.success(memberProductCollection);
     }
 

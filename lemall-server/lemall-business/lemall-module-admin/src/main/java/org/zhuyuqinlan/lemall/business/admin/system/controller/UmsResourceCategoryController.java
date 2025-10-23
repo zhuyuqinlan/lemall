@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceCategoryDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsResourceCategoryService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -24,8 +24,8 @@ public class UmsResourceCategoryController {
 
     @Operation(summary = "查询所有后台资源分类")
     @GetMapping("/listAll")
-    public Result<List<UmsResourceCategoryResponseDTO>> listAllResourceCategory() {
-        List<UmsResourceCategoryResponseDTO> umsResourceCategoryResponseDTOS = umsResourceCategoryService.listAllResourceCategory();
+    public Result<List<UmsResourceCategoryDTO>> listAllResourceCategory() {
+        List<UmsResourceCategoryDTO> umsResourceCategoryResponseDTOS = umsResourceCategoryService.listAllResourceCategory();
         return Result.success(umsResourceCategoryResponseDTOS);
     }
 

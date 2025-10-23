@@ -13,8 +13,8 @@ import org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsCouponDao;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponProductCategoryRelationRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsCouponProductRelationRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponParamDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.common.mapper.SmsCouponMapper;
 
@@ -115,18 +115,18 @@ public class SmsCouponService extends ServiceImpl<SmsCouponMapper, SmsCoupon> {
         return b;
     }
 
-    public IPage<SmsCouponResponseDTO> listPage(String name, Integer type, Integer pageSize, Integer pageNum) {
+    public IPage<SmsCouponDTO> listPage(String name, Integer type, Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<SmsCoupon>lambdaQuery()
                 .like(StringUtils.hasText(name), SmsCoupon::getName, name)
                 .eq(type != null, SmsCoupon::getType, type)
         ).convert(e -> {
-            SmsCouponResponseDTO smsCouponResponseDTO = new SmsCouponResponseDTO();
+            SmsCouponDTO smsCouponResponseDTO = new SmsCouponDTO();
             BeanUtils.copyProperties(e, smsCouponResponseDTO);
             return smsCouponResponseDTO;
         });
     }
 
-    public SmsCouponParamResponseDTO getItem(Long id) {
+    public SmsCouponParamDTO getItem(Long id) {
         return smsCouponDao.getItem(id);
     }
 }

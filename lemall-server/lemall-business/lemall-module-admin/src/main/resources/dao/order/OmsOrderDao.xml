@@ -50,7 +50,7 @@
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
 
-    <resultMap id="orderDetailResultMap" type="org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO" extends="BaseResultMap">
+    <resultMap id="orderDetailResultMap" type="org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDetailDTO" extends="BaseResultMap">
         <collection property="orderItemList" resultMap="org.zhuyuqinlan.lemall.common.mapper.OmsOrderItemMapper.BaseResultMap" columnPrefix="item_"/>
         <collection property="historyList" resultMap="org.zhuyuqinlan.lemall.common.mapper.OmsOrderOperateHistoryMapper.BaseResultMap" columnPrefix="history_"/>
     </resultMap>

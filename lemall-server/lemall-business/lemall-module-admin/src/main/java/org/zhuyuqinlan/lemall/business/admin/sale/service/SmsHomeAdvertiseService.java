@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeAdvertiseRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeAdvertiseResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeAdvertiseDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeAdvertise;
 import org.zhuyuqinlan.lemall.common.mapper.SmsHomeAdvertiseMapper;
 
@@ -62,8 +62,8 @@ public class SmsHomeAdvertiseService extends ServiceImpl<SmsHomeAdvertiseMapper,
      * @param id id
      * @return 结果
      */
-    public SmsHomeAdvertiseResponseDTO getItem(Long id) {
-        SmsHomeAdvertiseResponseDTO responseDTO = new SmsHomeAdvertiseResponseDTO();
+    public SmsHomeAdvertiseDTO getItem(Long id) {
+        SmsHomeAdvertiseDTO responseDTO = new SmsHomeAdvertiseDTO();
         SmsHomeAdvertise smsHomeAdvertise = getById(id);
         BeanUtils.copyProperties(smsHomeAdvertise, responseDTO);
         return responseDTO;
@@ -91,7 +91,7 @@ public class SmsHomeAdvertiseService extends ServiceImpl<SmsHomeAdvertiseMapper,
      * @param pageNum 页码
      * @return 结果
      */
-    public IPage<SmsHomeAdvertiseResponseDTO> listPage(String name, Integer type, String endTime, Integer pageSize, Integer pageNum) {
+    public IPage<SmsHomeAdvertiseDTO> listPage(String name, Integer type, String endTime, Integer pageSize, Integer pageNum) {
         return page(new Page<>(pageNum, pageSize),
                 Wrappers.<SmsHomeAdvertise>lambdaQuery()
                         .like(StringUtils.hasText(name), SmsHomeAdvertise::getName, name)
@@ -102,7 +102,7 @@ public class SmsHomeAdvertiseService extends ServiceImpl<SmsHomeAdvertiseMapper,
                                 LocalDate.parse(endTime).atTime(LocalTime.MAX))
                         .orderByDesc(SmsHomeAdvertise::getSort)
         ).convert(e -> {
-            SmsHomeAdvertiseResponseDTO dto = new SmsHomeAdvertiseResponseDTO();
+            SmsHomeAdvertiseDTO dto = new SmsHomeAdvertiseDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         });

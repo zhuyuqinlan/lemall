@@ -8,8 +8,8 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsMoneyInfoParam
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderDeliveryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReceiverInfoParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderDetailResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDetailDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -28,10 +28,10 @@ public class OmsOrderController {
 
     @Operation(summary = "查询订单")
     @GetMapping("/list")
-    public Result<IPage<OmsOrderResponseDTO>> list(@Validated OmsOrderQueryParamRequestDTO queryParam,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<OmsOrderResponseDTO> orderList = orderService.listPage(queryParam, pageSize, pageNum);
+    public Result<IPage<OmsOrderDTO>> list(@Validated OmsOrderQueryParamRequestDTO queryParam,
+                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<OmsOrderDTO> orderList = orderService.listPage(queryParam, pageSize, pageNum);
         return Result.success(orderList);
     }
 
@@ -58,8 +58,8 @@ public class OmsOrderController {
 
     @Operation(summary = "获取订单详情:订单信息、商品信息、操作记录")
     @GetMapping("/{id}")
-    public Result<OmsOrderDetailResponseDTO> detail(@PathVariable Long id) {
-        OmsOrderDetailResponseDTO orderDetailResult = orderService.detail(id);
+    public Result<OmsOrderDetailDTO> detail(@PathVariable Long id) {
+        OmsOrderDetailDTO orderDetailResult = orderService.detail(id);
         return Result.success(orderDetailResult);
     }
 

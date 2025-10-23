@@ -10,7 +10,7 @@ import java.util.List;
 import org.zhuyuqinlan.lemall.common.entity.UmsResourceCategory;
 import org.zhuyuqinlan.lemall.common.mapper.UmsResourceCategoryMapper;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceCategoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceCategoryResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceCategoryDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsResource;
 import org.zhuyuqinlan.lemall.common.response.BizException;
 
@@ -26,12 +26,12 @@ public class UmsResourceCategoryService extends ServiceImpl<UmsResourceCategoryM
     /**
      * 列出所有资源分类
      */
-    public List<UmsResourceCategoryResponseDTO> listAllResourceCategory() {
+    public List<UmsResourceCategoryDTO> listAllResourceCategory() {
         return super.list(Wrappers.<UmsResourceCategory>lambdaQuery()
                         .orderByDesc(UmsResourceCategory::getSort)
                         .orderByDesc(UmsResourceCategory::getCreateTime))
                 .stream().map(e -> {
-                    UmsResourceCategoryResponseDTO dto = new UmsResourceCategoryResponseDTO();
+                    UmsResourceCategoryDTO dto = new UmsResourceCategoryDTO();
                     BeanUtils.copyProperties(e, dto);
                     return dto;
                 }).toList();

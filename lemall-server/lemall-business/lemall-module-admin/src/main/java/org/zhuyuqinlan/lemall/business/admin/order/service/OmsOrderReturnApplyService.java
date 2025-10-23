@@ -11,8 +11,8 @@ import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.order.dao.OmsOrderReturnApplyDao;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReturnApplyQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsUpdateStatusParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnApplyResultResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyResultDTO;
 import org.zhuyuqinlan.lemall.common.entity.OmsOrderReturnApply;
 import org.zhuyuqinlan.lemall.common.mapper.OmsOrderReturnApplyMapper;
 
@@ -28,7 +28,7 @@ public class OmsOrderReturnApplyService extends ServiceImpl<OmsOrderReturnApplyM
     /**
      * 分页查询退货申请
      */
-    public IPage<OmsOrderReturnApplyResponseDTO> listPage(OmsReturnApplyQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
+    public IPage<OmsOrderReturnApplyDTO> listPage(OmsReturnApplyQueryParamRequestDTO queryParam, Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<OmsOrderReturnApply>lambdaQuery()
                         .eq(queryParam.getId() != null, OmsOrderReturnApply::getId, queryParam.getId())
                         .eq(queryParam.getStatus() != null, OmsOrderReturnApply::getStatus, queryParam.getStatus())
@@ -42,7 +42,7 @@ public class OmsOrderReturnApplyService extends ServiceImpl<OmsOrderReturnApplyM
                         })
                 )
                 .convert(e -> {
-                    OmsOrderReturnApplyResponseDTO dto = new OmsOrderReturnApplyResponseDTO();
+                    OmsOrderReturnApplyDTO dto = new OmsOrderReturnApplyDTO();
                     BeanUtils.copyProperties(e, dto);
                     return dto;
                 });
@@ -61,7 +61,7 @@ public class OmsOrderReturnApplyService extends ServiceImpl<OmsOrderReturnApplyM
     /**
      * 获取退货申请详情
      */
-    public OmsOrderReturnApplyResultResponseDTO getItem(Long id) {
+    public OmsOrderReturnApplyResultDTO getItem(Long id) {
         return omsOrderReturnApplyDao.getDetail(id);
     }
 

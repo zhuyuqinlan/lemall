@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.common.entity.SmsFlashPromotion;
 import org.zhuyuqinlan.lemall.common.mapper.SmsFlashPromotionMapper;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionDTO;
 
 /**
  * 秒杀活动管理Service
@@ -69,9 +69,9 @@ public class SmsFlashPromotionService extends ServiceImpl<SmsFlashPromotionMappe
      * @param id id
      * @return 结果
      */
-    public SmsFlashPromotionResponseDTO getItem(Long id) {
+    public SmsFlashPromotionDTO getItem(Long id) {
         SmsFlashPromotion smsFlashPromotion = getById(id);
-        SmsFlashPromotionResponseDTO responseDTO = new SmsFlashPromotionResponseDTO();
+        SmsFlashPromotionDTO responseDTO = new SmsFlashPromotionDTO();
         BeanUtils.copyProperties(smsFlashPromotion, responseDTO);
         return responseDTO;
     }
@@ -83,11 +83,11 @@ public class SmsFlashPromotionService extends ServiceImpl<SmsFlashPromotionMappe
      * @param pageNum 页码
      * @return 结果
      */
-    public IPage<SmsFlashPromotionResponseDTO> listPage(String keyword, Integer pageSize, Integer pageNum) {
+    public IPage<SmsFlashPromotionDTO> listPage(String keyword, Integer pageSize, Integer pageNum) {
         return page(new Page<>(pageNum, pageSize), Wrappers.<SmsFlashPromotion>lambdaQuery()
                 .like(StringUtils.hasText(keyword), SmsFlashPromotion::getTitle, keyword)
         ).convert(e -> {
-            SmsFlashPromotionResponseDTO responseDTO = new SmsFlashPromotionResponseDTO();
+            SmsFlashPromotionDTO responseDTO = new SmsFlashPromotionDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         });

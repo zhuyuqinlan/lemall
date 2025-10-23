@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.CmsSubject;
 import org.zhuyuqinlan.lemall.common.mapper.CmsSubjectMapper;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectDTO;
 
 import java.util.List;
 
@@ -21,9 +21,9 @@ public class CmsSubjectService extends ServiceImpl<CmsSubjectMapper, CmsSubject>
      * 获取全部商品专题
      * @return 结果
      */
-    public List<CmsSubjectResponseDTO> listAll() {
+    public List<CmsSubjectDTO> listAll() {
         return super.list().stream().map(e -> {
-            CmsSubjectResponseDTO dto = new CmsSubjectResponseDTO();
+            CmsSubjectDTO dto = new CmsSubjectDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         }).toList();
@@ -36,11 +36,11 @@ public class CmsSubjectService extends ServiceImpl<CmsSubjectMapper, CmsSubject>
      * @param pageSize 每页条数
      * @return 结果
      */
-    public IPage<CmsSubjectResponseDTO> listPage(String keyword, Integer pageNum, Integer pageSize) {
+    public IPage<CmsSubjectDTO> listPage(String keyword, Integer pageNum, Integer pageSize) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<CmsSubject>lambdaQuery()
                 .like(StringUtils.hasText(keyword), CmsSubject::getTitle, keyword)
         ).convert(e -> {
-            CmsSubjectResponseDTO dto = new CmsSubjectResponseDTO();
+            CmsSubjectDTO dto = new CmsSubjectDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         });

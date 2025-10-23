@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsBrandRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsBrandResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsBrandDTO;
 import org.zhuyuqinlan.lemall.common.entity.PmsBrand;
 import org.zhuyuqinlan.lemall.common.entity.PmsProduct;
 import org.zhuyuqinlan.lemall.common.mapper.PmsBrandMapper;
-import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductService;
 
 import java.util.List;
 
@@ -30,12 +29,12 @@ public class PmsBrandService extends ServiceImpl<PmsBrandMapper, PmsBrand> {
     /**
      * 分页查询品牌列表
      */
-    public IPage<PmsBrandResponseDTO> getList(String keyword, Integer pageNum, Integer pageSize) {
+    public IPage<PmsBrandDTO> getList(String keyword, Integer pageNum, Integer pageSize) {
         return page(new Page<>(pageNum, pageSize), Wrappers.<PmsBrand>lambdaQuery()
                 .like(StringUtils.hasText(keyword), PmsBrand::getName, keyword)
                 .orderByDesc(PmsBrand::getSort)
         ).convert(e -> {
-            PmsBrandResponseDTO dto = new PmsBrandResponseDTO();
+            PmsBrandDTO dto = new PmsBrandDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         });
@@ -44,9 +43,9 @@ public class PmsBrandService extends ServiceImpl<PmsBrandMapper, PmsBrand> {
     /**
      * 获取所有品牌
      */
-    public List<PmsBrandResponseDTO> getListAll() {
+    public List<PmsBrandDTO> getListAll() {
         return list().stream().map(e -> {
-            PmsBrandResponseDTO dto = new PmsBrandResponseDTO();
+            PmsBrandDTO dto = new PmsBrandDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         }).toList();
@@ -95,8 +94,8 @@ public class PmsBrandService extends ServiceImpl<PmsBrandMapper, PmsBrand> {
     /**
      * 根据品牌id查询
      */
-    public PmsBrandResponseDTO getBrandById(Long id) {
-        PmsBrandResponseDTO dto = new PmsBrandResponseDTO();
+    public PmsBrandDTO getBrandById(Long id) {
+        PmsBrandDTO dto = new PmsBrandDTO();
         PmsBrand brand = getById(id);
         BeanUtils.copyProperties(brand, dto);
         return dto;

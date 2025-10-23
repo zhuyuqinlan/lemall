@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeRecommendSubjectRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeRecommendSubjectResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeRecommendSubjectDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeRecommendSubjectService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -52,11 +52,11 @@ public class SmsHomeRecommendSubjectController {
 
     @Operation(summary = "分页查询推荐")
     @GetMapping("/list")
-    public Result<IPage<SmsHomeRecommendSubjectResponseDTO>> list(@RequestParam(value = "subjectName", required = false) String subjectName,
-                                                                  @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
-                                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsHomeRecommendSubjectResponseDTO> homeBrandList = recommendSubjectService.listPage(subjectName, recommendStatus, pageSize, pageNum);
+    public Result<IPage<SmsHomeRecommendSubjectDTO>> list(@RequestParam(value = "subjectName", required = false) String subjectName,
+                                                          @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
+                                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<SmsHomeRecommendSubjectDTO> homeBrandList = recommendSubjectService.listPage(subjectName, recommendStatus, pageSize, pageNum);
         return Result.success(homeBrandList);
     }
 }

@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductQueryParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductParamResultResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductParamResultDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -26,10 +26,10 @@ public class PmsProductController {
 
     @Operation(summary = "查询商品")
     @GetMapping("/list")
-    public Result<IPage<PmsProductResponseDTO>> getList(PmsProductQueryParamRequestDTO productQueryParam,
-                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<PmsProductResponseDTO> res = pmsProductService.getList(productQueryParam,pageSize,pageNum);
+    public Result<IPage<PmsProductDTO>> getList(PmsProductQueryParamRequestDTO productQueryParam,
+                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<PmsProductDTO> res = pmsProductService.getList(productQueryParam,pageSize,pageNum);
         return Result.success(res);
     }
 
@@ -42,8 +42,8 @@ public class PmsProductController {
 
     @Operation(summary = "根据商品id获取商品编辑信息")
     @GetMapping("/updateInfo/{id}")
-    public Result<PmsProductParamResultResponseDTO> updateInfo(@PathVariable("id") Long id) {
-        PmsProductParamResultResponseDTO res = pmsProductService.getUpdateInfo(id);
+    public Result<PmsProductParamResultDTO> updateInfo(@PathVariable("id") Long id) {
+        PmsProductParamResultDTO res = pmsProductService.getUpdateInfo(id);
         return Result.success(res);
     }
 
@@ -56,8 +56,8 @@ public class PmsProductController {
 
     @Operation(summary = "根据商品名称或货号模糊查询")
     @GetMapping("/simpleList")
-    public Result<List<PmsProductResponseDTO>> getSimpleList(String keyword) {
-        List<PmsProductResponseDTO> res = pmsProductService.getSimpleList(keyword);
+    public Result<List<PmsProductDTO>> getSimpleList(String keyword) {
+        List<PmsProductDTO> res = pmsProductService.getSimpleList(keyword);
         return Result.success(res);
     }
 

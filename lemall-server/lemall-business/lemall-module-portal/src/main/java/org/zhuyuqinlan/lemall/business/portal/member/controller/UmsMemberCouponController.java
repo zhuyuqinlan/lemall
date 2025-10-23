@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryDetail;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponHistoryResponseDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.SmsCouponResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.CartPromotionItem;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.SmsCouponHistoryDetail;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.SmsCouponHistoryDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.SmsCouponDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.OmsCartItemService;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberCouponService;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
@@ -40,8 +40,8 @@ public class UmsMemberCouponController {
     @Parameter(name = "useStatus", description = "优惠券筛选类型:0->未使用；1->已使用；2->已过期",
             in = ParameterIn.QUERY, schema = @Schema(type = "integer", allowableValues = {"0", "1", "2"}))
     @GetMapping("/listHistory")
-    public Result<List<SmsCouponHistoryResponseDTO>> listHistory(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
-        List<SmsCouponHistoryResponseDTO> couponResponseDTOList = umsMemberCouponService.listHistory(useStatus);
+    public Result<List<SmsCouponHistoryDTO>> listHistory(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
+        List<SmsCouponHistoryDTO> couponResponseDTOList = umsMemberCouponService.listHistory(useStatus);
         return Result.success(couponResponseDTOList);
     }
 
@@ -49,8 +49,8 @@ public class UmsMemberCouponController {
     @Parameter(name = "useStatus", description = "优惠券筛选类型:0->未使用；1->已使用；2->已过期",
             in = ParameterIn.QUERY, schema = @Schema(type = "integer", allowableValues = {"0", "1", "2"}))
     @GetMapping("/list")
-    public Result<List<SmsCouponResponseDTO>> list(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
-        List<SmsCouponResponseDTO> couponResponseDTOList = umsMemberCouponService.list(useStatus);
+    public Result<List<SmsCouponDTO>> list(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
+        List<SmsCouponDTO> couponResponseDTOList = umsMemberCouponService.list(useStatus);
         return Result.success(couponResponseDTOList);
     }
 
@@ -66,8 +66,8 @@ public class UmsMemberCouponController {
 
     @Operation(summary = "获取当前商品相关优惠券")
     @GetMapping("/listByProduct/{productId}")
-    public Result<List<SmsCouponResponseDTO>> listByProduct(@PathVariable Long productId) {
-        List<SmsCouponResponseDTO> couponResponseDTOList = umsMemberCouponService.listByProduct(productId);
+    public Result<List<SmsCouponDTO>> listByProduct(@PathVariable Long productId) {
+        List<SmsCouponDTO> couponResponseDTOList = umsMemberCouponService.listByProduct(productId);
         return Result.success(couponResponseDTOList);
     }
 

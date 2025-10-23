@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.zhuyuqinlan.lemall.business.admin.product.dao.PmsProductCategoryDao;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductCategoryRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryWithChildrenItem;
 import org.zhuyuqinlan.lemall.common.entity.PmsProduct;
 import org.zhuyuqinlan.lemall.common.entity.PmsProductCategory;
 import org.zhuyuqinlan.lemall.common.entity.PmsProductCategoryAttributeRelation;
@@ -85,12 +85,12 @@ public class PmsProductCategoryService extends ServiceImpl<PmsProductCategoryMap
     /**
      * 分页查询商品分类
      */
-    public IPage<PmsProductCategoryResponseDTO> getList(Long parentId, Integer pageNum, Integer pageSize) {
+    public IPage<PmsProductCategoryDTO> getList(Long parentId, Integer pageNum, Integer pageSize) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<PmsProductCategory>lambdaQuery()
                 .eq(PmsProductCategory::getParentId, parentId)
                 .orderByDesc(PmsProductCategory::getSort)
         ).convert(e -> {
-            PmsProductCategoryResponseDTO dto = new PmsProductCategoryResponseDTO();
+            PmsProductCategoryDTO dto = new PmsProductCategoryDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         });
@@ -99,8 +99,8 @@ public class PmsProductCategoryService extends ServiceImpl<PmsProductCategoryMap
     /**
      * 根据id获取商品分类
      */
-    public PmsProductCategoryResponseDTO getItemById(Long id) {
-        PmsProductCategoryResponseDTO dto = new PmsProductCategoryResponseDTO();
+    public PmsProductCategoryDTO getItemById(Long id) {
+        PmsProductCategoryDTO dto = new PmsProductCategoryDTO();
         BeanUtils.copyProperties(super.getById(id), dto);
         return dto;
     }

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.UmsMemberReceiveAddressRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.UmsMemberReceiveAddressResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.UmsMemberReceiveAddressDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.UmsMemberReceiveAddressService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -44,15 +44,15 @@ public class UmsMemberReceiveAddressController {
 
     @Operation(summary = "显示所有收货地址")
     @GetMapping("/list")
-    public Result<List<UmsMemberReceiveAddressResponseDTO>> list() {
-        List<UmsMemberReceiveAddressResponseDTO> res = umsMemberReceiveAddressService.listAddress();
+    public Result<List<UmsMemberReceiveAddressDTO>> list() {
+        List<UmsMemberReceiveAddressDTO> res = umsMemberReceiveAddressService.listAddress();
         return Result.success(res);
     }
 
     @Operation(summary = "获取收货地址详情")
     @GetMapping("/{id}")
-    public Result<UmsMemberReceiveAddressResponseDTO> get(@PathVariable Long id) {
-        UmsMemberReceiveAddressResponseDTO addressResponseDTO = umsMemberReceiveAddressService.getItem(id);
+    public Result<UmsMemberReceiveAddressDTO> get(@PathVariable Long id) {
+        UmsMemberReceiveAddressDTO addressResponseDTO = umsMemberReceiveAddressService.getItem(id);
         return Result.success(addressResponseDTO);
     }
 }

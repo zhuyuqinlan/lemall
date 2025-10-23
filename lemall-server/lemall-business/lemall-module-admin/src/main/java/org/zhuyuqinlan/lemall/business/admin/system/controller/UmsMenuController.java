@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuNodeResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuNodeDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsMenuService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -26,17 +26,17 @@ public class UmsMenuController {
 
     @Operation(summary = "树形结构返回所有菜单列表")
     @GetMapping("/treeList")
-    public Result<List<UmsMenuNodeResponseDTO>> treeList() {
-        List<UmsMenuNodeResponseDTO> umsMenuNodeResponseDTO = umsMenuService.treeList();
+    public Result<List<UmsMenuNodeDTO>> treeList() {
+        List<UmsMenuNodeDTO> umsMenuNodeResponseDTO = umsMenuService.treeList();
         return Result.success(umsMenuNodeResponseDTO);
     }
 
     @Operation(summary = "分页查询后台菜单")
     @GetMapping("/list/{parentId}")
-    public Result<IPage<UmsMenuResponseDTO>> list(@PathVariable @NotNull Long parentId,
-                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<UmsMenuResponseDTO> menuResponseDTOIPage = umsMenuService.pageMenu(parentId, pageNum, pageSize);
+    public Result<IPage<UmsMenuDTO>> list(@PathVariable @NotNull Long parentId,
+                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<UmsMenuDTO> menuResponseDTOIPage = umsMenuService.pageMenu(parentId, pageNum, pageSize);
         return Result.success(menuResponseDTOIPage);
     }
 
@@ -50,8 +50,8 @@ public class UmsMenuController {
 
     @Operation(summary = "根据ID获取菜单详情")
     @GetMapping("/{id}")
-    public Result<UmsMenuResponseDTO> getById(@PathVariable @NotNull Long id) {
-        UmsMenuResponseDTO umsMenuResponseDTO = umsMenuService.getItem(id);
+    public Result<UmsMenuDTO> getById(@PathVariable @NotNull Long id) {
+        UmsMenuDTO umsMenuResponseDTO = umsMenuService.getItem(id);
         return Result.success(umsMenuResponseDTO);
     }
 

@@ -34,10 +34,10 @@
     </sql>
     <!-- 映射父类 + 子类集合 -->
     <resultMap id="CategoryWithChildrenMap"
-               type="org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryWithChildrenItem">
+               type="org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryWithChildrenItem">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
-        <collection property="children" ofType="org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductCategoryResponseDTO">
+        <collection property="children" ofType="org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryDTO">
             <id property="id" column="child_id"/>
             <result property="name" column="child_name"/>
         </collection>

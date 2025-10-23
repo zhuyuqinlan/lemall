@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeNewProductRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsHomeNewProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeNewProductDTO;
 import org.zhuyuqinlan.lemall.common.entity.SmsHomeNewProduct;
 import org.zhuyuqinlan.lemall.common.mapper.SmsHomeNewProductMapper;
 
@@ -79,13 +79,13 @@ public class SmsHomeNewProductService extends ServiceImpl<SmsHomeNewProductMappe
      * @param pageNum 页码
      * @return 结果
      */
-    public IPage<SmsHomeNewProductResponseDTO> listPage(String productName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
+    public IPage<SmsHomeNewProductDTO> listPage(String productName, Integer recommendStatus, Integer pageSize, Integer pageNum) {
         return page(new Page<>(pageNum, pageSize), Wrappers.<SmsHomeNewProduct>lambdaQuery()
                 .like(StringUtils.hasText(productName), SmsHomeNewProduct::getProductName, productName)
                 .eq(recommendStatus != null, SmsHomeNewProduct::getRecommendStatus, recommendStatus)
                 .orderByDesc(SmsHomeNewProduct::getSort)
         ).convert(e -> {
-            SmsHomeNewProductResponseDTO responseDTO = new SmsHomeNewProductResponseDTO();
+            SmsHomeNewProductDTO responseDTO = new SmsHomeNewProductDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         });

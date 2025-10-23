@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.member.dao.*;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.*;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.*;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.common.mapper.*;
@@ -47,7 +47,7 @@ public class UmsMemberCouponService {
         );
         if (count >= smsCoupon.getPerLimit()) throw new BizException("您已经领取过该优惠劵");
 
-        UmsMemberResponseDTO currentMember = memberService.getCurrentMember();
+        UmsMemberDTO currentMember = memberService.getCurrentMember();
         SmsCouponHistory smsCouponHistory = new SmsCouponHistory();
         smsCouponHistory.setCouponId(couponId);
         smsCouponHistory.setCouponCode(generateCouponCode(currentMember.getId()));
@@ -76,13 +76,13 @@ public class UmsMemberCouponService {
     /**
      * 获取优惠券历史列表
      */
-    public List<SmsCouponHistoryResponseDTO> listHistory(Integer useStatus) {
+    public List<SmsCouponHistoryDTO> listHistory(Integer useStatus) {
         List<SmsCouponHistory> histories = couponHistoryMapperPortal.selectList(
                 Wrappers.<SmsCouponHistory>lambdaQuery()
                         .eq(SmsCouponHistory::getMemberId, StpMemberUtil.getLoginId())
                         .eq(useStatus != null, SmsCouponHistory::getUseStatus, useStatus)
         );
-        List<SmsCouponHistoryResponseDTO> result = new ArrayList<>();
+        List<SmsCouponHistoryDTO> result = new ArrayList<>();
         BeanUtils.copyProperties(histories, result);
         return result;
     }
@@ -90,7 +90,7 @@ public class UmsMemberCouponService {
     /**
      * 获取用户优惠券列表
      */
-    public List<SmsCouponResponseDTO> list(Integer useStatus) {
+    public List<SmsCouponDTO> list(Integer useStatus) {
         return smsCouponHistoryDao.getCouponList(Long.parseLong(StpMemberUtil.getLoginId().toString()), useStatus);
     }
 
@@ -111,10 +111,10 @@ public class UmsMemberCouponService {
             BigDecimal totalAmount = BigDecimal.ZERO;
             if (useType.equals(0)) totalAmount = calcTotalAmount(cartPromotionItems);
             else if (useType.equals(1)) {
-                List<Long> categoryIds = coupon.getCategoryRelationList().stream().map(SmsCouponProductCategoryRelationResponseDTO::getProductCategoryId).toList();
+                List<Long> categoryIds = coupon.getCategoryRelationList().stream().map(SmsCouponProductCategoryRelationDTO::getProductCategoryId).toList();
                 totalAmount = calcTotalAmountByproductCategoryId(cartPromotionItems, categoryIds);
             } else if (useType.equals(2)) {
-                List<Long> productIds = coupon.getProductRelationList().stream().map(SmsCouponProductRelationResponseDTO::getProductId).toList();
+                List<Long> productIds = coupon.getProductRelationList().stream().map(SmsCouponProductRelationDTO::getProductId).toList();
                 totalAmount = calcTotalAmountByProductId(cartPromotionItems, productIds);
             }
 
@@ -131,7 +131,7 @@ public class UmsMemberCouponService {
     /**
      * 获取当前商品相关优惠券
      */
-    public List<SmsCouponResponseDTO> listByProduct(Long productId) {
+    public List<SmsCouponDTO> listByProduct(Long productId) {
         List<Long> allCouponIds = new ArrayList<>();
 
         List<SmsCouponProductRelation> cprList = couponProductRelationMapper.selectList(
@@ -153,7 +153,7 @@ public class UmsMemberCouponService {
                         .and(w -> w.lt(SmsCoupon::getEndTime, now).gt(SmsCoupon::getStartTime, now).eq(SmsCoupon::getUseType, 0))
                         .or(w -> w.lt(SmsCoupon::getEndTime, now).gt(SmsCoupon::getStartTime, now).ne(SmsCoupon::getUseType, 0).in(SmsCoupon::getId, allCouponIds))
         ).stream().map(e -> {
-            SmsCouponResponseDTO dto = new SmsCouponResponseDTO();
+            SmsCouponDTO dto = new SmsCouponDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         }).toList();

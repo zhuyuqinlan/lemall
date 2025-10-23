@@ -22,7 +22,7 @@
   </select>
 
     <select id="getMenuListByRoleId"
-            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO">
+            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO">
         SELECT m.id          as id,
                m.parent_id   as parentId,
                m.create_time as createTime,
@@ -39,7 +39,7 @@
     </select>
 
   <select id="getResourceListByRoleId"
-            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO">
+            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO">
       SELECT r.id          as id,
              r.create_time as createTime,
              r.`name`      as `name`,

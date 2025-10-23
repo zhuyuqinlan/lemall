@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberBrandAttentionRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberBrandAttentionResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberBrandAttentionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.MemberAttentionService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -44,16 +44,16 @@ public class MemberAttentionController {
 
     @Operation(summary = "显示关注列表")
     @GetMapping("/list")
-    public Result<Page<MemberBrandAttentionResponseDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        Page<MemberBrandAttentionResponseDTO> page = memberAttentionService.list(pageNum,pageSize);
+    public Result<Page<MemberBrandAttentionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        Page<MemberBrandAttentionDTO> page = memberAttentionService.list(pageNum,pageSize);
         return Result.success(page);
     }
 
     @Operation(summary = "显示关注品牌详情")
     @GetMapping("/detail")
-    public Result<MemberBrandAttentionResponseDTO> detail(@RequestParam Long brandId) {
-        MemberBrandAttentionResponseDTO memberBrandAttention = memberAttentionService.detail(brandId);
+    public Result<MemberBrandAttentionDTO> detail(@RequestParam Long brandId) {
+        MemberBrandAttentionDTO memberBrandAttention = memberAttentionService.detail(brandId);
         return Result.success(memberBrandAttention);
     }
 

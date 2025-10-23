@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsOrderReturnReasonRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.order.dto.response.OmsOrderReturnReasonResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnReasonDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderReturnReasonService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -46,16 +46,16 @@ public class OmsOrderReturnReasonController {
 
     @Operation(summary = "分页查询全部退货原因")
     @GetMapping("/list")
-    public Result<IPage<OmsOrderReturnReasonResponseDTO>> list(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<OmsOrderReturnReasonResponseDTO> reasonList = orderReturnReasonService.listPage(pageSize, pageNum);
+    public Result<IPage<OmsOrderReturnReasonDTO>> list(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<OmsOrderReturnReasonDTO> reasonList = orderReturnReasonService.listPage(pageSize, pageNum);
         return Result.success(reasonList);
     }
 
     @Operation(summary = "获取单个退货原因详情信息")
     @GetMapping("/{id}")
-    public Result<OmsOrderReturnReasonResponseDTO> getItem(@PathVariable Long id) {
-        OmsOrderReturnReasonResponseDTO reason = orderReturnReasonService.getItem(id);
+    public Result<OmsOrderReturnReasonDTO> getItem(@PathVariable Long id) {
+        OmsOrderReturnReasonDTO reason = orderReturnReasonService.getItem(id);
         return Result.success(reason);
     }
 

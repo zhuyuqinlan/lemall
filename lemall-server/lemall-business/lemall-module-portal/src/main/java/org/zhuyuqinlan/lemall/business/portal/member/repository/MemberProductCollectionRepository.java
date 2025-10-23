@@ -3,7 +3,7 @@ package org.zhuyuqinlan.lemall.business.portal.member.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberProductCollection;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.MemberProductCollection;
 
 public interface MemberProductCollectionRepository extends MongoRepository<MemberProductCollection,String> {
     MemberProductCollection findByMemberIdAndProductId(Long memberId, Long productId);

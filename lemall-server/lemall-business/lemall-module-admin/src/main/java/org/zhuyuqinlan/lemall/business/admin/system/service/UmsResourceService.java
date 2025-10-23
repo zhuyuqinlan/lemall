@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsResource;
 import org.zhuyuqinlan.lemall.common.entity.UmsRoleResourceRelation;
 import org.zhuyuqinlan.lemall.common.mapper.UmsResourceMapper;
@@ -50,18 +50,18 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
     /**
      * 列出所有资源
      */
-    public List<UmsResourceResponseDTO> listAll() {
+    public List<UmsResourceDTO> listAll() {
         return super.list().stream().map(e -> {
-            UmsResourceResponseDTO umsResourceResponseDTO = new UmsResourceResponseDTO();
-            BeanUtils.copyProperties(e, umsResourceResponseDTO);
-            return umsResourceResponseDTO;
+            UmsResourceDTO umsResourceDTO = new UmsResourceDTO();
+            BeanUtils.copyProperties(e, umsResourceDTO);
+            return umsResourceDTO;
         }).toList();
     }
 
     /**
      * 分页查询资源列表
      */
-    public IPage<UmsResourceResponseDTO> pageRes(Long categoryId, String nameKeyword, String urlKeyword, Integer pageNum, Integer pageSize) {
+    public IPage<UmsResourceDTO> pageRes(Long categoryId, String nameKeyword, String urlKeyword, Integer pageNum, Integer pageSize) {
         return baseMapper.selectPage(new Page<>(pageNum, pageSize),
                         Wrappers.<UmsResource>lambdaQuery()
                                 .eq(categoryId != null, UmsResource::getCategoryId, categoryId)
@@ -70,9 +70,9 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
                                 .orderByDesc(UmsResource::getCreateTime)
                 )
                 .convert(e -> {
-                    UmsResourceResponseDTO umsResourceResponseDTO = new UmsResourceResponseDTO();
-                    BeanUtils.copyProperties(e, umsResourceResponseDTO);
-                    return umsResourceResponseDTO;
+                    UmsResourceDTO umsResourceDTO = new UmsResourceDTO();
+                    BeanUtils.copyProperties(e, umsResourceDTO);
+                    return umsResourceDTO;
                 });
     }
 

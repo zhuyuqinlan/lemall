@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsBrandRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsBrandResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsBrandDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsBrandService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -24,17 +24,17 @@ public class PmsBrandController {
 
     @Operation(summary = "根据品牌名称分页获取品牌列表")
     @GetMapping("/list")
-    public Result<IPage<PmsBrandResponseDTO>> getList(@RequestParam(value = "keyword", required = false) String keyword,
-                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
-        IPage<PmsBrandResponseDTO> res =  brandService.getList(keyword,pageNum,pageSize);
+    public Result<IPage<PmsBrandDTO>> getList(@RequestParam(value = "keyword", required = false) String keyword,
+                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        IPage<PmsBrandDTO> res =  brandService.getList(keyword,pageNum,pageSize);
         return Result.success(res);
     }
 
     @Operation(summary = "获取全部品牌列表")
     @GetMapping("/listAll")
-    public Result<List<PmsBrandResponseDTO>> getListAll() {
-        List<PmsBrandResponseDTO> brandResponseDTOS = brandService.getListAll();
+    public Result<List<PmsBrandDTO>> getListAll() {
+        List<PmsBrandDTO> brandResponseDTOS = brandService.getListAll();
         return Result.success(brandResponseDTOS);
     }
 
@@ -61,9 +61,9 @@ public class PmsBrandController {
 
     @Operation(summary = "根据编号查询品牌信息")
     @GetMapping(value = "/{id}")
-    public Result<PmsBrandResponseDTO> getItem(@PathVariable("id") Long id) {
-        PmsBrandResponseDTO pmsBrandResponseDTO = brandService.getBrandById(id);
-        return Result.success(pmsBrandResponseDTO);
+    public Result<PmsBrandDTO> getItem(@PathVariable("id") Long id) {
+        PmsBrandDTO pmsBrandDTO = brandService.getBrandById(id);
+        return Result.success(pmsBrandDTO);
     }
 
     @Operation(summary = "批量删除品牌")

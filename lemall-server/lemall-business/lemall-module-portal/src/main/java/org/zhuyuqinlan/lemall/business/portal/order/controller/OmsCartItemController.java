@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.CartProduct;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.OmsCartItemRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.CartPromotionItem;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.OmsCartItemResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.CartPromotionItem;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.OmsCartItemDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.OmsCartItemService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -33,8 +33,8 @@ public class OmsCartItemController {
 
     @Operation(summary = "获取某个会员的购物车列表")
     @GetMapping("/list")
-    public Result<List<OmsCartItemResponseDTO>> list() {
-        List<OmsCartItemResponseDTO> cartItemList = omsCartItemService.listCartItemResponseDTO(Long.parseLong(StpMemberUtil.getLoginId().toString()));
+    public Result<List<OmsCartItemDTO>> list() {
+        List<OmsCartItemDTO> cartItemList = omsCartItemService.listCartItemResponseDTO(Long.parseLong(StpMemberUtil.getLoginId().toString()));
         return Result.success(cartItemList);
     }
 

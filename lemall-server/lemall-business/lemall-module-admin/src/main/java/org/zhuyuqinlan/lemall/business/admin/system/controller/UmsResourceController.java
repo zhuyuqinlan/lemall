@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsResourceService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -25,19 +25,19 @@ public class UmsResourceController {
 
     @Operation(summary = "查询所有后台资源")
     @GetMapping("/listAll")
-    public Result<List<UmsResourceResponseDTO>> listAll() {
-        List<UmsResourceResponseDTO> umsResourceResponseDTOS = umsResourceService.listAll();
-        return Result.success(umsResourceResponseDTOS);
+    public Result<List<UmsResourceDTO>> listAll() {
+        List<UmsResourceDTO> umsResourceDTOS = umsResourceService.listAll();
+        return Result.success(umsResourceDTOS);
     }
 
     @Operation(summary = "分页模糊查询后台资源")
     @GetMapping("/list")
-    public Result<IPage<UmsResourceResponseDTO>> list(@RequestParam(required = false) Long categoryId,
-                                                      @RequestParam(required = false) String nameKeyword,
-                                                      @RequestParam(required = false) String urlKeyword,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<UmsResourceResponseDTO> umsResourceResponseDTOIPage = umsResourceService.pageRes(categoryId, nameKeyword, urlKeyword, pageNum, pageSize);
+    public Result<IPage<UmsResourceDTO>> list(@RequestParam(required = false) Long categoryId,
+                                              @RequestParam(required = false) String nameKeyword,
+                                              @RequestParam(required = false) String urlKeyword,
+                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<UmsResourceDTO> umsResourceResponseDTOIPage = umsResourceService.pageRes(categoryId, nameKeyword, urlKeyword, pageNum, pageSize);
         return Result.success(umsResourceResponseDTOIPage);
     }
 

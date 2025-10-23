@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -51,17 +51,17 @@ public class SmsFlashPromotionController {
 
     @Operation(summary = "获取活动详情")
     @GetMapping("/{id}")
-    public Result<SmsFlashPromotionResponseDTO> getItem(@PathVariable Long id) {
-        SmsFlashPromotionResponseDTO flashPromotion = flashPromotionService.getItem(id);
+    public Result<SmsFlashPromotionDTO> getItem(@PathVariable Long id) {
+        SmsFlashPromotionDTO flashPromotion = flashPromotionService.getItem(id);
         return Result.success(flashPromotion);
     }
 
     @Operation(summary = "根据活动名称分页查询")
     @GetMapping("/list")
-    public Result<IPage<SmsFlashPromotionResponseDTO>> getItem(@RequestParam(value = "keyword", required = false) String keyword,
-                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        IPage<SmsFlashPromotionResponseDTO> flashPromotionList = flashPromotionService.listPage(keyword, pageSize, pageNum);
+    public Result<IPage<SmsFlashPromotionDTO>> getItem(@RequestParam(value = "keyword", required = false) String keyword,
+                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        IPage<SmsFlashPromotionDTO> flashPromotionList = flashPromotionService.listPage(keyword, pageSize, pageNum);
         return Result.success(flashPromotionList);
     }
 }

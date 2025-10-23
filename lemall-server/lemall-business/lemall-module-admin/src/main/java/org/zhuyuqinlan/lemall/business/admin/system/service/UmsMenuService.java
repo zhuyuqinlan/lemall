@@ -9,8 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuNodeResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuNodeDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.mapper.UmsMenuMapper;
 import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 import org.zhuyuqinlan.lemall.common.entity.UmsRoleMenuRelation;
@@ -27,13 +27,13 @@ public class UmsMenuService extends ServiceImpl<UmsMenuMapper, UmsMenu> {
      * 树结构返回菜单
      * @return 结果
      */
-    public List<UmsMenuNodeResponseDTO> treeList() {
-        List<UmsMenuNodeResponseDTO> menuList = super.list(Wrappers.<UmsMenu>lambdaQuery()
+    public List<UmsMenuNodeDTO> treeList() {
+        List<UmsMenuNodeDTO> menuList = super.list(Wrappers.<UmsMenu>lambdaQuery()
                         .orderByDesc(UmsMenu::getSort)
                         .orderByDesc(UmsMenu::getCreateTime))
                 .stream()
                 .map(umsMenu -> {
-                    UmsMenuNodeResponseDTO dto = new UmsMenuNodeResponseDTO();
+                    UmsMenuNodeDTO dto = new UmsMenuNodeDTO();
                     BeanUtils.copyProperties(umsMenu, dto);
                     return dto;
                 }).toList();
@@ -47,14 +47,14 @@ public class UmsMenuService extends ServiceImpl<UmsMenuMapper, UmsMenu> {
     /**
      * 分页查询菜单
      */
-    public IPage<UmsMenuResponseDTO> pageMenu(Long parentId, Integer pageNum, Integer pageSize) {
+    public IPage<UmsMenuDTO> pageMenu(Long parentId, Integer pageNum, Integer pageSize) {
         return baseMapper.selectPage(new Page<>(pageNum, pageSize),
                         Wrappers.<UmsMenu>lambdaQuery()
                                 .eq(UmsMenu::getParentId, parentId)
                                 .orderByDesc(UmsMenu::getSort)
                                 .orderByDesc(UmsMenu::getCreateTime))
                 .convert(umsMenu -> {
-                    UmsMenuResponseDTO dto = new UmsMenuResponseDTO();
+                    UmsMenuDTO dto = new UmsMenuDTO();
                     BeanUtils.copyProperties(umsMenu, dto);
                     return dto;
                 });
@@ -73,9 +73,9 @@ public class UmsMenuService extends ServiceImpl<UmsMenuMapper, UmsMenu> {
     /**
      * 根据id获取菜单
      */
-    public UmsMenuResponseDTO getItem(Long id) {
+    public UmsMenuDTO getItem(Long id) {
         UmsMenu umsMenu = super.getById(id);
-        UmsMenuResponseDTO dto = new UmsMenuResponseDTO();
+        UmsMenuDTO dto = new UmsMenuDTO();
         BeanUtils.copyProperties(umsMenu, dto);
         return dto;
     }
@@ -121,8 +121,8 @@ public class UmsMenuService extends ServiceImpl<UmsMenuMapper, UmsMenu> {
     /**
      * 递归构建菜单树
      */
-    private UmsMenuNodeResponseDTO buildMenuTree(UmsMenuNodeResponseDTO menu, List<UmsMenuNodeResponseDTO> menuList) {
-        List<UmsMenuNodeResponseDTO> children = menuList.stream()
+    private UmsMenuNodeDTO buildMenuTree(UmsMenuNodeDTO menu, List<UmsMenuNodeDTO> menuList) {
+        List<UmsMenuNodeDTO> children = menuList.stream()
                 .filter(subMenu -> subMenu.getParentId().equals(menu.getId()))
                 .map(subMenu -> buildMenuTree(subMenu, menuList))
                 .toList();

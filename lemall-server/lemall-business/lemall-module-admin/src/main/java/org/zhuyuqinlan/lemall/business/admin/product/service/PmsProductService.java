@@ -12,8 +12,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductParamRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductQueryParamRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductParamResultResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.product.dto.response.PmsProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductParamResultDTO;
+import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.common.mapper.PmsProductMapper;
 import org.zhuyuqinlan.lemall.business.admin.product.dao.PmsProductDao;
@@ -42,7 +42,7 @@ public class PmsProductService extends ServiceImpl<PmsProductMapper, PmsProduct>
     /**
      * 分页查询商品
      */
-    public IPage<PmsProductResponseDTO> getList(PmsProductQueryParamRequestDTO productQueryParam, Integer pageSize, Integer pageNum) {
+    public IPage<PmsProductDTO> getList(PmsProductQueryParamRequestDTO productQueryParam, Integer pageSize, Integer pageNum) {
         return super.page(new Page<>(pageNum, pageSize), Wrappers.<PmsProduct>lambdaQuery()
                 .eq(productQueryParam.getPublishStatus() != null, PmsProduct::getPublishStatus, productQueryParam.getPublishStatus())
                 .eq(productQueryParam.getVerifyStatus() != null, PmsProduct::getVerifyStatus, productQueryParam.getVerifyStatus())
@@ -52,7 +52,7 @@ public class PmsProductService extends ServiceImpl<PmsProductMapper, PmsProduct>
                 .eq(productQueryParam.getBrandId() != null, PmsProduct::getBrandId, productQueryParam.getBrandId())
                 .orderByDesc(PmsProduct::getSort)
         ).convert(e -> {
-            PmsProductResponseDTO responseDTO = new PmsProductResponseDTO();
+            PmsProductDTO responseDTO = new PmsProductDTO();
             BeanUtils.copyProperties(e, responseDTO);
             return responseDTO;
         });
@@ -131,7 +131,7 @@ public class PmsProductService extends ServiceImpl<PmsProductMapper, PmsProduct>
     /**
      * 获取商品编辑信息
      */
-    public PmsProductParamResultResponseDTO getUpdateInfo(Long id) {
+    public PmsProductParamResultDTO getUpdateInfo(Long id) {
         return pmsProductDao.getUpdateInfo(id);
     }
 
@@ -153,13 +153,13 @@ public class PmsProductService extends ServiceImpl<PmsProductMapper, PmsProduct>
     /**
      * 简单查询商品
      */
-    public List<PmsProductResponseDTO> getSimpleList(String keyword) {
+    public List<PmsProductDTO> getSimpleList(String keyword) {
         return super.list(Wrappers.<PmsProduct>lambdaQuery()
                 .eq(PmsProduct::getDeleteStatus, 0)
                 .like(StringUtils.hasText(keyword), PmsProduct::getName, keyword)
                 .like(StringUtils.hasText(keyword), PmsProduct::getProductSn, keyword)
         ).stream().map(e -> {
-            PmsProductResponseDTO dto = new PmsProductResponseDTO();
+            PmsProductDTO dto = new PmsProductDTO();
             BeanUtils.copyProperties(e, dto);
             return dto;
         }).toList();

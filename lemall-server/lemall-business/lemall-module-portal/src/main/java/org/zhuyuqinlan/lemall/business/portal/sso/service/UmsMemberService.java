@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.common.captcha.constant.CaptchaConstant;
 import org.zhuyuqinlan.lemall.common.captcha.service.CaptchaService;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
@@ -73,7 +73,7 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
 
         StpMemberUtil.login(umsMember.getId());
 
-        UmsMemberResponseDTO userDTO = new UmsMemberResponseDTO();
+        UmsMemberDTO userDTO = new UmsMemberDTO();
         userDTO.setUsername(umsMember.getUsername());
         userDTO.setId(umsMember.getId());
         StpMemberUtil.getSession().set(AuthConstant.STP_ADMIN_INFO, userDTO);
@@ -83,8 +83,8 @@ public class UmsMemberService extends ServiceImpl<UmsMemberMapper, UmsMember> {
 
     // ======================= 当前用户 =======================
 
-    public UmsMemberResponseDTO getCurrentMember() {
-        return (UmsMemberResponseDTO) StpMemberUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
+    public UmsMemberDTO getCurrentMember() {
+        return (UmsMemberDTO) StpMemberUtil.getSession().get(AuthConstant.STP_ADMIN_INFO);
     }
 
     // ======================= 登出 =======================

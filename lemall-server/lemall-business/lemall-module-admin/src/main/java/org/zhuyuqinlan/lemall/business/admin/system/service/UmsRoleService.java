@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsRoleDao;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsRoleRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsMenuResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsResourceResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.response.UmsRoleResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.common.mapper.UmsRoleMapper;
 import org.zhuyuqinlan.lemall.common.response.BizException;
@@ -34,14 +34,14 @@ public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
         return umsRoleDao.getMenuList(id);
     }
 
-    public IPage<UmsRoleResponseDTO> pageRole(String keyword, Integer pageSize, Integer pageNum) {
+    public IPage<UmsRoleDTO> pageRole(String keyword, Integer pageSize, Integer pageNum) {
         return baseMapper.selectPage(new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(pageNum, pageSize),
                 com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRole>lambdaQuery()
                         .like(StringUtils.hasText(keyword), UmsRole::getName, keyword)
                         .orderByDesc(UmsRole::getSort)
                         .orderByDesc(UmsRole::getCreateTime)
         ).convert(umsRole -> {
-            UmsRoleResponseDTO dto = new UmsRoleResponseDTO();
+            UmsRoleDTO dto = new UmsRoleDTO();
             org.springframework.beans.BeanUtils.copyProperties(umsRole, dto);
             return dto;
         });
@@ -63,9 +63,9 @@ public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
         return baseMapper.updateById(role);
     }
 
-    public List<UmsRoleResponseDTO> listAll() {
+    public List<UmsRoleDTO> listAll() {
         return super.list().stream().map(umsRole -> {
-            UmsRoleResponseDTO dto = new UmsRoleResponseDTO();
+            UmsRoleDTO dto = new UmsRoleDTO();
             org.springframework.beans.BeanUtils.copyProperties(umsRole, dto);
             return dto;
         }).toList();
@@ -84,7 +84,7 @@ public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
         return super.save(umsRole);
     }
 
-    public List<UmsMenuResponseDTO> listMenu(Long roleId) {
+    public List<UmsMenuDTO> listMenu(Long roleId) {
         return umsRoleDao.getMenuListByRoleId(roleId);
     }
 
@@ -100,7 +100,7 @@ public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
         return menuIds.size();
     }
 
-    public List<UmsResourceResponseDTO> listResource(Long roleId) {
+    public List<UmsResourceDTO> listResource(Long roleId) {
         return umsRoleDao.getResourceListByRoleId(roleId);
     }
 

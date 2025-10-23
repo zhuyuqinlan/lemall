@@ -7,11 +7,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.auth.util.StpMemberUtil;
-import org.zhuyuqinlan.lemall.business.portal.member.domain.mogo.MemberBrandAttention;
+import org.zhuyuqinlan.lemall.business.portal.member.domain.MemberBrandAttention;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberBrandAttentionRequestDTO;
-import org.zhuyuqinlan.lemall.business.portal.member.dto.response.MemberBrandAttentionResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberBrandAttentionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.repository.MemberBrandAttentionRepository;
-import org.zhuyuqinlan.lemall.business.portal.sso.dto.response.UmsMemberResponseDTO;
+import org.zhuyuqinlan.lemall.business.portal.sso.dto.UmsMemberDTO;
 import org.zhuyuqinlan.lemall.business.portal.sso.service.UmsMemberService;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class MemberAttentionService {
     // ======================= 添加关注 =======================
     public int add(MemberBrandAttentionRequestDTO memberBrandAttention) {
         int count = 0;
-        UmsMemberResponseDTO currentMember = memberService.getCurrentMember();
+        UmsMemberDTO currentMember = memberService.getCurrentMember();
         memberBrandAttention.setMemberId(currentMember.getId());
         memberBrandAttention.setMemberNickname(currentMember.getNickname());
         memberBrandAttention.setMemberIcon(currentMember.getIcon());
@@ -53,7 +53,7 @@ public class MemberAttentionService {
     }
 
     // ======================= 获取关注列表 =======================
-    public Page<MemberBrandAttentionResponseDTO> list(Integer pageNum, Integer pageSize) {
+    public Page<MemberBrandAttentionDTO> list(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
 
         Page<MemberBrandAttention> page = memberBrandAttentionRepository.findByMemberId(
@@ -61,18 +61,18 @@ public class MemberAttentionService {
         );
 
         return page.map(entity -> {
-            MemberBrandAttentionResponseDTO dto = new MemberBrandAttentionResponseDTO();
+            MemberBrandAttentionDTO dto = new MemberBrandAttentionDTO();
             BeanUtils.copyProperties(entity, dto);
             return dto;
         });
     }
 
     // ======================= 获取关注详情 =======================
-    public MemberBrandAttentionResponseDTO detail(Long brandId) {
+    public MemberBrandAttentionDTO detail(Long brandId) {
         MemberBrandAttention entity = memberBrandAttentionRepository.findByMemberIdAndBrandId(
                 Long.parseLong(StpMemberUtil.getLoginId().toString()), brandId
         );
-        MemberBrandAttentionResponseDTO dto = new MemberBrandAttentionResponseDTO();
+        MemberBrandAttentionDTO dto = new MemberBrandAttentionDTO();
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }

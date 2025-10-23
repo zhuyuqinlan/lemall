@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionProductRelationRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductRelationResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionProductResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductRelationDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionProductRelationService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -46,8 +46,8 @@ public class SmsFlashPromotionProductRelationController {
 
     @Operation(summary = "获取管理商品促销信息")
     @GetMapping("/{id}")
-    public Result<SmsFlashPromotionProductRelationResponseDTO> getItem(@PathVariable Long id) {
-        SmsFlashPromotionProductRelationResponseDTO relation = relationService.getItem(id);
+    public Result<SmsFlashPromotionProductRelationDTO> getItem(@PathVariable Long id) {
+        SmsFlashPromotionProductRelationDTO relation = relationService.getItem(id);
         return Result.success(relation);
     }
 

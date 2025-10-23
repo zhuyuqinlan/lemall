@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zhuyuqinlan.lemall.business.admin.sale.dao.SmsCouponDao">
 
-  <resultMap id="couponItemParam" type="org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsCouponParamResponseDTO" extends="org.zhuyuqinlan.lemall.common.mapper.SmsCouponMapper.BaseResultMap">
+  <resultMap id="couponItemParam" type="org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsCouponParamDTO" extends="org.zhuyuqinlan.lemall.common.mapper.SmsCouponMapper.BaseResultMap">
     <collection property="productRelationList" columnPrefix="cpr_" resultMap="org.zhuyuqinlan.lemall.common.mapper.SmsCouponProductRelationMapper.BaseResultMap">
     </collection>
     <collection property="productCategoryRelationList" columnPrefix="cpcr_" resultMap="org.zhuyuqinlan.lemall.common.mapper.SmsCouponProductCategoryRelationMapper.BaseResultMap">

@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionSessionRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionDetailResponseDTO;
-import org.zhuyuqinlan.lemall.business.admin.sale.dto.response.SmsFlashPromotionSessionResponseDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionSessionDetailDTO;
+import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionSessionDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionSessionService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
@@ -52,22 +52,22 @@ public class SmsFlashPromotionSessionController {
 
     @Operation(summary = "获取场次详情")
     @GetMapping("/{id}")
-    public Result<SmsFlashPromotionSessionResponseDTO> getItem(@PathVariable Long id) {
-        SmsFlashPromotionSessionResponseDTO promotionSession = flashPromotionSessionService.getItem(id);
+    public Result<SmsFlashPromotionSessionDTO> getItem(@PathVariable Long id) {
+        SmsFlashPromotionSessionDTO promotionSession = flashPromotionSessionService.getItem(id);
         return Result.success(promotionSession);
     }
 
     @Operation(summary = "获取全部场次")
     @GetMapping("/list")
-    public Result<List<SmsFlashPromotionSessionResponseDTO>> list() {
-        List<SmsFlashPromotionSessionResponseDTO> promotionSessionList = flashPromotionSessionService.listAll();
+    public Result<List<SmsFlashPromotionSessionDTO>> list() {
+        List<SmsFlashPromotionSessionDTO> promotionSessionList = flashPromotionSessionService.listAll();
         return Result.success(promotionSessionList);
     }
 
     @Operation(summary = "获取全部可选场次及其数量")
     @GetMapping("/selectList")
-    public Result<List<SmsFlashPromotionSessionDetailResponseDTO>> selectList(Long flashPromotionId) {
-        List<SmsFlashPromotionSessionDetailResponseDTO> promotionSessionList = flashPromotionSessionService.selectList(flashPromotionId);
+    public Result<List<SmsFlashPromotionSessionDetailDTO>> selectList(Long flashPromotionId) {
+        List<SmsFlashPromotionSessionDetailDTO> promotionSessionList = flashPromotionSessionService.selectList(flashPromotionId);
         return Result.success(promotionSessionList);
     }
 }
