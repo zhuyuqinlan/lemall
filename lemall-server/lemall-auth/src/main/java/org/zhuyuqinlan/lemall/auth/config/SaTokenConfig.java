@@ -56,8 +56,6 @@ public class SaTokenConfig {
                 .addInclude("/**")
                 .setExcludeList(ignoreUrlsConfig.getUrls())
                 .setAuth(obj -> {
-                    String requestPath = SaHolder.getRequest().getRequestPath();
-                    PathContainer pathToMatch = PathContainer.parsePath(requestPath);
 
                     // 1. 门户端：只检查登录
                     SaRouter.match(portalPrefix + "/**", r -> StpMemberUtil.checkLogin()).stop();
@@ -69,6 +67,8 @@ public class SaTokenConfig {
                         Map<Object, Object> pathResourceMap = redisTemplate.opsForHash()
                                 .entries(AuthConstant.PATH_RESOURCE_MAP);
 
+                        String requestPath = SaHolder.getRequest().getRequestPath();
+                        PathContainer pathToMatch = PathContainer.parsePath(requestPath);
                         List<String> needResourceList = new ArrayList<>();
                         for (Map.Entry<Object, Object> entry : pathResourceMap.entrySet()) {
                             String patternStr = (String) entry.getKey();

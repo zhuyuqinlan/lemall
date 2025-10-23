@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(params) {
   return request({
-    url: '/system/role/list',
+    url: '/api/lemall-admin/system/role/list',
     method: 'get',
     params: params
   })
@@ -10,7 +10,7 @@ export function fetchList(params) {
 
 export function createRole(data) {
   return request({
-    url: '/system/role/create',
+    url: '/api/lemall-admin/system/role/create',
     method: 'post',
     data: data
   })
@@ -18,7 +18,7 @@ export function createRole(data) {
 
 export function updateRole(id, data) {
   return request({
-    url: '/system/role/update/' + id,
+    url: '/api/lemall-admin/system/role/update/' + id,
     method: 'post',
     data: data
   })
@@ -26,7 +26,7 @@ export function updateRole(id, data) {
 
 export function updateStatus(id, params) {
   return request({
-    url: '/system/role/updateStatus/' + id,
+    url: '/api/lemall-admin/system/role/updateStatus/' + id,
     method: 'post',
     params: params
   })
@@ -34,7 +34,7 @@ export function updateStatus(id, params) {
 
 export function deleteRole(data) {
   return request({
-    url:'/system/role/delete',
+    url:'/api/lemall-admin/system/role/delete',
     method:'post',
     data:data
   })
@@ -42,28 +42,28 @@ export function deleteRole(data) {
 
 export function fetchAllRoleList() {
   return request({
-    url: '/system/role/listAll',
+    url: '/api/lemall-admin/system/role/listAll',
     method: 'get'
   })
 }
 
 export function listMenuByRole(roleId) {
   return request({
-    url: '/system/role/listMenu/'+roleId,
+    url: '/api/lemall-admin/system/role/listMenu/'+roleId,
     method: 'get'
   })
 }
 
 export function listResourceByRole(roleId) {
   return request({
-    url: '/system/role/listResource/'+roleId,
+    url: '/api/lemall-admin/system/role/listResource/'+roleId,
     method: 'get'
   })
 }
 
 export function allocMenu(data) {
   return request({
-    url: '/system/role/allocMenu',
+    url: '/api/lemall-admin/system/role/allocMenu',
     method: 'post',
     data:data
   })
@@ -71,7 +71,7 @@ export function allocMenu(data) {
 
 export function allocResource(data) {
   return request({
-    url: '/system/role/allocResource',
+    url: '/api/lemall-admin/system/role/allocResource',
     method: 'post',
     data:data
   })

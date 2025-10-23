@@ -21,6 +21,7 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsAdminDao;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminLoginLogMapper;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminMapper;
@@ -221,16 +222,20 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         BeanUtils.copyProperties(admin, dto);
 
         List<UmsResource> resources = umsAdminDao.getResourceList(admin.getId());
-        dto.setResourceList(resources.stream().map(r -> r.getId().toString()).toList());
+        dto.setResourceList(resources.stream().map(UmsResource::getName).toList());
 
         List<UmsRole> roles = umsAdminDao.getRoleList(admin.getId());
-        dto.setRoleList(roles.stream().map(r -> r.getId().toString()).toList());
+        dto.setRoleList(roles.stream().map(UmsRole::getValue).toList());
 
         List<UmsPermission> perms = umsAdminDao.getPermissionList(admin.getId());
-        dto.setPermissionList(perms.stream().map(p -> p.getId().toString()).toList());
+        dto.setPermissionList(perms.stream().map(UmsPermission::getValue).toList());
 
-        List<UmsMenu> menus = roleService.getMenuList(admin.getId());
-        dto.setMenuList(menus);
+        List<UmsMenu> umsMenuList = roleService.getMenuList(admin.getId());
+        dto.setMenuList(umsMenuList.stream().map(e -> {
+            UmsMenuDTO umsMenuDTO = new UmsMenuDTO();
+            BeanUtils.copyProperties(e, umsMenuDTO);
+            return umsMenuDTO;
+        }).toList());
 
         StpUtil.getSession().set(AuthConstant.STP_ADMIN_INFO, dto);
         return dto;

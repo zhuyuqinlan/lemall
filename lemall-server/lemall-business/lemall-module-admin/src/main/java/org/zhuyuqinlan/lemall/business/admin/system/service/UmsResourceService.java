@@ -41,7 +41,7 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
         Map<String, String> pathResourceMap = new TreeMap<>();
         List<UmsResource> resourceList = umsResourceMapper.selectList(null);
         for (UmsResource resource : resourceList) {
-            pathResourceMap.put(adminPrefix + resource.getUrl(), resource.getId().toString());
+            pathResourceMap.put(adminPrefix + resource.getUrl(), resource.getName());
         }
         redisService.del(AuthConstant.PATH_RESOURCE_MAP);
         redisService.hSetAll(AuthConstant.PATH_RESOURCE_MAP, pathResourceMap);

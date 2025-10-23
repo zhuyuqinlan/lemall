@@ -3,6 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.system.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 
 import java.io.Serial;
@@ -42,5 +43,5 @@ public class UmsAdminInfoDTO implements Serializable {
     private Integer status;
 
     @Schema(description = "菜单列表")
-    private List<UmsMenu> menuList;
+    private List<UmsMenuDTO> menuList;
 }

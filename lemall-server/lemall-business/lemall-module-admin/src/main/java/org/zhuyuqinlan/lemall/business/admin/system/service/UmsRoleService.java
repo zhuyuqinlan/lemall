@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsRoleDao;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsRoleRequestDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;

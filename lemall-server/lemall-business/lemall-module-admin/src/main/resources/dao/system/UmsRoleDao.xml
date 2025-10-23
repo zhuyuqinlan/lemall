@@ -22,7 +22,7 @@
   </select>
 
     <select id="getMenuListByRoleId"
-            resultType="org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO">
+            resultType="org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO">
         SELECT m.id          as id,
                m.parent_id   as parentId,
                m.create_time as createTime,

@@ -4,7 +4,6 @@ package org.zhuyuqinlan.lemall.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -55,6 +54,6 @@ public class AdminUserDto implements Serializable {
     private List<String> resourceList;
 
     @Schema(description = "菜单列表")
-    private List<UmsMenu> menuList;
+    private List<UmsMenuDTO> menuList;
 }
 

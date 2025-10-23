@@ -6,6 +6,7 @@
     <!--@Table ums_role-->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="admin_count" jdbcType="INTEGER" property="adminCount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -14,7 +15,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, description, admin_count, create_time, `status`, sort
+    id, `name`, `value`, description, admin_count, create_time, `status`, sort
   </sql>
 
 </mapper>

@@ -42,6 +42,9 @@
         <el-table-column label="角色名称" align="center">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
+        <el-table-column label="角色标识" align="center">
+          <template slot-scope="scope">{{scope.row.value}}</template>
+        </el-table-column>
         <el-table-column label="描述" align="center">
           <template slot-scope="scope">{{scope.row.description}}</template>
         </el-table-column>
@@ -110,6 +113,9 @@
         <el-form-item label="角色名称：">
           <el-input v-model="role.name" style="width: 250px"></el-input>
         </el-form-item>
+        <el-form-item label="角色标识：">
+          <el-input v-model="role.value" style="width: 250px"></el-input>
+        </el-form-item>
         <el-form-item label="描述：">
           <el-input v-model="role.description"
                     type="textarea"
@@ -142,6 +148,7 @@
   const defaultRole = {
     id: null,
     name: null,
+    value: null,
     description: null,
     adminCount: 0,
     status: 1
@@ -274,7 +281,7 @@
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {
           this.listLoading = false;
-          this.list = response.data.records;
+          this.list = response.data.list;
           this.total = response.data.total;
         });
       }

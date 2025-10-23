@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 后台用户角色表
-    */
+ * 后台用户角色表
+ */
 @TableName(value = "ums_role")
 public class UmsRole {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -17,6 +17,12 @@ public class UmsRole {
      */
     @TableField(value = "`name`")
     private String name;
+
+    /**
+     * 权限校验标识符
+     */
+    @TableField(value = "`value`")
+    private String value;
 
     /**
      * 描述
@@ -42,6 +48,9 @@ public class UmsRole {
     @TableField(value = "`status`")
     private Integer status;
 
+    /**
+     * 排序
+     */
     @TableField(value = "sort")
     private Integer sort;
 
@@ -75,6 +84,24 @@ public class UmsRole {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 获取权限校验标识符
+     *
+     * @return value - 权限校验标识符
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * 设置权限校验标识符
+     *
+     * @param value 权限校验标识符
+     */
+    public void setValue(String value) {
+        this.value = value;
     }
 
     /**
@@ -150,14 +177,18 @@ public class UmsRole {
     }
 
     /**
-     * @return sort
+     * 获取排序
+     *
+     * @return sort - 排序
      */
     public Integer getSort() {
         return sort;
     }
 
     /**
-     * @param sort
+     * 设置排序
+     *
+     * @param sort 排序
      */
     public void setSort(Integer sort) {
         this.sort = sort;

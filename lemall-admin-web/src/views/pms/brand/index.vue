@@ -172,9 +172,8 @@
         this.listLoading = true;
         fetchList(this.listQuery).then(response => {
           this.listLoading = false;
-          this.list = response.data.records;
+          this.list = response.data.list;
           this.total = response.data.total;
-          this.totalPage = response.data.totalPage;
           this.pageSize = response.data.pageSize;
         });
       },

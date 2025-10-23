@@ -20,6 +20,10 @@ public class UmsRoleRequestDTO implements Serializable {
     @Schema(description = "角色名称")
     private String name;
 
+    @NotBlank
+    @Schema(description = "权限验证标识")
+    private String value;
+
     @Schema(description = "描述")
     private String description;
 

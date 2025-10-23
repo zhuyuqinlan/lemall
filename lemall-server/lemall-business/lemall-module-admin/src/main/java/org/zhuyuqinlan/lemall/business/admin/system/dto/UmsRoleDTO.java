@@ -21,6 +21,9 @@ public class UmsRoleDTO implements Serializable {
     @Schema(description = "角色名")
     private String name;
 
+    @Schema(description = "权限验证标识")
+    private String value;
+
     @Schema(description = "启用状态：0->禁用；1->启用")
     private Integer status;
 

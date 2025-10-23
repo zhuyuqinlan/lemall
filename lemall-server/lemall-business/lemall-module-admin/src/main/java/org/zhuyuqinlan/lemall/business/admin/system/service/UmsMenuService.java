@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsMenuRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuNodeDTO;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.mapper.UmsMenuMapper;
 import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 import org.zhuyuqinlan.lemall.common.entity.UmsRoleMenuRelation;

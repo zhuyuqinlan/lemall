@@ -3,6 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.system.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 
 import java.util.List;
 

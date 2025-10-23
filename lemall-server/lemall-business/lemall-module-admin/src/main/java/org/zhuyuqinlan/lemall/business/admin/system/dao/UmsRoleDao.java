@@ -1,6 +1,6 @@
 package org.zhuyuqinlan.lemall.business.admin.system.dao;
 
-import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
+import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.common.entity.UmsMenu;
 
