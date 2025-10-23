@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.CmsSubjectDTO;
 import org.zhuyuqinlan.lemall.business.admin.content.service.CmsSubjectService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;

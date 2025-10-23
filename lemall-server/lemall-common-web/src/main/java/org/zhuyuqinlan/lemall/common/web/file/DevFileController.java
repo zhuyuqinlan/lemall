@@ -95,7 +95,7 @@ public class DevFileController {
         }
     }
 
-    @Operation(summary = "上传文件")
+    @Operation(summary = "上传文件（minio）")
     @PostMapping("${lemall.server.prefix.common}/file/dev/minio/upload")
     public Result<String> upload(@RequestParam("file") MultipartFile file) {
         try {

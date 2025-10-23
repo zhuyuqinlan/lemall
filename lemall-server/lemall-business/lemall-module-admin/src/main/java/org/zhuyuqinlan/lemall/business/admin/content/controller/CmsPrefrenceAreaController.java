@@ -3,7 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.content.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsPrefrenceAreaDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.CmsPrefrenceAreaDTO;
 import org.zhuyuqinlan.lemall.business.admin.content.service.CmsPrefrenceAreaService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;

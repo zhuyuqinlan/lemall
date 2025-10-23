@@ -3,7 +3,7 @@ package org.zhuyuqinlan.lemall.business.admin.content.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsPrefrenceAreaDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.CmsPrefrenceAreaDTO;
 import org.zhuyuqinlan.lemall.common.entity.CmsPrefrenceArea;
 import org.zhuyuqinlan.lemall.common.mapper.CmsPrefrenceAreaMapper;
 

@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.business.admin.content.dto.response;
+package org.zhuyuqinlan.lemall.business.admin.content.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

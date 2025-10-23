@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.business.admin.content.dto.response;
+package org.zhuyuqinlan.lemall.business.admin.content.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -9,17 +9,16 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@Schema(description = "专题商品关系响应DTO")
-public class CmsSubjectProductRelationDTO implements Serializable {
+@Schema(description = "优选专区和商品关系响应DTO")
+public class CmsPrefrenceAreaProductRelationDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    @Schema(description = "专题ID")
-    private Long subjectId;
+    @Schema(description = "优选专区ID")
+    private Long prefrenceAreaId;
 
     @Schema(description = "商品ID")
     private Long productId;
 }
-

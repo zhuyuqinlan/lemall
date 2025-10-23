@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zhuyuqinlan.lemall.common.entity.CmsSubject;
 import org.zhuyuqinlan.lemall.common.mapper.CmsSubjectMapper;
-import org.zhuyuqinlan.lemall.business.admin.content.dto.response.CmsSubjectDTO;
+import org.zhuyuqinlan.lemall.business.admin.content.dto.CmsSubjectDTO;
 
 import java.util.List;
 
