@@ -23,3 +23,14 @@ minio:
 localFile:
   base-path: /usr/local/upload/lemall # 文件上传目录
   access-url-prefix: http://zhuyuqinlan.io/lemall-nginx/file-prod/local-download # 网络访问前缀（这里用nginx反代访问和nginx约定访问路径，如果nginx和后端不在同一台服务器，那要让后端将文件上传到共享目录中）
+secure:
+  ignore:
+    urls: #配置白名单路径
+      - "/doc.html"
+      - "/v3/api-docs/**"
+      - "/webjars/**"
+      - "/favicon.ico"
+      - "/api/lemall-common/file/local/access-code"
+      - "${lemall.server.prefix.admin}/system/admin/login"
+      - "${lemall.server.prefix.portal}/sso/login"
+      - "${lemall.server.prefix.portal}/sso/register"
