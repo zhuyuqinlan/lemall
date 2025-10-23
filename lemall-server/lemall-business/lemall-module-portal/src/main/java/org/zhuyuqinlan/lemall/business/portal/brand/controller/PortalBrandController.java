@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.brand.service.PortalBrandService;
 import org.zhuyuqinlan.lemall.business.portal.home.dto.PmsBrandDTO;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.util.List;
@@ -37,10 +38,10 @@ public class PortalBrandController {
 
     @Operation(summary = "分页获取品牌相关商品")
     @GetMapping("/productList")
-    public Result<IPage<PmsBrandDTO>> productList(@RequestParam Long brandId,
-                                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                          @RequestParam(value = "pageSize", defaultValue = "6") Integer pageSize) {
+    public Result<PageResult<PmsBrandDTO>> productList(@RequestParam Long brandId,
+                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                       @RequestParam(value = "pageSize", defaultValue = "6") Integer pageSize) {
         IPage<PmsBrandDTO> result = portalBrandService.productList(brandId,pageNum, pageSize);
-        return Result.success(result);
+        return Result.success(PageResult.fromMybatis(result));
     }
 }

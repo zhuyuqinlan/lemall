@@ -13,6 +13,7 @@ import org.zhuyuqinlan.lemall.business.portal.order.dto.ConfirmOrderResult;
 import org.zhuyuqinlan.lemall.business.portal.order.dto.OmsOrderDetail;
 import org.zhuyuqinlan.lemall.business.portal.order.dto.request.OrderParam;
 import org.zhuyuqinlan.lemall.business.portal.order.service.OmsPortalOrderService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.util.List;
@@ -66,11 +67,11 @@ public class OmsPortalOrderController {
     @Parameter(name = "status", description = "订单状态：-1->全部；0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭",
             in = ParameterIn.QUERY, schema = @Schema(type = "integer",defaultValue = "-1",allowableValues = {"-1","0","1","2","3","4"}))
     @GetMapping("/list")
-    public Result<IPage<OmsOrderDetail>> list(@RequestParam Integer status,
-                                                    @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                                                    @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+    public Result<PageResult<OmsOrderDetail>> list(@RequestParam Integer status,
+                                                   @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                                                   @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         IPage<OmsOrderDetail> orderPage = portalOrderService.list(status,pageNum,pageSize);
-        return Result.success(orderPage);
+        return Result.success(PageResult.fromMybatis(orderPage));
     }
 
     @Operation(summary = "根据ID获取订单详情")

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.content.dto.CmsSubjectDTO;
 import org.zhuyuqinlan.lemall.business.admin.content.service.CmsSubjectService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,11 +34,11 @@ public class CmsSubjectController {
 
     @Operation(summary = "根据专题名称分页获取专题")
     @GetMapping("/list")
-    public Result<IPage<CmsSubjectDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    public Result<PageResult<CmsSubjectDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
             IPage<CmsSubjectDTO> res = cmsSubjectService.listPage(keyword, pageNum, pageSize);
-            return Result.success(res);
+            return Result.success(PageResult.fromMybatis(res));
     }
 
 }

@@ -9,6 +9,7 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsUpdateStatusPa
 import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderReturnApplyResultDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderReturnApplyService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class OmsOrderReturnApplyController {
 
     @Operation(summary = "分页查询退货申请")
     @GetMapping("/list")
-    public Result<IPage<OmsOrderReturnApplyDTO>> list(OmsReturnApplyQueryParamRequestDTO queryParam,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<OmsOrderReturnApplyDTO>> list(OmsReturnApplyQueryParamRequestDTO queryParam,
+                                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<OmsOrderReturnApplyDTO> returnApplyList = returnApplyService.listPage(queryParam, pageSize, pageNum);
-        return Result.success(returnApplyList);
+        return Result.success(PageResult.fromMybatis(returnApplyList));
     }
 
     @Operation(summary = "批量删除申请")

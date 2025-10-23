@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberBrandAttentionRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberBrandAttentionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.MemberAttentionService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 @Validated
@@ -44,10 +45,10 @@ public class MemberAttentionController {
 
     @Operation(summary = "显示关注列表")
     @GetMapping("/list")
-    public Result<Page<MemberBrandAttentionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    public Result<PageResult<MemberBrandAttentionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         Page<MemberBrandAttentionDTO> page = memberAttentionService.list(pageNum,pageSize);
-        return Result.success(page);
+        return Result.success(PageResult.fromMongo(page));
     }
 
     @Operation(summary = "显示关注品牌详情")

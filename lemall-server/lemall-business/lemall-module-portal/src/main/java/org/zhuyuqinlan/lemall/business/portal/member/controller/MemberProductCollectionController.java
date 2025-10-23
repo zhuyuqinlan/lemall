@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberProductCollectionRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberProductCollectionDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.MemberCollectionService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 @Validated
@@ -44,10 +45,10 @@ public class MemberProductCollectionController {
 
     @Operation(summary = "显示收藏列表")
     @GetMapping("/list")
-    public Result<Page<MemberProductCollectionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    public Result<PageResult<MemberProductCollectionDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         Page<MemberProductCollectionDTO> page = memberCollectionService.list(pageNum,pageSize);
-        return Result.success(page);
+        return Result.success(PageResult.fromMongo(page));
     }
 
     @Operation(summary = "显示收藏商品详情")

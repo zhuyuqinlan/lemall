@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +59,10 @@ public class SmsFlashPromotionController {
 
     @Operation(summary = "根据活动名称分页查询")
     @GetMapping("/list")
-    public Result<IPage<SmsFlashPromotionDTO>> getItem(@RequestParam(value = "keyword", required = false) String keyword,
-                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<SmsFlashPromotionDTO>> getItem(@RequestParam(value = "keyword", required = false) String keyword,
+                                                            @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<SmsFlashPromotionDTO> flashPromotionList = flashPromotionService.listPage(keyword, pageSize, pageNum);
-        return Result.success(flashPromotionList);
+        return Result.success(PageResult.fromMybatis(flashPromotionList));
     }
 }

@@ -13,6 +13,7 @@ import org.zhuyuqinlan.lemall.business.portal.member.dto.PmsProductDTO;
 import org.zhuyuqinlan.lemall.business.portal.product.dto.PmsPortalProductDetail;
 import org.zhuyuqinlan.lemall.business.portal.product.dto.PmsProductCategoryNode;
 import org.zhuyuqinlan.lemall.business.portal.product.service.PmsPortalProductService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.util.List;
@@ -30,14 +31,14 @@ public class PmsPortalProductController {
     @Parameter(name = "sort", description = "排序字段:0->按相关度；1->按新品；2->按销量；3->价格从低到高；4->价格从高到低",
             in= ParameterIn.QUERY,schema = @Schema(type = "integer",defaultValue = "0",allowableValues = {"0","1","2","3","4"}))
     @GetMapping("/search")
-    public Result<IPage<PmsProductDTO>> search(@RequestParam(required = false) String keyword,
-                                               @RequestParam(required = false) Long brandId,
-                                               @RequestParam(required = false) Long productCategoryId,
-                                               @RequestParam(required = false, defaultValue = "0") Integer pageNum,
-                                               @RequestParam(required = false, defaultValue = "5") Integer pageSize,
-                                               @RequestParam(required = false, defaultValue = "0") Integer sort) {
+    public Result<PageResult<PmsProductDTO>> search(@RequestParam(required = false) String keyword,
+                                                    @RequestParam(required = false) Long brandId,
+                                                    @RequestParam(required = false) Long productCategoryId,
+                                                    @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                    @RequestParam(required = false, defaultValue = "5") Integer pageSize,
+                                                    @RequestParam(required = false, defaultValue = "0") Integer sort) {
         IPage<PmsProductDTO> productList = pmsPortalProductService.search(keyword, brandId, productCategoryId, pageNum, pageSize, sort);
-        return Result.success(productList);
+        return Result.success(PageResult.fromMybatis(productList));
     }
 
     @Operation(summary = "以树形结构获取所有商品分类")

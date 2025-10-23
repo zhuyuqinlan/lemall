@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeBrandRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeBrandDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeBrandService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,11 +54,11 @@ public class SmsHomeBrandController {
     @Operation(summary = "分页查询推荐品牌")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
 
-    public Result<IPage<SmsHomeBrandDTO>> list(@RequestParam(value = "brandName", required = false) String brandName,
-                                               @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
-                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<SmsHomeBrandDTO>> list(@RequestParam(value = "brandName", required = false) String brandName,
+                                                    @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
+                                                    @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<SmsHomeBrandDTO> homeBrandList = homeBrandService.listPage(brandName, recommendStatus, pageSize, pageNum);
-        return Result.success(homeBrandList);
+        return Result.success(PageResult.fromMybatis(homeBrandList));
     }
 }

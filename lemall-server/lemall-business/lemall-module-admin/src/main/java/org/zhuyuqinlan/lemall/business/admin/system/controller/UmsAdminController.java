@@ -14,6 +14,7 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminInfoDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsAdminService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -67,11 +68,11 @@ public class UmsAdminController {
 
     @Operation(summary = "根据用户名或姓名分页获取用户列表")
     @GetMapping("/list")
-    public Result<IPage<UmsAdminDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<UmsAdminDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<UmsAdminDTO> adminList = adminService.listPage(keyword, pageSize, pageNum);
-        return Result.success(adminList);
+        return Result.success(PageResult.fromMybatis(adminList));
     }
 
     //TODO 添加用户时，允许上传头像

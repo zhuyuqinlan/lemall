@@ -46,6 +46,11 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           const data = response.data
+          if (data.menuList && data.menuList.length > 0) { // 验证返回的menuList是否是一个非空数组
+            commit('SET_MENUS', data.menuList)
+          } else {
+            reject('getInfo: menuList must be a non-null array !')
+          }
           commit('SET_NAME', data.username)
           commit('SET_AVATAR', data.icon)
           resolve(response)

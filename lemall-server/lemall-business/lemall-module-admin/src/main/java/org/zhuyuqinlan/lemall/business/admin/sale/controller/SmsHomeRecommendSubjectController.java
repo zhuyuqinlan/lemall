@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsHomeRecommendSubjectRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsHomeRecommendSubjectDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsHomeRecommendSubjectService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -52,11 +53,11 @@ public class SmsHomeRecommendSubjectController {
 
     @Operation(summary = "分页查询推荐")
     @GetMapping("/list")
-    public Result<IPage<SmsHomeRecommendSubjectDTO>> list(@RequestParam(value = "subjectName", required = false) String subjectName,
-                                                          @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
-                                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<SmsHomeRecommendSubjectDTO>> list(@RequestParam(value = "subjectName", required = false) String subjectName,
+                                                               @RequestParam(value = "recommendStatus", required = false) Integer recommendStatus,
+                                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<SmsHomeRecommendSubjectDTO> homeBrandList = recommendSubjectService.listPage(subjectName, recommendStatus, pageSize, pageNum);
-        return Result.success(homeBrandList);
+        return Result.success(PageResult.fromMybatis(homeBrandList));
     }
 }

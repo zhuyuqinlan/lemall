@@ -11,6 +11,7 @@ import org.zhuyuqinlan.lemall.business.admin.order.dto.request.OmsReceiverInfoPa
 import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDetailDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.dto.OmsOrderDTO;
 import org.zhuyuqinlan.lemall.business.admin.order.service.OmsOrderService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,11 @@ public class OmsOrderController {
 
     @Operation(summary = "查询订单")
     @GetMapping("/list")
-    public Result<IPage<OmsOrderDTO>> list(@Validated OmsOrderQueryParamRequestDTO queryParam,
-                                           @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                           @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<OmsOrderDTO>> list(@Validated OmsOrderQueryParamRequestDTO queryParam,
+                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<OmsOrderDTO> orderList = orderService.listPage(queryParam, pageSize, pageNum);
-        return Result.success(orderList);
+        return Result.success(PageResult.fromMybatis(orderList));
     }
 
     @Operation(summary = "批量发货")

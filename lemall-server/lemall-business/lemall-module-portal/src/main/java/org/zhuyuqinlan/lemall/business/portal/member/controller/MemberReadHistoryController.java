@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.request.MemberReadHistoryRequestDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.dto.MemberReadHistoryDTO;
 import org.zhuyuqinlan.lemall.business.portal.member.service.MemberReadHistoryService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.util.List;
@@ -53,9 +54,9 @@ public class MemberReadHistoryController {
 
     @Operation(summary = "分页获取用户浏览记录")
     @GetMapping("/list")
-    public Result<Page<MemberReadHistoryDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+    public Result<PageResult<MemberReadHistoryDTO>> list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         Page<MemberReadHistoryDTO> page = memberReadHistoryService.list(pageNum, pageSize);
-        return Result.success(page);
+        return Result.success(PageResult.fromMongo(page));
     }
 }

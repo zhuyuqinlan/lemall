@@ -9,6 +9,7 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsMenuRequestDT
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuNodeDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsMenuService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,11 @@ public class UmsMenuController {
 
     @Operation(summary = "分页查询后台菜单")
     @GetMapping("/list/{parentId}")
-    public Result<IPage<UmsMenuDTO>> list(@PathVariable @NotNull Long parentId,
-                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<UmsMenuDTO>> list(@PathVariable @NotNull Long parentId,
+                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<UmsMenuDTO> menuResponseDTOIPage = umsMenuService.pageMenu(parentId, pageNum, pageSize);
-        return Result.success(menuResponseDTOIPage);
+        return Result.success(PageResult.fromMybatis(menuResponseDTOIPage));
     }
 
     @Operation(summary = "添加后台菜单")

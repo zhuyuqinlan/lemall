@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsResourceRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsResourceService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,13 @@ public class UmsResourceController {
 
     @Operation(summary = "分页模糊查询后台资源")
     @GetMapping("/list")
-    public Result<IPage<UmsResourceDTO>> list(@RequestParam(required = false) Long categoryId,
-                                              @RequestParam(required = false) String nameKeyword,
-                                              @RequestParam(required = false) String urlKeyword,
-                                              @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                              @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<UmsResourceDTO>> list(@RequestParam(required = false) Long categoryId,
+                                                   @RequestParam(required = false) String nameKeyword,
+                                                   @RequestParam(required = false) String urlKeyword,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<UmsResourceDTO> umsResourceResponseDTOIPage = umsResourceService.pageRes(categoryId, nameKeyword, urlKeyword, pageNum, pageSize);
-        return Result.success(umsResourceResponseDTOIPage);
+        return Result.success(PageResult.fromMybatis(umsResourceResponseDTOIPage));
     }
 
     @Operation(summary = "添加后台资源")

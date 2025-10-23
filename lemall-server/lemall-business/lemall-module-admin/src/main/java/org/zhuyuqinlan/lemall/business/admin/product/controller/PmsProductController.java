@@ -9,6 +9,7 @@ import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductParam
 import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductParamResultDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +27,11 @@ public class PmsProductController {
 
     @Operation(summary = "查询商品")
     @GetMapping("/list")
-    public Result<IPage<PmsProductDTO>> getList(PmsProductQueryParamRequestDTO productQueryParam,
-                                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<PmsProductDTO>> getList(PmsProductQueryParamRequestDTO productQueryParam,
+                                                     @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<PmsProductDTO> res = pmsProductService.getList(productQueryParam,pageSize,pageNum);
-        return Result.success(res);
+        return Result.success(PageResult.fromMybatis(res));
     }
 
     @Operation(summary = "创建商品")

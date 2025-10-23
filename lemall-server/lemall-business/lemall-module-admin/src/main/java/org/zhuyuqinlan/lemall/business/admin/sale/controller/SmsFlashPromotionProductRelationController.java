@@ -8,6 +8,7 @@ import org.zhuyuqinlan.lemall.business.admin.sale.dto.request.SmsFlashPromotionP
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductRelationDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.dto.SmsFlashPromotionProductResponseDTO;
 import org.zhuyuqinlan.lemall.business.admin.sale.service.SmsFlashPromotionProductRelationService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,11 +54,11 @@ public class SmsFlashPromotionProductRelationController {
 
     @Operation(summary = "分页查询不同场次关联及商品信息")
     @GetMapping("/list")
-    public Result<IPage<SmsFlashPromotionProductResponseDTO>> list(@RequestParam(value = "flashPromotionId") Long flashPromotionId,
-                                                                   @RequestParam(value = "flashPromotionSessionId") Long flashPromotionSessionId,
-                                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<SmsFlashPromotionProductResponseDTO>> list(@RequestParam(value = "flashPromotionId") Long flashPromotionId,
+                                                                        @RequestParam(value = "flashPromotionSessionId") Long flashPromotionSessionId,
+                                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<SmsFlashPromotionProductResponseDTO> flashPromotionProductList = relationService.listPage(flashPromotionId, flashPromotionSessionId, pageSize, pageNum);
-        return Result.success(flashPromotionProductList);
+        return Result.success(PageResult.fromMybatis(flashPromotionProductList));
     }
 }

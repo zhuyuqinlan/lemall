@@ -11,6 +11,7 @@ import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsResourceDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.service.UmsRoleService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +36,11 @@ public class UmsRoleController {
 
     @Operation(summary = "根据角色名称分页获取角色列表")
     @GetMapping("list")
-    public Result<IPage<UmsRoleDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
-                                          @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<UmsRoleDTO>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<UmsRoleDTO> umsRoleIPage = umsRoleService.pageRole(keyword,pageSize,pageNum);
-        return Result.success(umsRoleIPage);
+        return Result.success(PageResult.fromMybatis(umsRoleIPage));
     }
 
     @Operation(summary = "修改角色状态")

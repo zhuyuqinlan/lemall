@@ -8,6 +8,7 @@ import org.zhuyuqinlan.lemall.business.admin.product.dto.request.PmsProductCateg
 import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryDTO;
 import org.zhuyuqinlan.lemall.business.admin.product.dto.PmsProductCategoryWithChildrenItem;
 import org.zhuyuqinlan.lemall.business.admin.product.service.PmsProductCategoryService;
+import org.zhuyuqinlan.lemall.common.response.PageResult;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,11 +49,11 @@ public class PmsProductCategoryController {
 
     @Operation(summary = "分页查询商品分类")
     @GetMapping("/list/{parentId}")
-    public Result<IPage<PmsProductCategoryDTO>> getList(@PathVariable Long parentId,
-                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+    public Result<PageResult<PmsProductCategoryDTO>> getList(@PathVariable Long parentId,
+                                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         IPage<PmsProductCategoryDTO> res = pmsProductCategoryService.getList(parentId,pageNum,pageSize);
-        return Result.success(res);
+        return Result.success(PageResult.fromMybatis(res));
     }
 
     @Operation(summary = "根据id获取商品分类")
