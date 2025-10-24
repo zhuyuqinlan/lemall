@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 后台用户表
-    */
+ * 后台用户表
+ */
 @TableName(value = "ums_admin")
 public class UmsAdmin {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -19,10 +19,10 @@ public class UmsAdmin {
     private String password;
 
     /**
-     * 头像
+     * 头像文件id
      */
-    @TableField(value = "icon")
-    private String icon;
+    @TableField(value = "avatar_file_id")
+    private Long avatarFileId;
 
     /**
      * 邮箱
@@ -103,21 +103,21 @@ public class UmsAdmin {
     }
 
     /**
-     * 获取头像
+     * 获取头像文件id
      *
-     * @return icon - 头像
+     * @return avatar_file_id - 头像文件id
      */
-    public String getIcon() {
-        return icon;
+    public Long getAvatarFileId() {
+        return avatarFileId;
     }
 
     /**
-     * 设置头像
+     * 设置头像文件id
      *
-     * @param icon 头像
+     * @param avatarFileId 头像文件id
      */
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setAvatarFileId(Long avatarFileId) {
+        this.avatarFileId = avatarFileId;
     }
 
     /**

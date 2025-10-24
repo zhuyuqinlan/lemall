@@ -47,7 +47,9 @@ redis:
   key:
     authCode: authCode
     authCodeLimit: authCodeLimit
-    localFileAccess: localFileAccess
+    localFileAccess: fs:localFileAccess
+    fileUrl: file:url
+    fileLock: lock:file
   expire:
     common: 7776000 # redis默认过期时间（3个月左右）
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

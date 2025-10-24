@@ -25,8 +25,8 @@ public class UmsAdminRequestDTO implements Serializable {
     @Schema(description = "密码")
     private String password;
 
-    @Schema(description = "用户头像")
-    private String icon;
+    @Schema(description = "用户头像文件Id")
+    private Long avatarFileId;
 
     @Schema(description = "邮箱")
     @Email

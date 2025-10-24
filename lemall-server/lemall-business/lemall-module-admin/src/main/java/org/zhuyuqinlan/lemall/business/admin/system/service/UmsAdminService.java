@@ -23,6 +23,7 @@ import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
 import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
+import org.zhuyuqinlan.lemall.common.file.service.FileUrlCacheService;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminLoginLogMapper;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminMapper;
 import org.zhuyuqinlan.lemall.common.response.BizException;
@@ -39,6 +40,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     private final UmsAdminRoleRelationService userRoleRelationService;
     private final UmsRoleService roleService;
     private final UmsAdminDao umsAdminDao;
+    private final FileUrlCacheService fileUrlCacheService;
 
     /**
      * 管理员登录
@@ -220,6 +222,8 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         AdminUserDto dto = new AdminUserDto();
         UmsAdmin admin = super.getById(id);
         BeanUtils.copyProperties(admin, dto);
+        String fileUrl = fileUrlCacheService.getFileUrl(admin.getAvatarFileId());
+        dto.setIcon(fileUrl);
 
         List<UmsResource> resources = umsAdminDao.getResourceList(admin.getId());
         dto.setResourceList(resources.stream().map(UmsResource::getName).toList());

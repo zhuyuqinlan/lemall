@@ -3,6 +3,7 @@ package org.zhuyuqinlan.lemall.common.service;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -170,5 +171,21 @@ public class RedisService {
 
     public Long lRemove(String key, long count, Object value) {
         return redisTemplate.opsForList().remove(key, count, value);
+    }
+
+    // ========== 分布式锁 ============
+    public boolean tryLock(String key, long expireSeconds) {
+        // 使用 Redis 原子操作 SETNX + EXPIRE
+        Boolean success = redisTemplate.opsForValue()
+                .setIfAbsent(key, "LOCKED", Duration.ofSeconds(expireSeconds));
+        return Boolean.TRUE.equals(success);
+    }
+
+    public void unlock(String key) {
+        try {
+            redisTemplate.delete(key);
+        } catch (Exception e) {
+            // 解锁失败不影响主流程
+        }
     }
 }
