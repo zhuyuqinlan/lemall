@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.web.file;
+package org.zhuyuqinlan.lemall.common.web.file.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @Profile("dev")  // 只在 dev 环境生效
 @Slf4j
@@ -97,7 +98,7 @@ public class DevFileController {
 
     @Operation(summary = "上传文件（minio）")
     @PostMapping("${lemall.server.prefix.common}/file/dev/minio/upload")
-    public Result<String> upload(@RequestParam("file") MultipartFile file) {
+    public Result<Map<String, String>> upload(@RequestParam("file") MultipartFile file) {
         try {
             // 生成当天文件夹名
             String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
@@ -120,8 +121,9 @@ public class DevFileController {
             String contentType = file.getContentType();
 
             // 上传
-            String url = minioFileStorageService.uploadFile(objectName, inputStream, size, contentType);
-            return Result.success(url);
+            Map<String, String> stringStringMap =
+                    minioFileStorageService.uploadFile(objectName, inputStream, size, contentType);
+            return Result.success(stringStringMap);
         } catch (Exception e) {
             log.error("上传文件失败", e);
             return Result.fail("上传文件失败: " + e.getMessage());

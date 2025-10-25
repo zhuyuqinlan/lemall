@@ -13,10 +13,11 @@
     <result column="content_type" jdbcType="VARCHAR" property="contentType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="md5" jdbcType="CHAR" property="md5" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, storage_type, bucket, uri, original_name, `size`, content_type, create_time, 
-    update_time
+    update_time, md5
   </sql>
 </mapper>

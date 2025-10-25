@@ -13,6 +13,7 @@ import org.zhuyuqinlan.lemall.common.file.utils.MinIOUtils;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -89,7 +90,7 @@ public class MinIOService implements CloudFileStorageService {
      * 上传文件
      */
     @Override
-    public String uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
+    public Map<String, String> uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
         try {
             MinIOUtils.uploadFile(minioClient, bucket, objectName, inputStream, size, contentType);
             FsFileStorage fsFileStorage = new FsFileStorage();
@@ -100,11 +101,14 @@ public class MinIOService implements CloudFileStorageService {
             fsFileStorage.setContentType(contentType);
             fsFileStorage.setUri(bucket + "/" + objectName);
             fileStorageMapper.insert(fsFileStorage);
+            Map<String,String> map = new HashMap<>();
+            map.put("id",fsFileStorage.getId().toString());
+            map.put("url",getFileUrl(objectName));
+            return map;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        return getFileUrl(objectName);
     }
 
     /**
@@ -153,7 +157,7 @@ public class MinIOService implements CloudFileStorageService {
     }
 
     @Override
-    public String saveFileRecord(String originalFileName) {
+    public Map<String, String> saveFileRecord(String originalFileName) {
         try {
             // 去minio读去文件信息
             Map<String, Object> info = MinIOUtils.getFileInfo(minioClient, bucket, originalFileName);
@@ -168,7 +172,10 @@ public class MinIOService implements CloudFileStorageService {
             fsFileStorage.setContentType(contentType);
             fsFileStorage.setUri(bucket + "/" + originalFileName);
             fileStorageMapper.insert(fsFileStorage);
-            return getFileUrl(originalFileName);
+            Map<String,String> map = new HashMap<>();
+            map.put("id",fsFileStorage.getId().toString());
+            map.put("url",getFileUrl(originalFileName));
+            return map;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);

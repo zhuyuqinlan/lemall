@@ -21,10 +21,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.server.PathContainer;
 import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
+import org.zhuyuqinlan.lemall.common.service.RedisService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +40,15 @@ import java.util.concurrent.ConcurrentMap;
 @EnableConfigurationProperties(IgnoreUrlsConfig.class)
 public class SaTokenConfig {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisService redisService;
     @Value("${lemall.server.prefix.portal}")
     private String portalPrefix;
     @Value("${lemall.server.prefix.admin}")
     private String adminPrefix;
+    @Value("${redis.common-prefix}")
+    private String REDIS_PREFIX;
+    @Value("${redis.key.auth.pathResourceMap}")
+    private String PATH_RESOURCE_MAP;
 
     private final IgnoreUrlsConfig ignoreUrlsConfig;
     private final PathPatternParser patternParser = PathPatternParser.defaultInstance; // 路径解析器
@@ -64,8 +68,7 @@ public class SaTokenConfig {
                     SaRouter.match(adminPrefix + "/**", r -> {
                         StpUtil.checkLogin();
                         // Redis 权限匹配
-                        Map<Object, Object> pathResourceMap = redisTemplate.opsForHash()
-                                .entries(AuthConstant.PATH_RESOURCE_MAP);
+                        Map<Object, Object> pathResourceMap = redisService.hGetAll(REDIS_PREFIX + ":" + PATH_RESOURCE_MAP);
 
                         String requestPath = SaHolder.getRequest().getRequestPath();
                         PathContainer pathToMatch = PathContainer.parsePath(requestPath);

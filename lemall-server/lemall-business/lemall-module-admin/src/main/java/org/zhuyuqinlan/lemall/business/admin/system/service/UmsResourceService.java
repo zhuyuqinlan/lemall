@@ -20,7 +20,6 @@ import org.zhuyuqinlan.lemall.common.entity.UmsResource;
 import org.zhuyuqinlan.lemall.common.entity.UmsRoleResourceRelation;
 import org.zhuyuqinlan.lemall.common.mapper.UmsResourceMapper;
 import org.zhuyuqinlan.lemall.common.service.RedisService;
-import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 
 
 @Service
@@ -33,6 +32,10 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
 
     @Value("${lemall.server.prefix.admin}")
     private String adminPrefix;
+    @Value("${redis.common-prefix}")
+    private String REDIS_PREFIX;
+    @Value("${redis.key.auth.pathResourceMap}")
+    private String AUTH_PATH_RESOURCE_MAP;
 
     /**
      * 初始化路径与资源访问规则
@@ -43,8 +46,9 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
         for (UmsResource resource : resourceList) {
             pathResourceMap.put(adminPrefix + resource.getUrl(), resource.getName());
         }
-        redisService.del(AuthConstant.PATH_RESOURCE_MAP);
-        redisService.hSetAll(AuthConstant.PATH_RESOURCE_MAP, pathResourceMap);
+        String key = REDIS_PREFIX + ":" + AUTH_PATH_RESOURCE_MAP;
+        redisService.del(key);
+        redisService.hSetAll(key, pathResourceMap);
     }
 
     /**

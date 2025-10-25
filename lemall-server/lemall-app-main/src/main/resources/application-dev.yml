@@ -20,7 +20,7 @@ minio:
 localFile:
   base-path: D:/upload/lemall # 文件上传目录
   local-download-prefix: /file-dev/local-download # 开发环境使用本地上传，文件访问url的前缀
-  access-url-prefix: "http://localhost:8080${localFile.local-download-prefix}" # 网络访问
+  access-url-prefix: "http://localhost:${server.port}${localFile.local-download-prefix}" # 开发环境本地文件网络访问
 secure:
   ignore:
     urls: #配置白名单路径

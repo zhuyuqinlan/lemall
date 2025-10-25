@@ -15,23 +15,23 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public RedisService(RedisTemplate<String, Object> redisTemplate) {
+    public RedisService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     // ======================= 通用操作 =======================
 
-    public void set(String key, Object value, long time) {
+    public void set(String key, String value, long time) {
         redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
     }
 
-    public void set(String key, Object value) {
+    public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public Object get(String key) {
+    public String get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
@@ -65,65 +65,66 @@ public class RedisService {
 
     // ======================= Hash操作 =======================
 
-    public Object hGet(String key, String hashKey) {
-        return redisTemplate.opsForHash().get(key, hashKey);
+    public void hSet(String key, String hashKey, String value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
     }
 
-    public Boolean hSet(String key, String hashKey, Object value, long time) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
+    public Boolean hSet(String key, String hashKey, String value, long time) {
+        hSet(key, hashKey, value);
         return expire(key, time);
     }
 
-    public void hSet(String key, String hashKey, Object value) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
+    public String hGet(String key, String hashKey) {
+        Object val = redisTemplate.opsForHash().get(key, hashKey);
+        return val == null ? null : val.toString();
     }
 
     public Map<Object, Object> hGetAll(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
 
-    public Boolean hSetAll(String key, Map<String, Object> map, long time) {
+    public void hSetAll(String key, Map<String, String> map) {
         redisTemplate.opsForHash().putAll(key, map);
+    }
+
+    public Boolean hSetAll(String key, Map<String, String> map, long time) {
+        hSetAll(key, map);
         return expire(key, time);
     }
 
-    public void hSetAll(String key, Map<String, ?> map) {
-        redisTemplate.opsForHash().putAll(key, map);
-    }
-
-    public void hDel(String key, Object... hashKey) {
-        redisTemplate.opsForHash().delete(key, hashKey);
+    public void hDel(String key, Object... hashKeys) {
+        redisTemplate.opsForHash().delete(key, hashKeys);
     }
 
     public Boolean hHasKey(String key, String hashKey) {
         return redisTemplate.opsForHash().hasKey(key, hashKey);
     }
 
-    public Long hIncr(String key, String hashKey, Long delta) {
+    public Long hIncr(String key, String hashKey, long delta) {
         return redisTemplate.opsForHash().increment(key, hashKey, delta);
     }
 
-    public Long hDecr(String key, String hashKey, Long delta) {
+    public Long hDecr(String key, String hashKey, long delta) {
         return redisTemplate.opsForHash().increment(key, hashKey, -delta);
     }
 
     // ======================= Set操作 =======================
 
-    public Set<Object> sMembers(String key) {
+    public Set<String> sMembers(String key) {
         return redisTemplate.opsForSet().members(key);
     }
 
-    public Long sAdd(String key, Object... values) {
+    public Long sAdd(String key, String... values) {
         return redisTemplate.opsForSet().add(key, values);
     }
 
-    public Long sAdd(String key, long time, Object... values) {
-        Long count = redisTemplate.opsForSet().add(key, values);
+    public Long sAdd(String key, long time, String... values) {
+        Long count = sAdd(key, values);
         expire(key, time);
         return count;
     }
 
-    public Boolean sIsMember(String key, Object value) {
+    public Boolean sIsMember(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, value);
     }
 
@@ -131,13 +132,13 @@ public class RedisService {
         return redisTemplate.opsForSet().size(key);
     }
 
-    public Long sRemove(String key, Object... values) {
-        return redisTemplate.opsForSet().remove(key, values);
+    public Long sRemove(String key, String... values) {
+        return redisTemplate.opsForSet().remove(key, (Object[]) values);
     }
 
     // ======================= List操作 =======================
 
-    public List<Object> lRange(String key, long start, long end) {
+    public List<String> lRange(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
@@ -145,37 +146,37 @@ public class RedisService {
         return redisTemplate.opsForList().size(key);
     }
 
-    public Object lIndex(String key, long index) {
+    public String lIndex(String key, long index) {
         return redisTemplate.opsForList().index(key, index);
     }
 
-    public Long lPush(String key, Object value) {
+    public Long lPush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
-    public Long lPush(String key, Object value, long time) {
-        Long index = redisTemplate.opsForList().rightPush(key, value);
+    public Long lPush(String key, String value, long time) {
+        Long index = lPush(key, value);
         expire(key, time);
         return index;
     }
 
-    public Long lPushAll(String key, Object... values) {
+    public Long lPushAll(String key, String... values) {
         return redisTemplate.opsForList().rightPushAll(key, values);
     }
 
-    public Long lPushAll(String key, Long time, Object... values) {
-        Long count = redisTemplate.opsForList().rightPushAll(key, values);
+    public Long lPushAll(String key, long time, String... values) {
+        Long count = lPushAll(key, values);
         expire(key, time);
         return count;
     }
 
-    public Long lRemove(String key, long count, Object value) {
+    public Long lRemove(String key, long count, String value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }
 
-    // ========== 分布式锁 ============
+    // ======================= 分布式锁 =======================
+
     public boolean tryLock(String key, long expireSeconds) {
-        // 使用 Redis 原子操作 SETNX + EXPIRE
         Boolean success = redisTemplate.opsForValue()
                 .setIfAbsent(key, "LOCKED", Duration.ofSeconds(expireSeconds));
         return Boolean.TRUE.equals(success);
@@ -184,8 +185,6 @@ public class RedisService {
     public void unlock(String key) {
         try {
             redisTemplate.delete(key);
-        } catch (Exception e) {
-            // 解锁失败不影响主流程
-        }
+        } catch (Exception ignored) {}
     }
 }

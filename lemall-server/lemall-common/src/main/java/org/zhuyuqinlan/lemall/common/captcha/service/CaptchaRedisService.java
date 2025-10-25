@@ -21,15 +21,15 @@ public class CaptchaRedisService {
     }
 
     /** Redis 数据库前缀，用于隔离不同应用或业务 */
-    @Value("${redis.database}")
-    private String REDIS_DATABASE;
+    @Value("${redis.common-prefix}")
+    private String REDIS_PREFIX;
 
     /** 验证码 key 前缀 */
-    @Value("${redis.key.authCode}")
+    @Value("${redis.key.auth.captcha.code}")
     private String REDIS_KEY_AUTH_CODE;
 
     /** 验证码发送频率限制 key 前缀 */
-    @Value("${redis.key.authCodeLimit}")
+    @Value("${redis.key.auth.captcha.limit}")
     private String REDIS_KEY_AUTH_CODE_LIMIT;
 
     /**
@@ -43,12 +43,12 @@ public class CaptchaRedisService {
      */
     public void setAuthCode(String target, String type, String authCode, long expireSeconds, long intervalSeconds) {
         // 构建验证码存储 key：格式 [数据库前缀]:[验证码前缀]:[类型]:[目标]
-        String authCodeKey = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + type + ":" + target;
+        String authCodeKey = REDIS_PREFIX + ":" + REDIS_KEY_AUTH_CODE.replace("{type}", type).replace("{target}", target);
         // 存储验证码，设置过期时间
         redisService.set(authCodeKey, authCode, expireSeconds);
 
         // 构建防刷 key：格式 [数据库前缀]:[防刷前缀]:[类型]:[目标]
-        String limitKey = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE_LIMIT + ":" + type + ":" + target;
+        String limitKey = REDIS_PREFIX + ":" + REDIS_KEY_AUTH_CODE_LIMIT.replace("{type}", type).replace("{target}", target);
         // 存储防刷标记，设置发送间隔时间
         redisService.set(limitKey, "1", intervalSeconds);
     }
@@ -61,8 +61,8 @@ public class CaptchaRedisService {
      * @return 验证码字符串，如果不存在返回 null
      */
     public String getAuthCode(String target, String type) {
-        String authCodeKey = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + type + ":" + target;
-        return (String) redisService.get(authCodeKey);
+        String authCodeKey = REDIS_PREFIX + ":" + REDIS_KEY_AUTH_CODE.replace("{type}", type).replace("{target}", target);
+        return redisService.get(authCodeKey);
     }
 
     /**
@@ -73,7 +73,7 @@ public class CaptchaRedisService {
      * @return true 表示可以发送，false 表示间隔时间未到
      */
     public boolean canSendAuthCode(String target, String type) {
-        String limitKey = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE_LIMIT + ":" + type + ":" + target;
+        String limitKey = REDIS_PREFIX + ":" + REDIS_KEY_AUTH_CODE_LIMIT.replace("{type}", type).replace("{target}", target);
         // 如果限制 key 不存在，说明可以发送
         return !redisService.hasKey(limitKey);
     }

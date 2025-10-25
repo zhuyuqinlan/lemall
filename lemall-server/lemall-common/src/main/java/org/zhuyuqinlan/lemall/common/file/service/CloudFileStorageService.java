@@ -21,5 +21,5 @@ public interface CloudFileStorageService extends FileStorageService {
      * @param originalFileName 路径
      * @return url
      */
-    String saveFileRecord(String originalFileName);
+    Map<String,String> saveFileRecord(String originalFileName);
 }

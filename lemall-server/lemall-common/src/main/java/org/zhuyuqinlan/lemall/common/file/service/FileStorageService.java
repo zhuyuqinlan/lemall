@@ -1,6 +1,7 @@
 package org.zhuyuqinlan.lemall.common.file.service;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * 基础文件存储接口
@@ -16,7 +17,7 @@ public interface FileStorageService {
      * @param contentType MIME类型
      * @return 存储后的对象名或 URL
      */
-    String uploadFile(String objectName, InputStream inputStream, long size, String contentType);
+    Map<String,String> uploadFile(String objectName, InputStream inputStream, long size, String contentType);
 
     /** 删除文件 */
     void deleteFile(String objectName);

@@ -36,7 +36,7 @@ public class ApplicationTest {
         redisService.set(key, value);
 
         // 获取 key
-        String result = redisService.get(key).toString();
+        String result = redisService.get(key);
         System.out.println("Redis 中获取的值: " + result);
 
         // 简单断言

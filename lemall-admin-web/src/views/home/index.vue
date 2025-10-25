@@ -208,6 +208,15 @@
         </el-col>
       </el-row>
     </div>
+    <el-form label-width="120px">
+      <el-form-item label="文件上传方式：">
+        <el-radio-group v-model="uploadType">
+          <el-radio label="local">本地上传</el-radio>
+          <el-radio label="oss">阿里云OSS</el-radio>
+          <el-radio label="minio">minio上传</el-radio>
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -219,39 +228,40 @@
   const DATA_FROM_BACKEND = {
     columns: ['date', 'orderCount','orderAmount'],
     rows: [
-      {date: '2018-11-01', orderCount: 10, orderAmount: 1093},
-      {date: '2018-11-02', orderCount: 20, orderAmount: 2230},
-      {date: '2018-11-03', orderCount: 33, orderAmount: 3623},
-      {date: '2018-11-04', orderCount: 50, orderAmount: 6423},
-      {date: '2018-11-05', orderCount: 80, orderAmount: 8492},
-      {date: '2018-11-06', orderCount: 60, orderAmount: 6293},
-      {date: '2018-11-07', orderCount: 20, orderAmount: 2293},
-      {date: '2018-11-08', orderCount: 60, orderAmount: 6293},
-      {date: '2018-11-09', orderCount: 50, orderAmount: 5293},
-      {date: '2018-11-10', orderCount: 30, orderAmount: 3293},
-      {date: '2018-11-11', orderCount: 20, orderAmount: 2293},
-      {date: '2018-11-12', orderCount: 80, orderAmount: 8293},
-      {date: '2018-11-13', orderCount: 100, orderAmount: 10293},
-      {date: '2018-11-14', orderCount: 10, orderAmount: 1293},
-      {date: '2018-11-15', orderCount: 40, orderAmount: 4293}
+      {date: '2024-11-01', orderCount: 10, orderAmount: 1093},
+      {date: '2024-11-02', orderCount: 20, orderAmount: 2230},
+      {date: '2024-11-03', orderCount: 33, orderAmount: 3623},
+      {date: '2024-11-04', orderCount: 50, orderAmount: 6423},
+      {date: '2024-11-05', orderCount: 80, orderAmount: 8492},
+      {date: '2024-11-06', orderCount: 60, orderAmount: 6293},
+      {date: '2024-11-07', orderCount: 20, orderAmount: 2293},
+      {date: '2024-11-08', orderCount: 60, orderAmount: 6293},
+      {date: '2024-11-09', orderCount: 50, orderAmount: 5293},
+      {date: '2024-11-10', orderCount: 30, orderAmount: 3293},
+      {date: '2024-11-11', orderCount: 20, orderAmount: 2293},
+      {date: '2024-11-12', orderCount: 80, orderAmount: 8293},
+      {date: '2024-11-13', orderCount: 100, orderAmount: 10293},
+      {date: '2024-11-14', orderCount: 10, orderAmount: 1293},
+      {date: '2024-11-15', orderCount: 40, orderAmount: 4293}
     ]
   };
   export default {
     name: 'home',
     data() {
       return {
+        uploadType: localStorage.getItem('uploadType') || 'local',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
             onClick(picker) {
-              let start = new Date(2018,10,1);
+              let start = new Date(2024,10,1);
               const end = new Date(start.getTime() + 1000 * 60 * 60 * 24 * 7);
               picker.$emit('pick', [start, end]);
             }
           }, {
             text: '最近一月',
             onClick(picker) {
-              let start = new Date(2018,10,1);
+              let start = new Date(2024,10,1);
               const end = new Date(start.getTime() + 1000 * 60 * 60 * 24 * 30);
               picker.$emit('pick', [start, end]);
             }
@@ -278,12 +288,18 @@
       this.initOrderCountDate();
       this.getData();
     },
+    watch: {
+      // 用户选择改变时同步到 localStorage
+      uploadType(newVal) {
+        localStorage.setItem('uploadType', newVal)
+      }
+    },
     methods:{
       handleDateChange(){
         this.getData();
       },
       initOrderCountDate(){
-        let start = new Date(2018,10,1);
+        let start = new Date(2024,10,1);
         const end = new Date(start.getTime() + 1000 * 60 * 60 * 24 * 7);
         this.orderCountDate=[start,end];
       },

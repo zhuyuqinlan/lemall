@@ -6,11 +6,6 @@ package org.zhuyuqinlan.lemall.common.constant;
 public interface AuthConstant {
 
     /**
-     * Redis缓存权限规则（路径->资源）
-     */
-    String PATH_RESOURCE_MAP = "auth:pathResourceMap";
-
-    /**
      * 会员登录类型
      */
     String STP_MEMBER_LOGIN_TYPE = "member";

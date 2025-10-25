@@ -28,6 +28,13 @@ service.interceptors.response.use(
   * code为非200是抛错 可结合自己业务进行修改
   */
     const res = response.data
+    // 分页参数转换
+    if (res.data) {
+      const page = res.data;
+      ['total','pageNum','pageSize'].forEach(key => {
+        if (page[key] && typeof page[key] === 'string') page[key] = Number(page[key]);
+      });
+    }
     if (res.code !== 200) {
       Message({
         message: res.message,

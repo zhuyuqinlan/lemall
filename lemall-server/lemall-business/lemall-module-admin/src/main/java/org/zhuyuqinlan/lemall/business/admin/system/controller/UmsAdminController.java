@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${lemall.server.prefix.admin}/system/admin")
-@Tag(name = "用户管理",description = "AdminController")
+@Tag(name = "用户管理", description = "AdminController")
 public class UmsAdminController {
 
     private final UmsAdminService adminService;
@@ -37,16 +37,16 @@ public class UmsAdminController {
     @Value("${sa-token.token-prefix}")
     private String tokenHead;
 
-    @Operation(summary = "登录",description = "后台管理登录后返回token")
+    @Operation(summary = "登录", description = "后台管理登录后返回token")
     @PostMapping("/login")
     public Result<?> login(@RequestBody @Validated UserAdminLoginRequestDTO loginRequestDTO) {
-        SaTokenInfo saTokenInfo  = adminService.login(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
+        SaTokenInfo saTokenInfo = adminService.login(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
         if (saTokenInfo == null) {
             return Result.fail("登录失败");
         }
         Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", saTokenInfo.getTokenValue() );
-        tokenMap.put("tokenHead", tokenHead+" ");
+        tokenMap.put("token", saTokenInfo.getTokenValue());
+        tokenMap.put("tokenHead", tokenHead + " ");
         return Result.success(tokenMap);
     }
 
@@ -75,7 +75,6 @@ public class UmsAdminController {
         return Result.success(PageResult.fromMybatis(adminList));
     }
 
-    //TODO 添加用户时，允许上传头像
     @Operation(summary = "用户注册")
     @PostMapping("/register")
     public Result<UmsAdminDTO> register(@RequestBody @Validated UmsAdminRequestDTO umsAdminParam) {
@@ -98,7 +97,7 @@ public class UmsAdminController {
     @Operation(summary = "修改指定用户信息")
     @PostMapping("/update/{id}")
     public Result<?> update(@PathVariable @NotNull Long id, @Validated @RequestBody UmsAdminRequestDTO admin) {
-        boolean flag = adminService.updateAdmin(id,admin);
+        boolean flag = adminService.updateAdmin(id, admin);
         return flag ? Result.success() : Result.fail("修改账号信息失败");
     }
 

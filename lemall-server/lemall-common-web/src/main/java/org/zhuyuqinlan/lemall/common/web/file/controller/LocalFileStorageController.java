@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.web.file;
+package org.zhuyuqinlan.lemall.common.web.file.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,14 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
+import org.zhuyuqinlan.lemall.common.file.dto.FileInfoCacheByMd5DTO;
+import org.zhuyuqinlan.lemall.common.file.service.FileCacheService;
 import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 import org.zhuyuqinlan.lemall.common.service.RedisService;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -26,44 +27,60 @@ public class LocalFileStorageController {
 
     private final FileStorageService fileStorageService;
     private final RedisService redisService;
+    private final FileCacheService fileCacheService;
 
-    public LocalFileStorageController(@Qualifier("localFileStorageService") FileStorageService fileStorageService, RedisService redisService) {
+    public LocalFileStorageController(@Qualifier("localFileStorageService") FileStorageService fileStorageService, RedisService redisService, FileCacheService fileCacheService) {
         this.fileStorageService = fileStorageService;
         this.redisService = redisService;
+        this.fileCacheService = fileCacheService;
     }
 
-    /** Redis 数据库前缀，用于隔离不同应用或业务 */
-    @Value("${redis.database}")
-    private String REDIS_DATABASE;
+    /**
+     * Redis 数据库前缀，用于隔离不同应用或业务
+     */
+    @Value("${redis.common-prefix}")
+    private String REDIS_PREFIX;
 
     /**
      * 本地文件access key前缀
      */
-    @Value("${redis.key.localFileAccess}")
+    @Value("${redis.key.fs.access.localFileAccess}")
     private String REDIS_KEY_LOCAL_FILE_ACCESS;
 
-    /** token名 **/
+    /**
+     * token名
+     **/
     @Value("${sa-token.token-name}")
     private String SA_TOKEN_NAME;
 
 
-    @Operation(summary = "获取本地文件上传的access code（短期有效）")
+    @Operation(summary = "获取本地文件上传的access code（如果该文件在服务器上存在直接返回）")
     @GetMapping("/access-code")
-    public Result<String> getAccessCode(HttpServletRequest request) {
-        // 生成随机 access code
-        String accessCode = UUID.randomUUID().toString();
+    public Result<?> getAccessCode(@RequestParam("fileMd5") String fileMd5, HttpServletRequest request) {
         // 存入redis
         String token = request.getHeader(SA_TOKEN_NAME);
-        redisService.set(REDIS_DATABASE + ":" + REDIS_KEY_LOCAL_FILE_ACCESS + ":" + token, accessCode, FileStorageConstant.LOCAL_ACCESS_EXPIRE);
-        return Result.success(accessCode);
+        redisService.set(REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_FILE_ACCESS.replace("{token}", token),
+                "1",
+                FileStorageConstant.LOCAL_ACCESS_EXPIRE);
+        // 检查redis中该md5是否存在
+        FileInfoCacheByMd5DTO fileInfoByMd5 = fileCacheService.getFileInfoByMd5(fileMd5);
+        // 返回结果
+        Map<String,Object> map = new HashMap<>();
+        if (fileInfoByMd5 == null) {
+            map.put("exist",false);
+        } else {
+            map.put("exist",true);
+            map.put("fileInfo",fileInfoByMd5);
+        }
+        return Result.success(map);
     }
 
     @Operation(summary = "上传文件（本地存储）")
     @PostMapping("/upload")
-    public Result<String> upload(@RequestParam("file") MultipartFile file,HttpServletRequest request) {
+    public Result<Map<String, String>> upload(@RequestParam("file") MultipartFile file, @RequestParam("fileMd5") String fileMd5, HttpServletRequest request) {
         // 校验access
         String token = request.getHeader(SA_TOKEN_NAME);
-        if (!redisService.hasKey(REDIS_DATABASE + ":" + REDIS_KEY_LOCAL_FILE_ACCESS + ":" + token)) {
+        if (!redisService.hasKey(REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_FILE_ACCESS.replace("{token}", token))) {
             return Result.fail("assess已key过期");
         }
         try {
@@ -86,22 +103,12 @@ public class LocalFileStorageController {
             long size = file.getSize();
             String contentType = file.getContentType();
 
-            String url = fileStorageService.uploadFile(objectName, inputStream, size, contentType);
-            return Result.success(url);
+            Map<String, String> stringStringMap =
+                    fileStorageService.uploadFile(objectName, inputStream, size, contentType);
+            return Result.success(stringStringMap);
         } catch (Exception e) {
             log.error("本地文件上传失败", e);
             return Result.fail("本地文件上传失败: " + e.getMessage());
-        }
-    }
-
-    @Operation(summary = "获取文件访问 URL（本地存储）")
-    @GetMapping("/url")
-    public Result<String> getFileUrl(@RequestParam("objectName") String objectName) {
-        try {
-            return Result.success(fileStorageService.getFileUrl(objectName));
-        } catch (Exception e) {
-            log.error("获取文件 URL 失败", e);
-            return Result.fail("获取文件 URL 失败: " + e.getMessage());
         }
     }
 }

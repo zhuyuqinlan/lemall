@@ -12,6 +12,8 @@ import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class LocalFileStorageService implements FileStorageService {
@@ -29,7 +31,7 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public String uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
+    public Map<String,String> uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
         try {
             Path filePath = Paths.get(basePath, objectName);
             Files.createDirectories(filePath.getParent());
@@ -41,7 +43,11 @@ public class LocalFileStorageService implements FileStorageService {
             fsFileStorage.setUri(objectName);
             fsFileStorage.setOriginalName(objectName);
             fileStorageMapper.insert(fsFileStorage);
-            return getFileUrl(objectName);
+            Long id = fsFileStorage.getId();
+            Map<String,String> map = new HashMap<>();
+            map.put("id",id.toString());
+            map.put("url",getFileUrl(objectName));
+            return map;
         } catch (IOException e) {
             throw new RuntimeException("本地文件上传失败", e);
         }

@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 统一文件存储表
-    */
+ * 统一文件存储表
+ */
 @TableName(value = "fs_file_storage")
 public class FsFileStorage {
     /**
@@ -62,6 +62,12 @@ public class FsFileStorage {
      */
     @TableField(value="update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
+
+    /**
+     * 文件MD5，用于去重和完整性校验
+     */
+    @TableField(value = "md5")
+    private String md5;
 
     /**
      * 获取文件ID，主键
@@ -223,5 +229,23 @@ public class FsFileStorage {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取文件MD5，用于去重和完整性校验
+     *
+     * @return md5 - 文件MD5，用于去重和完整性校验
+     */
+    public String getMd5() {
+        return md5;
+    }
+
+    /**
+     * 设置文件MD5，用于去重和完整性校验
+     *
+     * @param md5 文件MD5，用于去重和完整性校验
+     */
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }
