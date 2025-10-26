@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.file.service.impl;
+package org.zhuyuqinlan.lemall.common.file.service.storage.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.minio.MinioClient;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.common.entity.FsFileStorage;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.service.CloudFileStorageService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.utils.MinIOUtils;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 

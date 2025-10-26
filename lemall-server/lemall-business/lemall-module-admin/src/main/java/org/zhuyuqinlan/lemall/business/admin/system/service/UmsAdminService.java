@@ -14,16 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminCreateRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminInfoDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsRoleDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dao.UmsAdminDao;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminUpdateRequestDTO;
 import org.zhuyuqinlan.lemall.common.constant.AuthConstant;
 import org.zhuyuqinlan.lemall.common.dto.AdminUserDto;
 import org.zhuyuqinlan.lemall.common.dto.UmsMenuDTO;
 import org.zhuyuqinlan.lemall.common.entity.*;
-import org.zhuyuqinlan.lemall.common.file.service.FileCacheService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.FileCacheService;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminLoginLogMapper;
 import org.zhuyuqinlan.lemall.common.mapper.UmsAdminMapper;
 import org.zhuyuqinlan.lemall.common.response.BizException;
@@ -105,6 +106,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         return adminPage.convert(admin -> {
             UmsAdminDTO dto = new UmsAdminDTO();
             BeanUtils.copyProperties(admin, dto);
+            dto.setIcon(fileCacheService.getFileUrlByFileId(admin.getAvatarFileId()));
             return dto;
         });
     }
@@ -112,7 +114,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     /**
      * 用户注册
      */
-    public UmsAdminDTO register(UmsAdminRequestDTO umsAdminParam) {
+    public UmsAdminDTO register(UmsAdminCreateRequestDTO umsAdminParam) {
         UmsAdmin umsAdmin = new UmsAdmin();
         BeanUtils.copyProperties(umsAdminParam, umsAdmin);
         umsAdmin.setCreateTime(new Date());
@@ -134,21 +136,21 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
     /**
      * 更新用户信息
      */
-    public boolean updateAdmin(Long id, UmsAdminRequestDTO umsAdminRequestDTO) {
-        if (umsAdminRequestDTO.getUsername() != null) {
+    public boolean updateAdmin(Long id, UmsAdminUpdateRequestDTO umsAdminCreateRequestDTO) {
+        if (umsAdminCreateRequestDTO.getUsername() != null) {
             List<UmsAdmin> existing = baseMapper.selectList(
-                    Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, umsAdminRequestDTO.getUsername())
+                    Wrappers.<UmsAdmin>lambdaQuery().eq(UmsAdmin::getUsername, umsAdminCreateRequestDTO.getUsername())
             );
             if (!existing.isEmpty() && !existing.get(0).getId().equals(id)) {
                 throw new BizException("用户名已存在");
             }
         }
 
-        if (umsAdminRequestDTO.getStatus() == 0) StpUtil.logout(id);
+        if (umsAdminCreateRequestDTO.getStatus() == 0) StpUtil.logout(id);
 
         UmsAdmin umsAdmin = new UmsAdmin();
         umsAdmin.setId(id);
-        BeanUtils.copyProperties(umsAdminRequestDTO, umsAdmin);
+        BeanUtils.copyProperties(umsAdminCreateRequestDTO, umsAdmin);
         return super.updateById(umsAdmin);
     }
 

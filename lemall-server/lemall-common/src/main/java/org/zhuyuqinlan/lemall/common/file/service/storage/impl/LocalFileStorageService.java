@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.file.service.impl;
+package org.zhuyuqinlan.lemall.common.file.service.storage.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -9,13 +9,11 @@ import org.springframework.util.FileCopyUtils;
 import org.zhuyuqinlan.lemall.common.entity.FsFileStorage;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.FileStorageService;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class LocalFileStorageService implements FileStorageService {

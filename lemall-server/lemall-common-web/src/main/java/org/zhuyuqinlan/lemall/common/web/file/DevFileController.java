@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.web.file.controller;
+package org.zhuyuqinlan.lemall.common.web.file;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.io.InputStream;
@@ -24,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 @Profile("dev")  // 只在 dev 环境生效
 @Slf4j

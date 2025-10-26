@@ -56,6 +56,7 @@ redis:
       access:
         local:
           localFileAccess: fs:access:local:{token}:{accessCode}   # 本地上传 access code
+          limit: fs:access:local:limit:{token} # 记录一分钟内获取了多少次access
       url:
         cacheByFileId: fs:url:fileId:{fileId}   # 文件ID -> URL
         lockByFileId: fs:url:lock:fileId:{fileId} # 防击穿

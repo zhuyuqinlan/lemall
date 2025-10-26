@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.web.file.controller;
+package org.zhuyuqinlan.lemall.common.web.file;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
-import org.zhuyuqinlan.lemall.common.file.service.CloudFileStorageService;
-import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
+import org.zhuyuqinlan.lemall.common.file.service.storage.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
 import java.util.Map;

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Schema(description = "用户请求类")
-public class UmsAdminRequestDTO implements Serializable {
+public class UmsAdminCreateRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

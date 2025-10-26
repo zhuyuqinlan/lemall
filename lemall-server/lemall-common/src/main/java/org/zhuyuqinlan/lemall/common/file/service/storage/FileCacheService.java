@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.file.service;
+package org.zhuyuqinlan.lemall.common.file.service.storage;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

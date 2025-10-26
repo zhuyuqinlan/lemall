@@ -8,7 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminCreateRequestDTO;
+import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UmsAdminUpdateRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.request.UserAdminLoginRequestDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminInfoDTO;
 import org.zhuyuqinlan.lemall.business.admin.system.dto.UmsAdminDTO;
@@ -77,7 +78,7 @@ public class UmsAdminController {
 
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public Result<UmsAdminDTO> register(@RequestBody @Validated UmsAdminRequestDTO umsAdminParam) {
+    public Result<UmsAdminDTO> register(@RequestBody @Validated UmsAdminCreateRequestDTO umsAdminParam) {
         UmsAdminDTO umsAdmin = adminService.register(umsAdminParam);
         if (umsAdmin == null) {
             return Result.fail("注册失败");
@@ -88,15 +89,15 @@ public class UmsAdminController {
     @Operation(summary = "修改帐号状态")
     @PostMapping("/updateStatus/{id}")
     public Result<?> updateStatus(@PathVariable @NotNull Long id, @RequestParam(value = "status") @NotNull Integer status) {
-        UmsAdminRequestDTO umsAdminRequestDTO = new UmsAdminRequestDTO();
-        umsAdminRequestDTO.setStatus(status);
-        boolean flag = adminService.updateAdmin(id, umsAdminRequestDTO);
+        UmsAdminUpdateRequestDTO umsAdminCreateRequestDTO = new UmsAdminUpdateRequestDTO();
+        umsAdminCreateRequestDTO.setStatus(status);
+        boolean flag = adminService.updateAdmin(id, umsAdminCreateRequestDTO);
         return flag ? Result.success() : Result.fail("修改账号状态失败");
     }
 
     @Operation(summary = "修改指定用户信息")
     @PostMapping("/update/{id}")
-    public Result<?> update(@PathVariable @NotNull Long id, @Validated @RequestBody UmsAdminRequestDTO admin) {
+    public Result<?> update(@PathVariable @NotNull Long id, @Validated @RequestBody UmsAdminUpdateRequestDTO admin) {
         boolean flag = adminService.updateAdmin(id, admin);
         return flag ? Result.success() : Result.fail("修改账号信息失败");
     }

@@ -1,4 +1,4 @@
-package org.zhuyuqinlan.lemall.common.file.service;
+package org.zhuyuqinlan.lemall.common.file.service.storage;
 
 import java.util.Map;
 
