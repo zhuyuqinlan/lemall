@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.minio.MinioClient;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.common.entity.FsFileStorage;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
+import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.service.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.utils.MinIOUtils;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
@@ -90,7 +92,7 @@ public class MinIOService implements CloudFileStorageService {
      * 上传文件
      */
     @Override
-    public Map<String, String> uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
+    public FileInfoDTO uploadFile(String objectName, InputStream inputStream, long size, String contentType, String md5) {
         try {
             MinIOUtils.uploadFile(minioClient, bucket, objectName, inputStream, size, contentType);
             FsFileStorage fsFileStorage = new FsFileStorage();
@@ -100,11 +102,12 @@ public class MinIOService implements CloudFileStorageService {
             fsFileStorage.setSize(size);
             fsFileStorage.setContentType(contentType);
             fsFileStorage.setUri(bucket + "/" + objectName);
+            fsFileStorage.setMd5(md5);
             fileStorageMapper.insert(fsFileStorage);
-            Map<String,String> map = new HashMap<>();
-            map.put("id",fsFileStorage.getId().toString());
-            map.put("url",getFileUrl(objectName));
-            return map;
+            FileInfoDTO fileInfoDTO = new FileInfoDTO();
+            BeanUtils.copyProperties(fileStorageMapper,fileInfoDTO);
+            fileInfoDTO.setUrl(getFileUrl(objectName));
+            return fileInfoDTO;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);

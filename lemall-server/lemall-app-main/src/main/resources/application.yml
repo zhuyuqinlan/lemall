@@ -5,8 +5,8 @@ spring:
     active: dev
   servlet:
     multipart:
-      max-file-size: 50MB # 单个文件最大
-      max-request-size: 50MB # 总文件最大
+      max-file-size: 100MB # 单个文件最大
+      max-request-size: 100MB # 总文件最大
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -54,13 +54,18 @@ redis:
         limit: auth:captcha:limit:{type}:{target}   # 验证码次数限制
     fs:
       access:
-        localFileAccess: fs:access:local:{token}   # 本地上传 access code
+        local:
+          localFileAccess: fs:access:local:{token}:{accessCode}   # 本地上传 access code
       url:
         cacheByFileId: fs:url:fileId:{fileId}   # 文件ID -> URL
         lockByFileId: fs:url:lock:fileId:{fileId} # 防击穿
       info:
         cacheByMd5: fs:info:md5:{md5}       # MD5 -> 文件信息
         lockByMd5: fs:info:lock:md5:{md5}      #  防击穿
+      preUpload:
+        local: fs:preUpload:local:{token}:{uploadCode} # local文件上传凭证
+
+
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token名称 (同时也是cookie名称)

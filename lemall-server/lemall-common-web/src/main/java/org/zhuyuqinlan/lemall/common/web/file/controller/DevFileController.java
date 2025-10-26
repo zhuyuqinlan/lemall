@@ -8,11 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -98,7 +100,7 @@ public class DevFileController {
 
     @Operation(summary = "上传文件（minio）")
     @PostMapping("${lemall.server.prefix.common}/file/dev/minio/upload")
-    public Result<Map<String, String>> upload(@RequestParam("file") MultipartFile file) {
+    public Result<FileInfoDTO> upload(@RequestParam("file") MultipartFile file) {
         try {
             // 生成当天文件夹名
             String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
@@ -120,10 +122,13 @@ public class DevFileController {
             long size = file.getSize();
             String contentType = file.getContentType();
 
+            String fileMd5;
+            try (InputStream in = file.getInputStream()) {
+                fileMd5 = DigestUtils.md5DigestAsHex(in);
+            }
             // 上传
-            Map<String, String> stringStringMap =
-                    minioFileStorageService.uploadFile(objectName, inputStream, size, contentType);
-            return Result.success(stringStringMap);
+            FileInfoDTO fileInfoDTO = minioFileStorageService.uploadFile(objectName, inputStream, size, contentType, fileMd5);
+            return Result.success(fileInfoDTO);
         } catch (Exception e) {
             log.error("上传文件失败", e);
             return Result.fail("上传文件失败: " + e.getMessage());

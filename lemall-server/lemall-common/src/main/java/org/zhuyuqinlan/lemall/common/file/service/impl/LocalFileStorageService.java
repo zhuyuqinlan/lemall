@@ -2,11 +2,13 @@ package org.zhuyuqinlan.lemall.common.file.service.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.zhuyuqinlan.lemall.common.entity.FsFileStorage;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
+import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.service.FileStorageService;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
@@ -31,7 +33,7 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public Map<String,String> uploadFile(String objectName, InputStream inputStream, long size, String contentType) {
+    public FileInfoDTO uploadFile(String objectName, InputStream inputStream, long size, String contentType, String md5) {
         try {
             Path filePath = Paths.get(basePath, objectName);
             Files.createDirectories(filePath.getParent());
@@ -42,12 +44,12 @@ public class LocalFileStorageService implements FileStorageService {
             fsFileStorage.setSize(size);
             fsFileStorage.setUri(objectName);
             fsFileStorage.setOriginalName(objectName);
+            fsFileStorage.setMd5(md5);
             fileStorageMapper.insert(fsFileStorage);
-            Long id = fsFileStorage.getId();
-            Map<String,String> map = new HashMap<>();
-            map.put("id",id.toString());
-            map.put("url",getFileUrl(objectName));
-            return map;
+            FileInfoDTO fileInfoDTO = new FileInfoDTO();
+            BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
+            fileInfoDTO.setUrl(getFileUrl(objectName));
+            return fileInfoDTO;
         } catch (IOException e) {
             throw new RuntimeException("本地文件上传失败", e);
         }

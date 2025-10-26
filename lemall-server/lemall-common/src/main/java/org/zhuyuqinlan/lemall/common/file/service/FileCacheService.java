@@ -159,6 +159,7 @@ public class FileCacheService {
             // 构建 DTO
             FileInfoCacheByMd5DTO dto = new FileInfoCacheByMd5DTO();
             BeanUtils.copyProperties(file,dto);
+            dto.setUrl(buildFileUrl(file));
             // 防雪崩：随机过期时间（1小时±5分钟）
             int ttl = 3600 + ThreadLocalRandom.current().nextInt(300);
             String str = JSONUtil.toJsonStr(dto);

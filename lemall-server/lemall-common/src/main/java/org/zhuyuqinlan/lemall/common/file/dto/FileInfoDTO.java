@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class FileInfoCacheByMd5DTO implements Serializable {
+public class FileInfoDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,4 +23,5 @@ public class FileInfoCacheByMd5DTO implements Serializable {
     private String contentType;       // MIME类型
     private Date createTime;          // 创建时间
     private Date updateTime;          // 更新时间
+    private String md5;               // md5
 }

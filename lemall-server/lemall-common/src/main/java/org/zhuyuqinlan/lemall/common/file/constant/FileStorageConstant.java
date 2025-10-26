@@ -11,5 +11,7 @@ public interface FileStorageConstant {
     // minio上传临时令牌过期时间（秒）
     int POST_POLICY_EXPIRE  = 300;
     // 本地文件access过期时间（秒）
-    int LOCAL_ACCESS_EXPIRE = 300;
+    int LOCAL_ACCESS_EXPIRE = 30;
+    // 本地文件上传凭证过期时间（秒）
+    int LOCAL_UPLOAD_EXPIRE = 300;
 }
