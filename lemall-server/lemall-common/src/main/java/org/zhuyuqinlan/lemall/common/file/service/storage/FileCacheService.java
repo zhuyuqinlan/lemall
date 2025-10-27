@@ -27,13 +27,13 @@ public class FileCacheService {
     // redis key信息
     @Value("${redis.common-prefix}")
     private String REDIS_PREFIX;
-    @Value("${redis.key.fs.url.cacheByFileId}")
+    @Value("${redis.key.fs.url.cache}")
     private String FS_URL_BY_FILE_ID;
-    @Value("${redis.key.fs.url.lockByFileId}")
+    @Value("${redis.key.fs.url.lock}")
     private String FS_URL_LOCK_BY_FILE_ID;
-    @Value("${redis.key.fs.info.cacheByMd5}")
+    @Value("${redis.key.fs.info.cache}")
     private String FS_INFO_CACHE_BY_MD5;
-    @Value("${redis.key.fs.info.lockByMd5}")
+    @Value("${redis.key.fs.info.lock}")
     private String FS_INFO_LOCK_BY_MD5;
 
     // 前缀信息

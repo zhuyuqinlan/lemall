@@ -34,10 +34,10 @@ public class FsFileStorage {
     private String uri;
 
     /**
-     * 上传时原始文件名
+     * 文件key
      */
-    @TableField(value = "original_name")
-    private String originalName;
+    @TableField(value = "fileKey")
+    private String filekey;
 
     /**
      * 文件大小，单位字节
@@ -142,21 +142,21 @@ public class FsFileStorage {
     }
 
     /**
-     * 获取上传时原始文件名
+     * 获取文件key
      *
-     * @return original_name - 上传时原始文件名
+     * @return fileKey - 文件key
      */
-    public String getOriginalName() {
-        return originalName;
+    public String getFilekey() {
+        return filekey;
     }
 
     /**
-     * 设置上传时原始文件名
+     * 设置文件key
      *
-     * @param originalName 上传时原始文件名
+     * @param filekey 文件key
      */
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setFilekey(String filekey) {
+        this.filekey = filekey;
     }
 
     /**

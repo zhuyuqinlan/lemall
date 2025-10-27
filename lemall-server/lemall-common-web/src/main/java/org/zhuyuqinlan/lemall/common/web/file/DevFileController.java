@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
+import org.zhuyuqinlan.lemall.common.file.service.biz.LocalFileService;
 import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.service.storage.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
@@ -32,58 +33,27 @@ import java.nio.file.Paths;
 @Tag(name = "文件操作(开发环境专用)", description = "LocalFileStorageController")
 public class DevFileController {
 
-    private final FileStorageService localFileStorageService;
+    private final LocalFileService localFileService;
     private final CloudFileStorageService minioFileStorageService;
 
-    public DevFileController(@Qualifier("localFileStorageService") FileStorageService localFileStorageService, @Qualifier("minIOService") CloudFileStorageService minioFileStorageService) {
-        this.localFileStorageService = localFileStorageService;
+    public DevFileController(LocalFileService localFileService,
+                             @Qualifier("minIOService") CloudFileStorageService minioFileStorageService) {
+        this.localFileService = localFileService;
         this.minioFileStorageService = minioFileStorageService;
     }
-
-    @Value("${localFile.local-download-prefix}")
-    private String localFileDownloadPrefix;
 
     /**
      * 浏览器访问或下载文件（本地存储）
      */
     @GetMapping("${localFile.local-download-prefix}/**")
     public void serveFile(HttpServletRequest request, HttpServletResponse response) {
-        String requestURI = request.getRequestURI();
-        String objectName = requestURI.replaceFirst("^" + localFileDownloadPrefix + "/", "");
-        System.out.println(objectName);
-        try (InputStream inputStream = localFileStorageService.downloadFile(objectName)) {
-            // 自动识别文件类型
-            Path path = Paths.get(objectName);
-            String contentType = Files.probeContentType(path);
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-
-            response.setContentType(contentType);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-
-            // 浏览器直接预览，不加 attachment
-            // 如果强制下载，加上 Content-Disposition
-            String filename = URLEncoder.encode(path.getFileName().toString(), StandardCharsets.UTF_8);
-            response.setHeader("Content-Disposition", "inline; filename=" + filename);
-
-            inputStream.transferTo(response.getOutputStream());
-        } catch (Exception e) {
-            log.error("读取本地文件失败", e);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        }
+        localFileService.serveFile(request.getRequestURI(), response);
     }
 
-    @Operation(summary = "删除文件（本地存储）")
     @PostMapping("${lemall.server.prefix.common}/file/dev/local/delete")
     public Result<?> deleteFileLocal(@RequestParam("objectName") String objectName) {
-        try {
-            localFileStorageService.deleteFile(objectName);
-            return Result.success();
-        } catch (Exception e) {
-            log.error("删除本地文件失败", e);
-            return Result.fail("删除本地文件失败: " + e.getMessage());
-        }
+        localFileService.deleteFile(objectName);
+        return Result.success();
     }
 
     @Operation(summary = "删除文件（Minio）")

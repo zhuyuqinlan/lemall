@@ -31,22 +31,22 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public FileInfoDTO uploadFile(String objectName, InputStream inputStream, long size, String contentType, String md5) {
+    public FileInfoDTO uploadFile(String fileKey, InputStream inputStream, long size, String contentType, String md5) {
         try {
-            Path filePath = Paths.get(basePath, objectName);
+            Path filePath = Paths.get(basePath, fileKey);
             Files.createDirectories(filePath.getParent());
             FileCopyUtils.copy(inputStream, Files.newOutputStream(filePath));
             FsFileStorage fsFileStorage = new FsFileStorage();
             fsFileStorage.setStorageType(FileStorageConstant.LOCAL_TYPE);
             fsFileStorage.setContentType(contentType);
             fsFileStorage.setSize(size);
-            fsFileStorage.setUri(objectName);
-            fsFileStorage.setOriginalName(objectName);
+            fsFileStorage.setUri(fileKey);
+            fsFileStorage.setFilekey(fileKey);
             fsFileStorage.setMd5(md5);
             fileStorageMapper.insert(fsFileStorage);
             FileInfoDTO fileInfoDTO = new FileInfoDTO();
             BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
-            fileInfoDTO.setUrl(getFileUrl(objectName));
+            fileInfoDTO.setUrl(getFileUrl(fileKey));
             return fileInfoDTO;
         } catch (IOException e) {
             throw new RuntimeException("本地文件上传失败", e);
@@ -54,27 +54,27 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public void deleteFile(String objectName) {
+    public void deleteFile(String fileKey) {
         try {
-            Files.deleteIfExists(Paths.get(basePath, objectName));
-            fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getOriginalName, objectName));
+            Files.deleteIfExists(Paths.get(basePath, fileKey));
+            fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFilekey, fileKey));
         } catch (IOException e) {
             throw new RuntimeException("删除本地文件失败", e);
         }
     }
 
     @Override
-    public InputStream downloadFile(String objectName) {
+    public InputStream downloadFile(String fileKey) {
         try {
-            return Files.newInputStream(Paths.get(basePath, objectName));
+            return Files.newInputStream(Paths.get(basePath, fileKey));
         } catch (IOException e) {
             throw new RuntimeException("本地文件下载失败", e);
         }
     }
 
     @Override
-    public String getFileUrl(String objectName) {
-        return accessUrlPrefix + "/" + objectName;
+    public String getFileUrl(String fileKey) {
+        return accessUrlPrefix + "/" + fileKey;
     }
 }
 

@@ -8,7 +8,7 @@
     <result column="storage_type" jdbcType="VARCHAR" property="storageType" />
     <result column="bucket" jdbcType="VARCHAR" property="bucket" />
     <result column="uri" jdbcType="VARCHAR" property="uri" />
-    <result column="original_name" jdbcType="VARCHAR" property="originalName" />
+    <result column="fileKey" jdbcType="VARCHAR" property="filekey" />
     <result column="size" jdbcType="BIGINT" property="size" />
     <result column="content_type" jdbcType="VARCHAR" property="contentType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -17,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, storage_type, bucket, uri, original_name, `size`, content_type, create_time, 
-    update_time, md5
+    id, storage_type, bucket, uri, fileKey, `size`, content_type, create_time, update_time, 
+    md5
   </sql>
 </mapper>

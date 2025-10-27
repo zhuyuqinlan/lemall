@@ -14,18 +14,18 @@ public interface FileStorageService {
      * 上传文件
      * @param inputStream 文件流
      * @param size 文件大小
-     * @param objectName 文件uri
+     * @param fileKey 文件实际位置
      * @param contentType MIME类型
      * @return 存储后的对象名或 URL
      */
-    FileInfoDTO uploadFile(String objectName, InputStream inputStream, long size, String contentType, String md5);
+    FileInfoDTO uploadFile(String fileKey, InputStream inputStream, long size, String contentType, String md5);
 
     /** 删除文件 */
-    void deleteFile(String objectName);
+    void deleteFile(String fileKey);
 
     /** 下载文件 **/
-    InputStream downloadFile(String objectName);
+    InputStream downloadFile(String fileKey);
 
     /** 获取文件访问 URL（带签名或直链） */
-    String getFileUrl(String objectName);
+    String getFileUrl(String fileKey);
 }
