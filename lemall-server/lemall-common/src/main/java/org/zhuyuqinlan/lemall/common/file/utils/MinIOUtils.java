@@ -2,140 +2,190 @@ package org.zhuyuqinlan.lemall.common.file.utils;
 
 import io.minio.*;
 import io.minio.http.Method;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
+import io.minio.messages.Item;
+
 import java.io.InputStream;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * MinIO 工具类
- * 纯静态方法，封装文件上传、下载、预览、删除、生成前端直传凭证等操作
+ * 封装上传、下载、预览、删除、批量删除、复制、文件信息、前端直传等常用操作。
+ * 所有方法为静态方法，方便直接调用。
  */
 public class MinIOUtils {
 
-    /**
-     * 上传：将一个输入流中的文件上传到MinIO服务器上指定的存储桶（bucket）里
-     *
-     * @param client      MinioClient 实例
-     * @param bucket      存储桶名称
-     * @param objectName  上传后对象名称
-     * @param inputStream 文件流
-     * @param size        文件大小
-     * @param contentType 文件类型，例如 image/png
-     * @throws Exception 异常
-     */
+    /* ----------------------- 基础操作 ----------------------- */
+
     public static void uploadFile(MinioClient client, String bucket, String objectName,
                                   InputStream inputStream, long size, String contentType) throws Exception {
+        ensureBucketExists(client, bucket);
         client.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucket)
                         .object(objectName)
                         .stream(inputStream, size, -1)
                         .contentType(contentType)
-                        .build());
+                        .build()
+        );
     }
 
-    /**
-     * 下载：从MinIO服务器下载指定存储桶（bucket）中的文件
-     *
-     * @param client     MinioClient 实例
-     * @param bucket     存储桶名称
-     * @param objectName 对象名称
-     * @return 文件流
-     * @throws Exception 异常
-     */
     public static InputStream downloadFile(MinioClient client, String bucket, String objectName) throws Exception {
         return client.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucket)
                         .object(objectName)
-                        .build());
+                        .build()
+        );
     }
 
-    /**
-     * 预览：生成一个预签名的URL，允许浏览器直接访问文件
-     * 注意：这个返回的MinioClient创建时设置的endpoint，需自己改成publicEndpoint
-     *
-     * @param client     MinioClient 实例
-     * @param bucket     存储桶名称
-     * @param objectName 对象名称
-     * @return 预签名URL
-     * @throws Exception 异常
-     */
     public static String getPreviewUrl(MinioClient client, String bucket, String objectName) throws Exception {
+        return getPreviewUrl(client, bucket, objectName, 7 * 24 * 3600);
+    }
+
+    public static String getPreviewUrl(MinioClient client, String bucket, String objectName, int expireSecs) throws Exception {
         return client.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
                         .bucket(bucket)
                         .object(objectName)
-                        .build());
+                        .expiry(expireSecs)
+                        .build()
+        );
     }
 
-    /**
-     * 删除：从MinIO服务器上的指定存储桶中删除一个文件
-     *
-     * @param client     MinioClient 实例
-     * @param bucket     存储桶名称
-     * @param objectName 对象名称
-     * @throws Exception 异常
-     */
     public static void deleteFile(MinioClient client, String bucket, String objectName) throws Exception {
         client.removeObject(
                 RemoveObjectArgs.builder()
                         .bucket(bucket)
                         .object(objectName)
-                        .build());
+                        .build()
+        );
     }
 
-    /**
-     * 生成前端直传临时凭证（POST Policy）
-     * 前端可直接使用该凭证将文件上传到 MinIO，不经过后端流转
-     *
-     * @param client         MinioClient 实例
-     * @param bucket         存储桶名称
-     * @param publicEndpoint 公网访问地址
-     * @param objectPrefix   文件上传目录前缀
-     * @param expireSeconds  凭证有效时间（秒）
-     * @return Map 包含上传地址 url 和 formData（签名参数）
-     * @throws Exception 异常
-     */
-    public static Map<String, Object> getPostPolicy(MinioClient client, String bucket,
-                                                    String publicEndpoint, String objectPrefix, int expireSeconds) throws Exception {
-        PostPolicy policy = new PostPolicy(bucket, ZonedDateTime.now().plusSeconds(expireSeconds));
-        policy.addStartsWithCondition("key", objectPrefix);
+    public static void deleteFiles(MinioClient client, String bucket, List<String> objectNames) throws Exception {
+        List<DeleteObject> objects = new ArrayList<>();
+        for (String name : objectNames) objects.add(new DeleteObject(name));
 
-        Map<String, String> formData = client.getPresignedPostFormData(policy);
+        Iterable<Result<DeleteError>> results = client.removeObjects(
+                RemoveObjectsArgs.builder()
+                        .bucket(bucket)
+                        .objects(objects)
+                        .build()
+        );
+        for (Result<DeleteError> result : results) {
+            DeleteError error = result.get();
+            System.err.printf("删除失败：%s (%s)%n", error.objectName(), error.message());
+        }
+    }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("url", publicEndpoint + "/" + bucket); // 上传地址
-        result.put("formData", formData);                // 前端表单签名数据
-        result.put("expire", System.currentTimeMillis() / 1000 + expireSeconds); // 过期时间（秒）
-        result.put("dir", objectPrefix);
+    public static boolean exists(MinioClient client, String bucket, String objectName) {
+        try {
+            client.statObject(StatObjectArgs.builder().bucket(bucket).object(objectName).build());
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    public static Map<String, Object> getFileInfo(MinioClient client, String bucket, String objectName) throws Exception {
+        StatObjectResponse stat = client.statObject(
+                StatObjectArgs.builder().bucket(bucket).object(objectName).build()
+        );
+        Map<String, Object> info = new HashMap<>();
+        info.put("objectName", objectName);
+        info.put("size", stat.size());
+        info.put("contentType", stat.contentType());
+        info.put("lastModified", stat.lastModified());
+        return info;
+    }
+
+    public static void copyFile(MinioClient client,
+                                String sourceBucket, String sourceObject,
+                                String targetBucket, String targetObject) throws Exception {
+        ensureBucketExists(client, targetBucket);
+        client.copyObject(
+                CopyObjectArgs.builder()
+                        .source(CopySource.builder()
+                                .bucket(sourceBucket)
+                                .object(sourceObject)
+                                .build())
+                        .bucket(targetBucket)
+                        .object(targetObject)
+                        .build()
+        );
+    }
+
+    public static void moveFile(MinioClient client,
+                                String sourceBucket, String sourceObject,
+                                String targetBucket, String targetObject) throws Exception {
+        copyFile(client, sourceBucket, sourceObject, targetBucket, targetObject);
+        deleteFile(client, sourceBucket, sourceObject);
+    }
+
+    public static List<String> listFiles(MinioClient client, String bucket, String prefix, boolean recursive) throws Exception {
+        List<String> result = new ArrayList<>();
+        Iterable<Result<Item>> items = client.listObjects(
+                ListObjectsArgs.builder()
+                        .bucket(bucket)
+                        .prefix(prefix)
+                        .recursive(recursive)
+                        .build()
+        );
+        for (Result<Item> item : items) result.add(item.get().objectName());
         return result;
     }
 
+    /* ----------------------- 前端直传 ----------------------- */
+
     /**
-     * 获取文件信息：大小、MIME 类型等
-     *
-     * @param client     MinioClient 实例
-     * @param bucket     存储桶名称
-     * @param objectName 对象名称
-     * @return Map 包含文件信息，例如 size 和 contentType
-     * @throws Exception 异常
+     * 生成前端直传凭证（POST Policy）
      */
-    public static Map<String, Object> getFileInfo(MinioClient client, String bucket, String objectName) throws Exception {
-        StatObjectResponse stat = client.statObject(
-                StatObjectArgs.builder()
+    public static Map<String, Object> getPostPolicy(MinioClient client,
+                                                    String bucket,
+                                                    String objectName,
+                                                    int expireSeconds) throws Exception {
+        // 构建策略
+        PostPolicy policy = new PostPolicy(bucket, ZonedDateTime.now().plusSeconds(expireSeconds));
+        if (objectName.endsWith("/")) {
+            policy.addStartsWithCondition("key", objectName);
+        } else {
+            policy.addEqualsCondition("key", objectName);
+        }
+
+        Map<String, String> formData = client.getPresignedPostFormData(policy);
+
+        // 从 client 生成 endpoint
+        String endpoint = client.getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                        .method(Method.PUT)
                         .bucket(bucket)
                         .object(objectName)
                         .build()
         );
+        // 去掉 path，得到纯 endpoint
+        endpoint = endpoint.replaceAll("/" + bucket + "/" + objectName + ".*$", "");
 
-        Map<String, Object> info = new HashMap<>();
-        info.put("objectName", objectName);
-        info.put("size", stat.size());              // 文件大小（字节）
-        info.put("contentType", stat.contentType());// MIME 类型
-        info.put("lastModified", stat.lastModified());// 最后修改时间
-        return info;
+        Map<String, Object> result = new HashMap<>();
+        result.put("url", endpoint + "/" + bucket);
+        result.put("formData", formData);
+        result.put("expire", System.currentTimeMillis() / 1000 + expireSeconds);
+        result.put("objectName", objectName);
+        return result;
+    }
+
+
+    /* ----------------------- 辅助工具 ----------------------- */
+
+    public static void ensureBucketExists(MinioClient client, String bucket) throws Exception {
+        boolean found = client.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+        if (!found) {
+            client.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+        }
+    }
+
+    public static String buildObjectPath(String fileName) {
+        return String.format("%tY%<tm%<td/%s", new Date(), fileName);
     }
 }

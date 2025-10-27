@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.zhuyuqinlan.lemall.common.file.config.LemallFileConfig;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoCacheByMd5DTO;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
@@ -19,6 +20,8 @@ import org.zhuyuqinlan.lemall.common.service.RedisService;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -26,6 +29,7 @@ import java.util.UUID;
  * 主要职责：
  * - 控制文件上传频率
  * - 校验文件秒传（MD5）
+ * - 验证文件类型合法性（MIME + 后缀）
  * - 生成上传凭证（uploadCode）
  * - 执行文件保存与缓存
  */
@@ -36,6 +40,7 @@ public class LocalFileService {
     private final FileStorageService fileStorageService;
     private final RedisService redisService;
     private final FileCacheService fileCacheService;
+    private final LemallFileConfig fileConfig;
 
     // Redis key 前缀
     @Value("${redis.common-prefix}")
@@ -53,12 +58,15 @@ public class LocalFileService {
     @Value("${redis.key.fs.access.local.limit}")
     private String REDIS_KEY_LOCAL_LIMIT_LIMIT;
 
-    public LocalFileService(@Qualifier("localFileStorageService") FileStorageService fileStorageService, RedisService redisService, FileCacheService fileCacheService) {
+    public LocalFileService(@Qualifier("localFileStorageService") FileStorageService fileStorageService,
+                            RedisService redisService,
+                            FileCacheService fileCacheService,
+                            LemallFileConfig fileConfig) {
         this.fileStorageService = fileStorageService;
         this.redisService = redisService;
         this.fileCacheService = fileCacheService;
+        this.fileConfig = fileConfig;
     }
-
 
     /**
      * 获取本地上传 access code
@@ -86,7 +94,6 @@ public class LocalFileService {
         );
         return accessCode;
     }
-
 
     /**
      * 检查文件 MD5（用于秒传逻辑）
@@ -131,14 +138,14 @@ public class LocalFileService {
         return dto;
     }
 
-
     /**
-     * 上传文件（含MD5校验 + 秒传判断）
+     * 上传文件（含MD5校验 + MIME验证 + 秒传判断）
      * 步骤：
      * 1. 校验 uploadCode 有效性
-     * 2. 计算文件 MD5，防止传输损坏
-     * 3. 如果文件已存在，则直接返回
-     * 4. 上传文件并返回存储信息
+     * 2. 验证 MIME 类型与文件后缀是否匹配
+     * 3. 计算文件 MD5，防止传输损坏
+     * 4. 如果文件已存在，则直接返回
+     * 5. 上传文件并返回存储信息
      *
      * @param token      用户token
      * @param uploadCode 上传凭证
@@ -162,6 +169,16 @@ public class LocalFileService {
         );
 
         try (InputStream in = file.getInputStream()) {
+            // 获取文件 MIME 和后缀
+            String contentType = file.getContentType();
+            String originalFilename = file.getOriginalFilename();
+            String ext = (originalFilename != null && originalFilename.contains("."))
+                    ? originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase()
+                    : "";
+
+            // 验证 MIME 与后缀是否匹配
+            validateMimeAndExt(contentType, ext);
+
             // 计算文件实际 MD5 校验完整性
             String fileMd5 = DigestUtils.md5DigestAsHex(in);
             if (!md5.equals(fileMd5)) throw new RuntimeException("文件在上传过程中受损");
@@ -177,23 +194,37 @@ public class LocalFileService {
 
             // 生成存储路径（日期 + 随机名）
             String dateFolder = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String originalFilename = file.getOriginalFilename();
-            String suffix = (originalFilename != null && originalFilename.contains("."))
-                    ? originalFilename.substring(originalFilename.lastIndexOf('.'))
-                    : "";
-            String objectName = dateFolder + "/" + UUID.randomUUID() + suffix;
+            String objectName = dateFolder + "/" + UUID.randomUUID() + "." + ext;
 
             // 上传文件到本地存储实现
             try (InputStream inputStream = file.getInputStream()) {
                 return fileStorageService.uploadFile(
                         objectName, inputStream, file.getSize(),
-                        file.getContentType(), fileMd5
+                        contentType, fileMd5
                 );
             }
 
         } catch (Exception e) {
             log.error("本地文件上传失败", e);
             throw new RuntimeException("本地文件上传失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 验证 MIME 类型与文件后缀是否匹配
+     *
+     * @param mime 文件 MIME 类型
+     * @param ext  文件扩展名（不带点）
+     */
+    private void validateMimeAndExt(String mime, String ext) {
+        if (!StringUtils.hasText(mime) || !StringUtils.hasText(ext)) {
+            throw new RuntimeException("无法识别文件类型");
+        }
+
+        Map<String, List<String>> mimeAllow = fileConfig.toMimeAllowMap();
+        List<String> allowedExts = mimeAllow.get(mime);
+        if (allowedExts == null || !allowedExts.contains(ext)) {
+            throw new RuntimeException("文件类型与扩展名不匹配或不被允许：" + mime + "----后缀：" + ext);
         }
     }
 }

@@ -60,7 +60,7 @@ public class FsFileStorage {
     /**
      * 更新时间
      */
-    @TableField(value="update_time", fill = FieldFill.UPDATE)
+    @TableField(value="update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**

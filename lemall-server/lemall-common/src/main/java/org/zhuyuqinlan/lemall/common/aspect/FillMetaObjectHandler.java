@@ -25,24 +25,24 @@ public class FillMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 重写不管原值是否为null，都进行填充
+     *
      * @param metaObject metaObject
-     * @param fieldName 字段名
-     * @param fieldVal fieldVal
+     * @param fieldName  字段名
+     * @param fieldVal   fieldVal
      * @return MetaObjectHandler
      */
     @Override
     public MetaObjectHandler strictFillStrategy(MetaObject metaObject, String fieldName, Supplier<?> fieldVal) {
-        Object obj = fieldVal.get();
-        if (Objects.nonNull(obj)) {
-            metaObject.setValue(fieldName, obj);
-        }
+        System.out.println("test");
+        metaObject.setValue(fieldName, fieldVal.get());
         return this;
     }
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
-        this.strictInsertFill(metaObject, UPDATE_TIME, Date.class, new Date());
+        Date now = new Date();
+        this.strictInsertFill(metaObject, CREATE_TIME, Date.class, now);
+        this.strictInsertFill(metaObject, UPDATE_TIME, Date.class, now);
     }
 
     @Override

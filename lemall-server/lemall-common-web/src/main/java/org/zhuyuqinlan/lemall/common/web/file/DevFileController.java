@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
+import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.service.storage.FileStorageService;
 import org.zhuyuqinlan.lemall.common.response.Result;
 
@@ -32,9 +33,9 @@ import java.nio.file.Paths;
 public class DevFileController {
 
     private final FileStorageService localFileStorageService;
-    private final FileStorageService minioFileStorageService;
+    private final CloudFileStorageService minioFileStorageService;
 
-    public DevFileController(@Qualifier("localFileStorageService") FileStorageService localFileStorageService, @Qualifier("minIOService") FileStorageService minioFileStorageService) {
+    public DevFileController(@Qualifier("localFileStorageService") FileStorageService localFileStorageService, @Qualifier("minIOService") CloudFileStorageService minioFileStorageService) {
         this.localFileStorageService = localFileStorageService;
         this.minioFileStorageService = minioFileStorageService;
     }
@@ -89,7 +90,7 @@ public class DevFileController {
     @PostMapping("${lemall.server.prefix.common}/file/dev/minio/delete")
     public Result<?> deleteFileMinio(@RequestParam("objectName") String objectName) {
         try {
-            minioFileStorageService.deleteFile(objectName);
+            minioFileStorageService.deleteFile(objectName,false);
             return Result.success();
         } catch (Exception e) {
             log.error("删除minio文件失败", e);
@@ -126,7 +127,7 @@ public class DevFileController {
                 fileMd5 = DigestUtils.md5DigestAsHex(in);
             }
             // 上传
-            FileInfoDTO fileInfoDTO = minioFileStorageService.uploadFile(objectName, inputStream, size, contentType, fileMd5);
+            FileInfoDTO fileInfoDTO = minioFileStorageService.uploadFile(objectName, inputStream, size, contentType, fileMd5,false);
             return Result.success(fileInfoDTO);
         } catch (Exception e) {
             log.error("上传文件失败", e);

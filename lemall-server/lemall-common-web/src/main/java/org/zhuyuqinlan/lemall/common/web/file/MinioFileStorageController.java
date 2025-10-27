@@ -18,38 +18,38 @@ import java.util.Map;
 @RequestMapping("${lemall.server.prefix.common}/file/minio")
 public class MinioFileStorageController {
 
-    private final FileStorageService fileStorageService;
+    private final CloudFileStorageService fileStorageService;
 
-    public MinioFileStorageController(@Qualifier("minIOService") FileStorageService fileStorageService) {
+    public MinioFileStorageController(@Qualifier("minIOService") CloudFileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
     @Operation(summary = "生成前端直传 POST Policy（仅云存储）")
     @GetMapping("/postPolicy")
-    public Result<Map<String, Object>> postPolicy() {
-        if (fileStorageService instanceof CloudFileStorageService cloudService) {
-            try {
-                String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-                return Result.success(cloudService.getPostPolicy(dateFolder, FileStorageConstant.POST_POLICY_EXPIRE));
-            } catch (Exception e) {
-                log.error("生成 POST Policy 失败", e);
-                return Result.fail("生成 POST Policy 失败: " + e.getMessage());
-            }
+    public Result<Map<String, Object>> postPolicy(@RequestParam String fileExt) {
+        try {
+            // 生成日期目录
+            String dateFolder = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+            // 生成唯一文件名
+            String uuid = java.util.UUID.randomUUID().toString().replace("-", "");
+            String objectName = String.format("%s/%s%s", dateFolder, uuid, fileExt);
+
+            // 调用服务生成 POST Policy
+            return Result.success(fileStorageService.getPostPolicy(objectName, FileStorageConstant.POST_POLICY_EXPIRE, true));
+        } catch (Exception e) {
+            log.error("生成 POST Policy 失败", e);
+            return Result.fail("生成 POST Policy 失败: " + e.getMessage());
         }
-        return Result.fail("本存储类型不支持前端直传");
     }
 
     @Operation(summary = "前端直传完成回调")
     @PostMapping("/callback")
     public Result<Map<String, String>> uploadCallback(@RequestParam String originalFileName) {
-        if (fileStorageService instanceof CloudFileStorageService cloudService) {
-            try {
-                Map<String, String> stringStringMap = cloudService.saveFileRecord(originalFileName);
-                return Result.success(stringStringMap);
-            } catch (Exception e) {
-                return Result.fail("回调处理失败: " + e.getMessage());
-            }
+        try {
+            Map<String, String> stringStringMap = fileStorageService.saveFileRecord(originalFileName, true);
+            return Result.success(stringStringMap);
+        } catch (Exception e) {
+            return Result.fail("回调处理失败: " + e.getMessage());
         }
-        return Result.fail("本存储类型不支持前端直传回调");
     }
 }
