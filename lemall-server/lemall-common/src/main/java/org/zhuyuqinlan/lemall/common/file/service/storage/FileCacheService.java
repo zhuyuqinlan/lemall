@@ -173,7 +173,7 @@ public class FileCacheService {
     }
 
     /**
-     * 根据存储类型拼接URL
+     * 根据存储类型拼接URL（仅支持公共读的bucket）
      */
     private String buildFileUrl(FsFileStorage file) {
         return switch (file.getStorageType().toUpperCase()) {

@@ -2,6 +2,7 @@ package org.zhuyuqinlan.lemall.common.file.service.storage.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,45 +32,36 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
+    @SneakyThrows
     public FileInfoDTO uploadFile(String fileKey, InputStream inputStream, long size, String contentType, String md5) {
-        try {
-            Path filePath = Paths.get(basePath, fileKey);
-            Files.createDirectories(filePath.getParent());
-            FileCopyUtils.copy(inputStream, Files.newOutputStream(filePath));
-            FsFileStorage fsFileStorage = new FsFileStorage();
-            fsFileStorage.setStorageType(FileStorageConstant.LOCAL_TYPE);
-            fsFileStorage.setContentType(contentType);
-            fsFileStorage.setSize(size);
-            fsFileStorage.setUri(fileKey);
-            fsFileStorage.setFilekey(fileKey);
-            fsFileStorage.setMd5(md5);
-            fileStorageMapper.insert(fsFileStorage);
-            FileInfoDTO fileInfoDTO = new FileInfoDTO();
-            BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
-            fileInfoDTO.setUrl(getFileUrl(fileKey));
-            return fileInfoDTO;
-        } catch (IOException e) {
-            throw new RuntimeException("本地文件上传失败", e);
-        }
+        Path filePath = Paths.get(basePath, fileKey);
+        Files.createDirectories(filePath.getParent());
+        FileCopyUtils.copy(inputStream, Files.newOutputStream(filePath));
+        FsFileStorage fsFileStorage = new FsFileStorage();
+        fsFileStorage.setStorageType(FileStorageConstant.LOCAL_TYPE);
+        fsFileStorage.setContentType(contentType);
+        fsFileStorage.setSize(size);
+        fsFileStorage.setUri(fileKey);
+        fsFileStorage.setFileKey(fileKey);
+        fsFileStorage.setMd5(md5);
+        fileStorageMapper.insert(fsFileStorage);
+        FileInfoDTO fileInfoDTO = new FileInfoDTO();
+        BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
+        fileInfoDTO.setUrl(getFileUrl(fileKey));
+        return fileInfoDTO;
     }
 
     @Override
+    @SneakyThrows
     public void deleteFile(String fileKey) {
-        try {
-            Files.deleteIfExists(Paths.get(basePath, fileKey));
-            fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFilekey, fileKey));
-        } catch (IOException e) {
-            throw new RuntimeException("删除本地文件失败", e);
-        }
+        Files.deleteIfExists(Paths.get(basePath, fileKey));
+        fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFileKey, fileKey));
     }
 
     @Override
+    @SneakyThrows
     public InputStream downloadFile(String fileKey) {
-        try {
-            return Files.newInputStream(Paths.get(basePath, fileKey));
-        } catch (IOException e) {
-            throw new RuntimeException("本地文件下载失败", e);
-        }
+        return Files.newInputStream(Paths.get(basePath, fileKey));
     }
 
     @Override

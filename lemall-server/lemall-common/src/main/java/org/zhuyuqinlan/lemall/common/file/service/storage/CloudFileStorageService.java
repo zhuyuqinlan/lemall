@@ -49,15 +49,12 @@ public interface CloudFileStorageService {
      * @param isPublic 是否为公共桶
      * @return 前端上传所需参数
      */
-    MultipartUploadInfo getMultipartUploadInfo(String fileKey,long partSize, long fileSize, int expireSeconds, boolean isPublic);
+    MultipartUploadInfo getMultipartUploadInfo(String fileKey,long partSize, long fileSize, int expireSeconds, String uploadId, boolean isPublic);
 
     /**
      * 前端直传后回调
-     * @param fileKey 文件key
-     * @return url
-     * @param isPublic 是否为公共桶
      */
-    FileInfoDTO mergeMultipartUpload(String fileKey, boolean isPublic);
+    FileInfoDTO mergeMultipartUpload(String uploadId, String fileKey, String md5, Long size, String contentType, boolean isPublic);
 
 
 }

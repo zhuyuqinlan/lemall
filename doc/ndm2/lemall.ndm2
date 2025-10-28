@@ -19063,7 +19063,7 @@
               },
               {
                 "objectType": "TableField_MYSQL",
-                "name": "original_name",
+                "name": "file_key",
                 "type": "varchar",
                 "length": 255,
                 "decimals": -2147483648,
@@ -19078,14 +19078,14 @@
                 "defaultValue": "",
                 "isOnUpdateCurrentTimestamp": false,
                 "isAutoInc": false,
-                "comment": "上传时原始文件名",
+                "comment": "文件key",
                 "columnFormat": "",
                 "storage": "",
                 "isVirtual": false,
                 "isGeneratedAlways": false,
                 "virtualExpr": "",
                 "virtualType": "",
-                "oldName": "original_name"
+                "oldName": "file_key"
               },
               {
                 "objectType": "TableField_MYSQL",

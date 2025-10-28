@@ -1,6 +1,7 @@
 package org.zhuyuqinlan.lemall.common.file.service.biz;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,16 +70,14 @@ public class LocalFileService {
         this.fileConfig = fileConfig;
     }
 
-    /**
-     * 获取上传 access code，限制1分钟5次
-     */
+    // ---------- 1. 获取上传 access code，限制1分钟5次 ----------
     public String getAccessCode(String token) {
         String limitKey = REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_LIMIT_LIMIT.replace("{token}", token);
         Long count = redisService.incr(limitKey, 1);
         if (count == 1) redisService.expire(limitKey, 60);
         if (count > 5) throw new RuntimeException("请求过于频繁，请稍后再试");
 
-        String accessCode = UUID.randomUUID().toString();
+        String accessCode = UUID.randomUUID().toString().replace("-", "");
         redisService.set(
                 REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_FILE_ACCESS
                         .replace("{token}", token)
@@ -89,9 +88,7 @@ public class LocalFileService {
         return accessCode;
     }
 
-    /**
-     * 检查文件 MD5，实现秒传逻辑
-     */
+    // ---------- 2. 检查文件 MD5，实现秒传逻辑 ----------
     public FileInfoExistDTO checkFile(String token, String md5, String accessCode) {
         String key = REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_FILE_ACCESS
                 .replace("{token}", token).replace("{accessCode}", accessCode);
@@ -101,7 +98,7 @@ public class LocalFileService {
         FileInfoCacheByMd5DTO cache = fileCacheService.getFileInfoByMd5(md5);
         FileInfoExistDTO dto = new FileInfoExistDTO();
         if (cache == null) {
-            String uploadCode = UUID.randomUUID().toString();
+            String uploadCode = UUID.randomUUID().toString().replace("-", "");
             redisService.set(
                     REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                             .replace("{token}", token)
@@ -118,66 +115,60 @@ public class LocalFileService {
         return dto;
     }
 
-    /**
-     * 上传文件（含 MD5 校验 + MIME 验证 + 秒传）
-     */
-    public FileInfoDTO uploadFile(String token, String uploadCode, MultipartFile file) {
+    // ---------- 3. 上传文件（含 MD5 校验 + MIME 验证 + 秒传） ----------
+    @SneakyThrows
+    public FileInfoDTO uploadFile(String token, String uploadId, MultipartFile file) {
+        // ---------- 3.1 校验 redis token ----------
         String md5 = redisService.get(
                 REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                         .replace("{token}", token)
-                        .replace("{uploadCode}", uploadCode)
+                        .replace("{uploadCode}", uploadId)
         );
         if (!StringUtils.hasText(md5)) throw new RuntimeException("uploadCode已过期");
-
         redisService.del(
                 REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                         .replace("{token}", token)
-                        .replace("{uploadCode}", uploadCode)
+                        .replace("{uploadCode}", uploadId)
         );
 
-        try (InputStream in = file.getInputStream()) {
-            String contentType = file.getContentType();
-            String originalFilename = file.getOriginalFilename();
-            String ext = (originalFilename != null && originalFilename.contains("."))
-                    ? originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase()
-                    : "";
+        // ---------- 3.2 验证文件类型 + MD5 ----------
+        validateFile(file, md5);
 
-            validateMimeAndExt(contentType, ext);
-
-            String fileMd5 = DigestUtils.md5DigestAsHex(in);
-            if (!md5.equals(fileMd5)) throw new RuntimeException("文件在上传过程中受损");
-
-            FileInfoCacheByMd5DTO cache = fileCacheService.getFileInfoByMd5(fileMd5);
-            if (cache != null) {
-                FileInfoDTO dto = new FileInfoDTO();
-                BeanUtils.copyProperties(cache, dto);
-                dto.setMd5(md5);
-                return dto;
-            }
-
-            String dateFolder = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String fileKey = dateFolder + "/" + UUID.randomUUID() + "." + ext;
-
-            try (InputStream inputStream = file.getInputStream()) {
-                return fileStorageService.uploadFile(
-                        fileKey, inputStream, file.getSize(),
-                        contentType, fileMd5
-                );
-            }
-
-        } catch (Exception e) {
-            log.error("本地文件上传失败", e);
-            throw new RuntimeException("本地文件上传失败：" + e.getMessage());
+        // ---------- 3.3 秒传逻辑 ----------
+        FileInfoCacheByMd5DTO cache = fileCacheService.getFileInfoByMd5(md5);
+        if (cache != null) {
+            FileInfoDTO dto = new FileInfoDTO();
+            BeanUtils.copyProperties(cache, dto);
+            dto.setMd5(md5);
+            return dto;
         }
+
+        // ---------- 3.4 生成存储路径 ----------
+        String ext = getFileExtension(file.getOriginalFilename());
+        String dateFolder = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String fileKey = dateFolder + "/" + UUID.randomUUID().toString().replace("-", "") + "." + ext;
+
+        // ---------- 3.5 上传文件 ----------
+        FileInfoDTO fileInfoDTO;
+        try (InputStream uploadStream = file.getInputStream()) {
+            fileInfoDTO = fileStorageService.uploadFile(
+                    fileKey,
+                    uploadStream,
+                    file.getSize(),
+                    file.getContentType(),
+                    md5
+            );
+        }
+
+        return fileInfoDTO;
     }
 
-    /**
-     * 下载或预览文件（浏览器访问）
-     */
+    // ---------- 4. 下载或预览文件（浏览器访问） ----------
+    @SneakyThrows
     public void serveFile(String requestURI, HttpServletResponse response) {
-        String fileKey = requestURI.replaceFirst("^" + localFileDownloadPrefix + "/", "");
-        try (InputStream inputStream = fileStorageService.downloadFile(fileKey)) {
-            Path path = Paths.get(fileKey);
+        String localPath = requestURI.replaceFirst("^" + localFileDownloadPrefix + "/", "");
+        try (InputStream inputStream = fileStorageService.downloadFile(localPath)) {
+            Path path = Paths.get(localPath);
             String contentType = Files.probeContentType(path);
             if (contentType == null) contentType = "application/octet-stream";
 
@@ -188,28 +179,21 @@ public class LocalFileService {
             response.setHeader("Content-Disposition", "inline; filename=" + filename);
 
             inputStream.transferTo(response.getOutputStream());
-        } catch (Exception e) {
-            log.error("读取本地文件失败", e);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    /**
-     * 删除文件
-     */
+    // ---------- 5. 删除文件 ----------
     public void deleteFile(String fileKey) {
-        try {
-            fileStorageService.deleteFile(fileKey);
-        } catch (Exception e) {
-            log.error("删除本地文件失败", e);
-            throw new RuntimeException("删除本地文件失败：" + e.getMessage());
-        }
+        fileStorageService.deleteFile(fileKey);
     }
 
-    /**
-     * 验证 MIME 与扩展名匹配
-     */
-    private void validateMimeAndExt(String mime, String ext) {
+    // ---------- 6. 验证文件合法性（MIME + 扩展名 + MD5 校验） ----------
+    @SneakyThrows
+    private void validateFile(MultipartFile file, String expectedMd5) {
+        String mime = file.getContentType();
+        String ext = getFileExtension(file.getOriginalFilename());
+
+        // MIME + 扩展名校验
         if (!StringUtils.hasText(mime) || !StringUtils.hasText(ext)) {
             throw new RuntimeException("无法识别文件类型");
         }
@@ -218,5 +202,20 @@ public class LocalFileService {
         if (allowedExts == null || !allowedExts.contains(ext)) {
             throw new RuntimeException("文件类型与扩展名不匹配或不被允许：" + mime + "----后缀：" + ext);
         }
+
+        // MD5 校验
+        try (InputStream in = file.getInputStream()) {
+            String fileMd5 = DigestUtils.md5DigestAsHex(in);
+            if (!expectedMd5.equals(fileMd5)) {
+                throw new RuntimeException("文件在上传过程中受损");
+            }
+        }
     }
+
+    // ---------- 7. 工具方法：提取文件扩展名 ----------
+    private String getFileExtension(String filename) {
+        if (!StringUtils.hasText(filename) || !filename.contains(".")) return "";
+        return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+    }
+
 }

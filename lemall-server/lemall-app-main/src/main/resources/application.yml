@@ -58,8 +58,12 @@ redis:
           access: fs:access:local:{token}:{accessCode}   # 本地上传 access code
           limit: fs:access:local:limit:{token} # 记录一分钟内获取了多少次access
         minio:
-          access: fs:access:minio:{token}:{accessCode} # minio上传access Code
-          limit: fs:access:minio:limit:{token} # 记录一分钟内获取了多少次access
+          public:
+            access: fs:access:minio:public:{token}:{accessCode} # minio上传access Code
+            limit: fs:access:minio:public:limit:{token} # 记录一分钟内获取了多少次access
+          private:
+            access: fs:access:minio:private:{token}:{accessCode} # minio上传access Code
+            limit: fs:access:minio:private:limit:{token} # 记录一分钟内获取了多少次access
       url:
         cache: fs:url:fileId:{fileId}   # 文件ID -> URL
         lock: fs:url:lock:fileId:{fileId} # 防击穿
@@ -68,7 +72,11 @@ redis:
         lock: fs:info:lock:md5:{md5}      #  防击穿
       preUpload:
         local: fs:preUpload:local:{token}:{uploadCode} # local文件上传凭证
-        minio: fs:preupload:minio:{token}:{uploadCode} # minio上传凭证
+        minio:
+          public:
+            fs:preupload:minio:public:{token}:{uploadCode} # minio上传凭证
+          private:
+            fs:preupload:minio:private:{token}:{uploadCode} # minio上传凭证
 
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

@@ -28,7 +28,7 @@ import java.io.InputStream;
  */
 @Slf4j
 @Service
-public class MinIOService implements CloudFileStorageService {
+public class MinioStorageService implements CloudFileStorageService {
 
     @Value("${minio.endpoint}")
     private String endpoint; // 内网访问地址
@@ -55,7 +55,7 @@ public class MinIOService implements CloudFileStorageService {
 
     private final FsFileStorageMapper fileStorageMapper;
 
-    public MinIOService(FsFileStorageMapper fileStorageMapper) {
+    public MinioStorageService(FsFileStorageMapper fileStorageMapper) {
         this.fileStorageMapper = fileStorageMapper;
     }
 
@@ -137,7 +137,7 @@ public class MinIOService implements CloudFileStorageService {
 
         FsFileStorage fsFileStorage = new FsFileStorage();
         fsFileStorage.setBucket(bucket);
-        fsFileStorage.setFilekey(fileKey);
+        fsFileStorage.setFileKey(fileKey);
         fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
         fsFileStorage.setSize(size);
         fsFileStorage.setContentType(contentType);
@@ -157,7 +157,7 @@ public class MinIOService implements CloudFileStorageService {
         String bucket = isPublic ? bucketPublic : bucketPrivate;
         CustomMinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
         MinioUtil.deleteFile(client, bucket, fileKey);
-        fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFilekey, fileKey));
+        fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFileKey, fileKey));
     }
 
     @Override
@@ -181,17 +181,42 @@ public class MinIOService implements CloudFileStorageService {
     }
 
     @Override
+    @SneakyThrows
     public PostPolicyDTO getPostPolicy(String fileKey, int expireSeconds, boolean isPublic) {
-        return null;
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
+        return MinioUtil.getPostPolicy(client, bucket, fileKey, expireSeconds);
     }
 
     @Override
-    public MultipartUploadInfo getMultipartUploadInfo(String fileKey, long partSize, long fileSize, int expireSeconds, boolean isPublic) {
-        return null;
+    @SneakyThrows
+    public MultipartUploadInfo getMultipartUploadInfo(String fileKey, long partSize, long fileSize, int expireSeconds, String uploadId, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
+        return MinioUtil.initMultipartUpload(client, bucket, fileKey, partSize, fileSize, expireSeconds, uploadId);
     }
 
     @Override
-    public FileInfoDTO mergeMultipartUpload(String fileKey, boolean isPublic) {
-        return null;
+    @SneakyThrows
+    public FileInfoDTO mergeMultipartUpload(String uploadId, String fileKey, String md5, Long size, String contentType, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
+        MinioUtil.mergeMultipartUpload(client, bucket, fileKey, uploadId);
+
+
+        FsFileStorage fsFileStorage = new FsFileStorage();
+        fsFileStorage.setBucket(bucket);
+        fsFileStorage.setFileKey(fileKey);
+        fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
+        fsFileStorage.setUri(bucket + "/" + fileKey);
+        fsFileStorage.setMd5(md5);
+        fsFileStorage.setSize(size);
+        fsFileStorage.setContentType(contentType);
+        fileStorageMapper.insert(fsFileStorage);
+
+        FileInfoDTO fileInfoDTO = new FileInfoDTO();
+        BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
+        fileInfoDTO.setUrl(getFileUrl(fileKey, isPublic));
+        return fileInfoDTO;
     }
 }

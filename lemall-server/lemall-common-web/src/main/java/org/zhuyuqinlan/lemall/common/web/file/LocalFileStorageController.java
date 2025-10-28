@@ -26,17 +26,17 @@ public class LocalFileStorageController {
     private String SA_TOKEN_NAME;
 
     @GetMapping("/access-code")
-    @Operation(summary = "获取上传 access code")
+    @Operation(summary = "获取上传accessCode")
     public Result<String> getAccessCode(HttpServletRequest request) {
         String token = request.getHeader(SA_TOKEN_NAME);
         return Result.success(localFileService.getAccessCode(token));
     }
 
     @PostMapping("/check")
-    @Operation(summary = "检查文件 MD5")
+    @Operation(summary = "检查文件MD5")
     public Result<FileInfoExistDTO> check(HttpServletRequest request,
-                                          @RequestParam String md5,
-                                          @RequestParam String accessCode) {
+                                          @RequestParam String accessCode,
+                                          @RequestParam String md5) {
         String token = request.getHeader(SA_TOKEN_NAME);
         return Result.success(localFileService.checkFile(token, md5, accessCode));
     }
@@ -44,9 +44,9 @@ public class LocalFileStorageController {
     @PostMapping("/upload")
     @Operation(summary = "上传文件")
     public Result<FileInfoDTO> upload(@RequestParam MultipartFile file,
-                                      @RequestParam String uploadCode,
+                                      @RequestParam String uploadId,
                                       HttpServletRequest request) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(localFileService.uploadFile(token, uploadCode, file));
+        return Result.success(localFileService.uploadFile(token, uploadId, file));
     }
 }

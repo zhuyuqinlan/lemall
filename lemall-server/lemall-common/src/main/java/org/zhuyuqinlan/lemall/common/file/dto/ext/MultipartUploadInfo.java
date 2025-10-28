@@ -11,10 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Schema(description = "分片凭证")
-public class MultipartUploadInfo extends FileInfoCacheByMd5DTO {
-
-    @Schema(description = "文件是否存在")
-    private boolean exist;
+public class MultipartUploadInfo extends FileInfoExistDTO {
 
     @Schema(description = "分片列表，每个分片包含 partNumber 和 url")
     private List<Map<String, Object>> parts;

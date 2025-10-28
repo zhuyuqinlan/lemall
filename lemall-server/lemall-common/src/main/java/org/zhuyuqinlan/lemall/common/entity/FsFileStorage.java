@@ -1,7 +1,9 @@
 package org.zhuyuqinlan.lemall.common.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 
 /**
@@ -36,8 +38,8 @@ public class FsFileStorage {
     /**
      * 文件key
      */
-    @TableField(value = "fileKey")
-    private String filekey;
+    @TableField(value = "file_key")
+    private String fileKey;
 
     /**
      * 文件大小，单位字节
@@ -54,13 +56,13 @@ public class FsFileStorage {
     /**
      * 创建时间
      */
-    @TableField(value="create_time", fill = FieldFill.INSERT)
+    @TableField(value = "create_time")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value="update_time", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_time")
     private Date updateTime;
 
     /**
@@ -144,19 +146,19 @@ public class FsFileStorage {
     /**
      * 获取文件key
      *
-     * @return fileKey - 文件key
+     * @return file_key - 文件key
      */
-    public String getFilekey() {
-        return filekey;
+    public String getFileKey() {
+        return fileKey;
     }
 
     /**
      * 设置文件key
      *
-     * @param filekey 文件key
+     * @param fileKey 文件key
      */
-    public void setFilekey(String filekey) {
-        this.filekey = filekey;
+    public void setFileKey(String fileKey) {
+        this.fileKey = fileKey;
     }
 
     /**

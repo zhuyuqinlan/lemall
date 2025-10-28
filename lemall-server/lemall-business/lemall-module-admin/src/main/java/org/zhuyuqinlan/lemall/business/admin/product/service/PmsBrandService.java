@@ -88,7 +88,7 @@ public class PmsBrandService extends ServiceImpl<PmsBrandMapper, PmsBrand> {
      */
     public boolean deleteBrandById(Long id) {
         // TODO 商品表关联了这个的，如果要删，要确认
-        return removeById(id);
+        return super.removeById(id);
     }
 
     /**
@@ -106,7 +106,7 @@ public class PmsBrandService extends ServiceImpl<PmsBrandMapper, PmsBrand> {
      */
     public boolean deleteBrandBatch(List<Long> ids) {
         // TODO 商品表关联了这个的，如果要删，要确认
-        return removeBatchByIds(ids);
+        return super.removeBatchByIds(ids);
     }
 
     /**

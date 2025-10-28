@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.common.file.bean.CustomMinioClient;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.dto.PostPolicyDTO;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -263,6 +262,8 @@ public class MinioUtil {
                         .build())
                 .get();
     }
+
+    // TODO 清理分片
 
     /**
      * 获取分片列表（私有方法）
