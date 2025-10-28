@@ -1,23 +1,27 @@
 package org.zhuyuqinlan.lemall.common.file.service.storage.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import io.minio.MinioClient;
+import io.minio.BucketExistsArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioAsyncClient;
+import io.minio.SetBucketPolicyArgs;
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.zhuyuqinlan.lemall.common.entity.FsFileStorage;
+import org.zhuyuqinlan.lemall.common.file.bean.CustomMinioClient;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.dto.MultipartUploadInfo;
+import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.dto.PostPolicyDTO;
 import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
-import org.zhuyuqinlan.lemall.common.file.utils.MinIOUtils;
+import org.zhuyuqinlan.lemall.common.file.utils.MinioUtil;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * MinIO Service（支持公共桶 + 私有桶 + 内网/公网访问）
@@ -44,10 +48,10 @@ public class MinIOService implements CloudFileStorageService {
     @Value("${minio.bucketName.private}")
     private String bucketPrivate;
 
-    private MinioClient minioClientPublicIn;   // 公共桶内网客户端
-    private MinioClient minioClientPrivateIn;  // 私有桶内网客户端
-    private MinioClient minioClientPublicNet;  // 公共桶公网客户端
-    private MinioClient minioClientPrivateNet; // 私有桶公网客户端（生成公网预签名 URL）
+    private CustomMinioClient minioClientPublicIn;   // 公共桶内网客户端
+    private CustomMinioClient minioClientPrivateIn;  // 私有桶内网客户端
+    private CustomMinioClient minioClientPublicNet;  // 公共桶公网客户端
+    private CustomMinioClient minioClientPrivateNet; // 私有桶公网客户端（生成公网预签名 URL）
 
     private final FsFileStorageMapper fileStorageMapper;
 
@@ -55,185 +59,51 @@ public class MinIOService implements CloudFileStorageService {
         this.fileStorageMapper = fileStorageMapper;
     }
 
-    /**
-     * 初始化四个 MinioClient 并创建桶
-     */
     @PostConstruct
-    public void init() throws Exception {
-        // 公共桶内网
-        minioClientPublicIn = MinioClient.builder()
+    @SneakyThrows
+    public void init() {
+        // 初始化 4 个 MinioAsyncClient（异步客户端）
+        minioClientPublicIn = new CustomMinioClient(MinioAsyncClient.builder()
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
-                .build();
+                .build());
+
+        minioClientPublicNet = new CustomMinioClient(MinioAsyncClient.builder()
+                .endpoint(publicEndpoint)
+                .credentials(accessKey, secretKey)
+                .build());
+
+        minioClientPrivateIn = new CustomMinioClient(MinioAsyncClient.builder()
+                .endpoint(endpoint)
+                .credentials(accessKey, secretKey)
+                .build());
+
+        minioClientPrivateNet = new CustomMinioClient(MinioAsyncClient.builder()
+                .endpoint(publicEndpoint)
+                .credentials(accessKey, secretKey)
+                .build());
+
+        // 创建桶（如果不存在）
         ensureBucket(minioClientPublicIn, bucketPublic, true);
-
-        // 公共桶公网
-        minioClientPublicNet = MinioClient.builder()
-                .endpoint(publicEndpoint)
-                .credentials(accessKey, secretKey)
-                .build();
-
-        // 私有桶内网
-        minioClientPrivateIn = MinioClient.builder()
-                .endpoint(endpoint)
-                .credentials(accessKey, secretKey)
-                .build();
+        ensureBucket(minioClientPublicNet, bucketPublic, true);
         ensureBucket(minioClientPrivateIn, bucketPrivate, false);
-
-        // 私有桶公网
-        minioClientPrivateNet = MinioClient.builder()
-                .endpoint(publicEndpoint)
-                .credentials(accessKey, secretKey)
-                .build();
+        ensureBucket(minioClientPrivateNet, bucketPrivate, false);
     }
 
-    /* ----------------------- 上传 ----------------------- */
-    @Override
-    public FileInfoDTO uploadFile(String fileKey, InputStream inputStream, long size, String contentType, String md5, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
-            MinIOUtils.uploadFile(client, bucket, fileKey, inputStream, size, contentType);
 
-            FsFileStorage fsFileStorage = new FsFileStorage();
-            fsFileStorage.setBucket(bucket);
-            fsFileStorage.setFilekey(fileKey);
-            fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
-            fsFileStorage.setSize(size);
-            fsFileStorage.setContentType(contentType);
-            fsFileStorage.setUri(bucket + "/" + fileKey);
-            fsFileStorage.setMd5(md5);
-            fileStorageMapper.insert(fsFileStorage);
+    @SneakyThrows
+    private void ensureBucket(MinioAsyncClient client, String bucket, boolean publicRead) {
+        // 判断桶是否存在（异步 → 同步等待）
+        boolean exists = client.bucketExists(
+                BucketExistsArgs.builder().bucket(bucket).build()
+        ).get();
 
-            FileInfoDTO fileInfoDTO = new FileInfoDTO();
-            BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
-            fileInfoDTO.setUrl(getFileUrl(fileKey, isPublic));
-            return fileInfoDTO;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+        if (!exists) {
+            client.makeBucket(MakeBucketArgs.builder().bucket(bucket).build()).get();
+            log.info("已创建桶：{}", bucket);
         }
-    }
 
-    /* ----------------------- 下载 ----------------------- */
-
-    @Override
-    public InputStream downloadFile(String fileKey, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
-            return MinIOUtils.downloadFile(client, bucket, fileKey);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /* ----------------------- 获取文件 URL ----------------------- */
-
-    @Override
-    public String getFileUrl(String fileKey, boolean isPublic) {
-        if (isPublic) {
-            // 公共桶直接返回公网地址
-            return publicEndpoint + "/" + bucketPublic + "/" + fileKey;
-        } else {
-            try {
-                // 私有桶生成预签名 URL，公网访问
-                return MinIOUtils.getPreviewUrl(minioClientPrivateNet, bucketPrivate, fileKey, 3600);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    /* ----------------------- 删除 ----------------------- */
-
-    @Override
-    public void deleteFile(String fileKey, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
-            MinIOUtils.deleteFile(client, bucket, fileKey);
-            fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFilekey, fileKey));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /* ----------------------- 前端直传凭证 ----------------------- */
-
-    @Override
-    public PostPolicyDTO getPostPolicy(String objectName, int expireSeconds, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
-            return MinIOUtils.getPostPolicy(client, bucket, objectName, expireSeconds);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public MultipartUploadInfo getMultipartUploadInfo(String fileKey, int expireSeconds, long partSize, long fileSize, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient minioClient = isPublic ? minioClientPublicNet : minioClientPrivateNet;
-            MultipartUploadInfo multipartUploadInfo = MinIOUtils.initMultipartUpload(minioClient, bucket, fileKey, partSize, fileSize, expireSeconds);
-            multipartUploadInfo.getParts().forEach(e -> e.remove("fileKey"));
-            return multipartUploadInfo;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /* ----------------------- 保存文件记录 ----------------------- */
-
-    @Override
-    public FileInfoDTO saveFileRecord(String fileKey, boolean isPublic) {
-        try {
-            String bucket = isPublic ? bucketPublic : bucketPrivate;
-            MinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
-
-            Map<String, Object> info = MinIOUtils.getFileInfo(client, bucket, fileKey);
-            long size = Long.parseLong(info.get("size").toString());
-            String contentType = info.get("contentType").toString();
-
-            FsFileStorage fsFileStorage = new FsFileStorage();
-            fsFileStorage.setBucket(bucket);
-            fsFileStorage.setFilekey(fileKey);
-            fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
-            fsFileStorage.setSize(size);
-            fsFileStorage.setContentType(contentType);
-            fsFileStorage.setUri(bucket + "/" + fileKey);
-            fileStorageMapper.insert(fsFileStorage);
-            FileInfoDTO fileInfoDTO = new FileInfoDTO();
-            BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
-            fileInfoDTO.setUrl(getFileUrl(fileKey, isPublic));
-            return fileInfoDTO;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /* ----------------------- 辅助方法 ----------------------- */
-
-    /**
-     * 创建桶并设置策略
-     *
-     * @param client      MinioClient
-     * @param bucket      桶名
-     * @param publicRead  是否设置为公共读
-     */
-    private void ensureBucket(MinioClient client, String bucket, boolean publicRead) throws Exception {
-        boolean found = client.bucketExists(io.minio.BucketExistsArgs.builder().bucket(bucket).build());
-        if (!found) {
-            client.makeBucket(io.minio.MakeBucketArgs.builder().bucket(bucket).build());
-        }
+        // 设置公共读策略
         if (publicRead) {
             String policy = """
                     {
@@ -248,10 +118,80 @@ public class MinIOService implements CloudFileStorageService {
                       ]
                     }
                     """.formatted(bucket);
-            client.setBucketPolicy(io.minio.SetBucketPolicyArgs.builder()
+
+            client.setBucketPolicy(SetBucketPolicyArgs.builder()
                     .bucket(bucket)
                     .config(policy)
-                    .build());
+                    .build()
+            ).get(); // ← 同步等待执行完成
+            log.info("已为桶 [{}] 设置公共读策略", bucket);
         }
+    }
+
+    @Override
+    @SneakyThrows
+    public FileInfoDTO uploadFile(String fileKey, InputStream inputStream, long size, String contentType, String md5, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
+        MinioUtil.uploadFile(client, bucket, fileKey, inputStream, size, contentType);
+
+        FsFileStorage fsFileStorage = new FsFileStorage();
+        fsFileStorage.setBucket(bucket);
+        fsFileStorage.setFilekey(fileKey);
+        fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
+        fsFileStorage.setSize(size);
+        fsFileStorage.setContentType(contentType);
+        fsFileStorage.setUri(bucket + "/" + fileKey);
+        fsFileStorage.setMd5(md5);
+        fileStorageMapper.insert(fsFileStorage);
+
+        FileInfoDTO fileInfoDTO = new FileInfoDTO();
+        BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
+        fileInfoDTO.setUrl(getFileUrl(fileKey, isPublic));
+        return fileInfoDTO;
+    }
+
+    @Override
+    @SneakyThrows
+    public void deleteFile(String fileKey, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
+        MinioUtil.deleteFile(client, bucket, fileKey);
+        fileStorageMapper.delete(Wrappers.<FsFileStorage>lambdaQuery().eq(FsFileStorage::getFilekey, fileKey));
+    }
+
+    @Override
+    @SneakyThrows
+    public InputStream downloadFile(String fileKey, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
+        return MinioUtil.getObject(client, bucket, fileKey, null, null);
+    }
+
+    @Override
+    @SneakyThrows
+    public String getFileUrl(String fileKey, boolean isPublic) {
+        if (isPublic) {
+            // 公共桶直接返回公网地址
+            return publicEndpoint + "/" + bucketPublic + "/" + fileKey;
+        } else {
+            // 私有桶生成预签名 URL，公网访问
+            return MinioUtil.getPreviewUrl(minioClientPrivateNet, bucketPrivate, fileKey);
+        }
+    }
+
+    @Override
+    public PostPolicyDTO getPostPolicy(String fileKey, int expireSeconds, boolean isPublic) {
+        return null;
+    }
+
+    @Override
+    public MultipartUploadInfo getMultipartUploadInfo(String fileKey, long partSize, long fileSize, int expireSeconds, boolean isPublic) {
+        return null;
+    }
+
+    @Override
+    public FileInfoDTO mergeMultipartUpload(String fileKey, boolean isPublic) {
+        return null;
     }
 }

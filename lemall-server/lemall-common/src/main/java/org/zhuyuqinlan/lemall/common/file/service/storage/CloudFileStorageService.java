@@ -1,7 +1,7 @@
 package org.zhuyuqinlan.lemall.common.file.service.storage;
 
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.dto.MultipartUploadInfo;
+import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.dto.PostPolicyDTO;
 
 import java.io.InputStream;
@@ -49,7 +49,7 @@ public interface CloudFileStorageService {
      * @param isPublic 是否为公共桶
      * @return 前端上传所需参数
      */
-    MultipartUploadInfo getMultipartUploadInfo(String fileKey, int expireSeconds, long partSize, long fileSize, boolean isPublic);
+    MultipartUploadInfo getMultipartUploadInfo(String fileKey,long partSize, long fileSize, int expireSeconds, boolean isPublic);
 
     /**
      * 前端直传后回调
@@ -57,7 +57,7 @@ public interface CloudFileStorageService {
      * @return url
      * @param isPublic 是否为公共桶
      */
-    FileInfoDTO saveFileRecord(String fileKey, boolean isPublic);
+    FileInfoDTO mergeMultipartUpload(String fileKey, boolean isPublic);
 
 
 }
