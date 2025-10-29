@@ -48,7 +48,7 @@ public interface CloudFileStorageService {
     MultipartUploadInfo getPostPolicy(String fileKey, int expireSeconds, String uploadId, boolean isPublic);
 
 
-    FileInfoDTO complete(String fileKey, String contentType, String md5, long size, boolean isPublic);
+    FileInfoDTO complete(String fileKey, String contentType, String md5, boolean isPublic);
 
     /**
      * 生成前端分片直传临时凭证

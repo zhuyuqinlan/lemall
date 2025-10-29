@@ -1,14 +1,12 @@
 package org.zhuyuqinlan.lemall.common.file.service.biz;
 
-import lombok.SneakyThrows;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import org.zhuyuqinlan.lemall.common.file.config.LemallFileConfig;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoCacheByMd5DTO;
@@ -16,10 +14,8 @@ import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.service.storage.FileCacheService;
-import org.zhuyuqinlan.lemall.common.file.utils.MinioUtil;
 import org.zhuyuqinlan.lemall.common.service.RedisService;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -69,7 +65,7 @@ public class MinioFileService {
         return accessCode;
     }
 
-    public MultipartUploadInfo uploadUrl(String token, String accessCode, String md5, String contentType, String uploadId,boolean isPublic) {
+    public MultipartUploadInfo uploadUrl(String token, String accessCode, String md5, String contentType, String fileName, String uploadId, boolean isPublic) {
         String accessKey = REDIS_PREFIX + ":" + (isPublic ? PUBLIC_ACCESS_KEY : PRIVATE_ACCESS_KEY).replace("{token}", token)
                 .replace("{accessCode}", accessCode);
         if (!redisService.hasKey(accessKey)) throw new RuntimeException("access已过期");
@@ -80,18 +76,21 @@ public class MinioFileService {
         if (cache == null) {
 
             Map<String, List<String>> mimeAllow = fileConfig.toMimeAllowMap();
-            if (mimeAllow == null || !mimeAllow.containsKey(contentType)) {
-                throw new RuntimeException("文件类型不被允许 ---- 后缀：" + contentType);
+            List<String> exts = mimeAllow.get(contentType);
+            String ext = getFileExtension(fileName);
+
+            if (exts == null || exts.isEmpty() || !exts.contains(ext.toLowerCase())) {
+                throw new RuntimeException("文件类型不被允许：" + contentType + " / " + ext);
             }
 
             String dateFolder = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String fileKey = dateFolder + "/" + UUID.randomUUID().toString().replace("-", "") + "." + contentType;
-            MultipartUploadInfo postPolicy = cloudFileStorageService.getPostPolicy(fileKey, FileStorageConstant.POST_POLICY_EXPIRE, uploadId,isPublic);
+            String fileKey = dateFolder + "/" + UUID.randomUUID().toString().replace("-", "") + "." + ext;
+            MultipartUploadInfo postPolicy = cloudFileStorageService.getPostPolicy(fileKey, FileStorageConstant.POST_POLICY_EXPIRE, uploadId, isPublic);
             postPolicy.setExist(false);
             String uploadKey = REDIS_PREFIX + ":" + (isPublic ? PUBLIC_UPLOAD_KEY : PRIVATE_UPLOAD_KEY)
-                    .replace("{token}", token).replace("{uploadId}", uploadId);
+                    .replace("{token}", token).replace("{uploadId}", postPolicy.getUploadId());
 
-            Map<String,String> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             map.put("fileKey", fileKey);
             map.put("contentType", contentType);
             map.put("md5", md5);
@@ -116,43 +115,69 @@ public class MinioFileService {
         String fileKey = cacheMap.getOrDefault("fileKey", "").toString();
         redisService.del(uploadKey);
 
-        // 从minio读取文件信息
-
-
-
-        return null;
+        // 校验并入库
+        return cloudFileStorageService.complete(fileKey, contentType, md5, isPublic);
     }
 
-    public MultipartUploadInfo multipartUploadInfoResult(String token, String accessCode, String md5, boolean isPublic) {
-        return null;
+    public MultipartUploadInfo multipartUploadInfoResult(String token, String accessCode, String uploadId, String md5, String contentType, String fileName, long fileSize, boolean isPublic) {
+        String accessKey = REDIS_PREFIX + ":" + (isPublic ? PUBLIC_ACCESS_KEY : PRIVATE_ACCESS_KEY).replace("{token}", token)
+                .replace("{accessCode}", accessCode);
+        if (!redisService.hasKey(accessKey)) throw new RuntimeException("access已过期");
+        redisService.del(accessKey);
+
+        if (fileSize < FileStorageConstant.MINIMUM_THRESHOLD_FOR_FILE_FRAGMENTATION) {
+            throw new RuntimeException("分片过小；请直接用单次上传");
+        }
+        FileInfoCacheByMd5DTO cache = fileCacheService.getFileInfoByMd5(md5);
+        MultipartUploadInfo dto = new MultipartUploadInfo();
+        if (cache == null) {
+
+            Map<String, List<String>> mimeAllow = fileConfig.toMimeAllowMap();
+            List<String> exts = mimeAllow.get(contentType);
+            String ext = getFileExtension(fileName);
+
+            if (exts == null || exts.isEmpty() || !exts.contains(ext.toLowerCase())) {
+                throw new RuntimeException("文件类型不被允许：" + contentType + " / " + ext);
+            }
+
+            String dateFolder = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String fileKey = dateFolder + "/" + UUID.randomUUID().toString().replace("-", "") + "." + ext;
+
+            MultipartUploadInfo postPolicy = cloudFileStorageService.getMultipartUploadInfo(fileKey, FileStorageConstant.FILE_FRAGMENT_SIZE, fileSize,
+                    FileStorageConstant.POST_POLICY_MULTIPART_EXPIRE, uploadId, isPublic);
+            postPolicy.setExist(false);
+            String uploadKey = REDIS_PREFIX + ":" + (isPublic ? PUBLIC_UPLOAD_KEY : PRIVATE_UPLOAD_KEY)
+                    .replace("{token}", token).replace("{uploadId}", postPolicy.getUploadId());
+
+            Map<String, String> map = new HashMap<>();
+            map.put("fileKey", fileKey);
+            map.put("contentType", contentType);
+            map.put("md5", md5);
+            map.put("fileSize", String.valueOf(fileSize));
+            redisService.hSetAll(uploadKey, map, FileStorageConstant.POST_POLICY_EXPIRE + 30);
+            return postPolicy;
+        } else {
+            BeanUtils.copyProperties(cache, dto);
+            dto.setExist(true);
+            return dto;
+        }
     }
 
     public FileInfoDTO completeMultipart(String token, String uploadId, boolean isPublic) {
-        return null;
-    }
+        String uploadKey = REDIS_PREFIX + ":" + (isPublic ? PUBLIC_UPLOAD_KEY : PRIVATE_UPLOAD_KEY)
+                .replace("{token}", token).replace("{uploadId}", uploadId);
+        if (!redisService.hasKey(uploadKey)) throw new RuntimeException("uploadId已过期");
 
-    @SneakyThrows
-    private void validateFile(MultipartFile file, String expectedMd5) {
-        String mime = file.getContentType();
-        String ext = getFileExtension(file.getOriginalFilename());
+        // 拿到上传信息
+        Map<Object, Object> cacheMap = redisService.hGetAll(uploadKey);
+        String md5 = cacheMap.getOrDefault("md5", "").toString();
+        String contentType = cacheMap.getOrDefault("contentType", "").toString();
+        String fileKey = cacheMap.getOrDefault("fileKey", "").toString();
+        long fileSize = Long.parseLong(cacheMap.getOrDefault("fileSize", "").toString());
+        redisService.del(uploadKey);
 
-        // MIME + 扩展名校验
-        if (!StringUtils.hasText(mime) || !StringUtils.hasText(ext)) {
-            throw new RuntimeException("无法识别文件类型");
-        }
-        Map<String, List<String>> mimeAllow = fileConfig.toMimeAllowMap();
-        List<String> allowedExts = mimeAllow.get(mime);
-        if (allowedExts == null || !allowedExts.contains(ext)) {
-            throw new RuntimeException("文件类型与扩展名不匹配或不被允许：" + mime + "----后缀：" + ext);
-        }
-
-        // MD5 校验
-        try (InputStream in = file.getInputStream()) {
-            String fileMd5 = DigestUtils.md5DigestAsHex(in);
-            if (!expectedMd5.equals(fileMd5)) {
-                throw new RuntimeException("文件在上传过程中受损");
-            }
-        }
+        // 合并
+        return cloudFileStorageService.mergeMultipartUpload(uploadId, fileKey, md5, fileSize, contentType, isPublic);
     }
 
 
@@ -173,4 +198,5 @@ public class MinioFileService {
 
         return filename.substring(dotIndex + 1).toLowerCase();
     }
+
 }

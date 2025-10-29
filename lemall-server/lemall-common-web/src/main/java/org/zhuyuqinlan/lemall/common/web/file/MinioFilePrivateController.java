@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.dto.ext.FileInfoExistDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.service.biz.MinioFileService;
 import org.zhuyuqinlan.lemall.common.response.Result;
@@ -38,9 +37,10 @@ public class MinioFilePrivateController {
                                                  @RequestParam String accessCode,
                                                  @RequestParam String md5,
                                                  @RequestParam String contentType,
-                                                 @RequestParam String uploadId) {
+                                                 @RequestParam String fileName,
+                                                 @RequestParam(required = false) String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, uploadId,false));
+        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, fileName,uploadId,false));
     }
 
     @PostMapping("/complete")
@@ -54,9 +54,13 @@ public class MinioFilePrivateController {
     @Operation(summary = "上传凭证(分片)")
     public Result<MultipartUploadInfo> multipartUploadInfoResult(HttpServletRequest request,
                                                                  @RequestParam String accessCode,
-                                                                 @RequestParam String md5) {
+                                                                 @RequestParam String md5,
+                                                                 @RequestParam String contentType,
+                                                                 @RequestParam String fileName,
+                                                                 @RequestParam long fileSize,
+                                                                 @RequestParam(required = false) String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.multipartUploadInfoResult(token, accessCode, md5, false));
+        return Result.success(minioFileService.multipartUploadInfoResult(token, accessCode, uploadId,md5, contentType,fileName,fileSize,false));
     }
 
     @PostMapping("/complete-multipart")

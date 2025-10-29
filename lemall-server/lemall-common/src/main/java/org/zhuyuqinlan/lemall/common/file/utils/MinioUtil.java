@@ -132,6 +132,7 @@ public class MinioUtil {
         List<Map<String, Object>> partsList = new ArrayList<>();
         Map<String, String> reqParams = new HashMap<>();
         reqParams.put("uploadId", uploadId);
+        multipartUploadInfo.setUploadId(uploadId);
 
         String presignedUrl = customMinioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()

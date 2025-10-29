@@ -25,4 +25,10 @@ public interface FileStorageConstant {
 
     // minio分片上传临时令牌过期时间（秒）
     int POST_POLICY_MULTIPART_EXPIRE = 10800;
+
+    // 分片大小(字节)
+    long FILE_FRAGMENT_SIZE = 5242880; // 5MB
+
+    // 分片上传最小文件
+    long MINIMUM_THRESHOLD_FOR_FILE_FRAGMENTATION = 52428800; // 50 MB
 }

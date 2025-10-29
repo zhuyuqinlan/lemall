@@ -1,10 +1,7 @@
 package org.zhuyuqinlan.lemall.common.file.service.storage.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioAsyncClient;
-import io.minio.SetBucketPolicyArgs;
+import io.minio.*;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -184,12 +181,42 @@ public class MinioStorageService implements CloudFileStorageService {
     public MultipartUploadInfo getPostPolicy(String fileKey, int expireSeconds, String uploadId, boolean isPublic) {
         String bucket = isPublic ? bucketPublic : bucketPrivate;
         CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
-        return MinioUtil.getPostPolicy(client, bucket, fileKey, uploadId, expireSeconds);
+        return MinioUtil.getPostPolicy(client, bucket, uploadId, fileKey, expireSeconds);
     }
 
     @Override
-    public FileInfoDTO complete(String fileKey, String contentType, String md5, long size, boolean isPublic) {
-        return null;
+    @SneakyThrows
+    public FileInfoDTO complete(String fileKey, String contentType, String md5, boolean isPublic) {
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        CustomMinioClient client = isPublic ? minioClientPublicIn : minioClientPrivateIn;
+
+        // 读取minio中文件信息
+        StatObjectResponse statObjectResponse = MinioUtil.stateObject(client, bucket, fileKey);
+        long size = statObjectResponse.size();
+        String contentTypeMinio = statObjectResponse.contentType();
+        String md5Minio = statObjectResponse.etag();
+
+        // 校验文件contentType和md5是否一致
+        if (!contentType.equals(contentTypeMinio) || !md5.equals(md5Minio)) {
+            throw new RuntimeException("文件MIME类型不一致或文件上传过程中损坏!");
+        }
+
+        // 入库
+        FsFileStorage fsFileStorage = new FsFileStorage();
+        fsFileStorage.setBucket(bucket);
+        fsFileStorage.setFileKey(fileKey);
+        fsFileStorage.setStorageType(FileStorageConstant.MINIO_TYPE);
+        fsFileStorage.setSize(size);
+        fsFileStorage.setContentType(contentTypeMinio);
+        fsFileStorage.setMd5(md5Minio);
+        fsFileStorage.setUri(bucket + "/" + fileKey);
+        fsFileStorage.setFileKey(fileKey);
+        fileStorageMapper.insert(fsFileStorage);
+
+        FileInfoDTO fileInfoDTO = new FileInfoDTO();
+        BeanUtils.copyProperties(fsFileStorage, fileInfoDTO);
+        fileInfoDTO.setUrl(getFileUrl(fileKey, isPublic));
+        return fileInfoDTO;
     }
 
     @Override
@@ -207,6 +234,15 @@ public class MinioStorageService implements CloudFileStorageService {
         CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
         MinioUtil.mergeMultipartUpload(client, bucket, fileKey, uploadId);
 
+        // 读取minio中文件信息
+        StatObjectResponse statObjectResponse = MinioUtil.stateObject(client, bucket, fileKey);
+        String contentTypeMinio = statObjectResponse.contentType();
+        String md5Minio = statObjectResponse.etag();
+
+        // 校验文件contentType和md5是否一致
+        if (!contentType.equals(contentTypeMinio) || !md5.equals(md5Minio)) {
+            throw new RuntimeException("文件MIME类型不一致或文件上传过程中损坏!");
+        }
 
         FsFileStorage fsFileStorage = new FsFileStorage();
         fsFileStorage.setBucket(bucket);

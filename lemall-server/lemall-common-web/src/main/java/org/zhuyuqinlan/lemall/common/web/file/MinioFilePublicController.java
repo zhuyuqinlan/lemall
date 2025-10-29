@@ -37,9 +37,10 @@ public class MinioFilePublicController {
                                                  @RequestParam String accessCode,
                                                  @RequestParam String md5,
                                                  @RequestParam String contentType,
-                                                 @RequestParam String uploadId) {
+                                                 @RequestParam String fileName,
+                                                 @RequestParam(required = false) String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, uploadId,true));
+        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, fileName, uploadId, true));
     }
 
     @PostMapping("/complete")
@@ -53,9 +54,13 @@ public class MinioFilePublicController {
     @Operation(summary = "上传凭证(分片)")
     public Result<MultipartUploadInfo> multipartUploadInfoResult(HttpServletRequest request,
                                                                  @RequestParam String accessCode,
-                                                                 @RequestParam String md5) {
+                                                                 @RequestParam String md5,
+                                                                 @RequestParam String contentType,
+                                                                 @RequestParam String fileName,
+                                                                 @RequestParam long fileSize,
+                                                                 @RequestParam(required = false) String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.multipartUploadInfoResult(token, accessCode, md5, true));
+        return Result.success(minioFileService.multipartUploadInfoResult(token, accessCode, uploadId,md5, contentType,fileName,fileSize,true));
     }
 
     @PostMapping("/complete-multipart")
