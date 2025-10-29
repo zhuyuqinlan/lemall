@@ -34,11 +34,13 @@ public class MinioFilePrivateController {
 
     @PostMapping("/upload-url")
     @Operation(summary = "上传凭证(单文件)")
-    public Result<FileInfoExistDTO> uploadUrl(HttpServletRequest request,
-                                              @RequestParam String accessCode,
-                                              @RequestParam String md5) {
+    public Result<MultipartUploadInfo> uploadUrl(HttpServletRequest request,
+                                                 @RequestParam String accessCode,
+                                                 @RequestParam String md5,
+                                                 @RequestParam String contentType,
+                                                 @RequestParam String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, false));
+        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, uploadId,false));
     }
 
     @PostMapping("/complete")

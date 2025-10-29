@@ -98,16 +98,16 @@ public class LocalFileService {
         FileInfoCacheByMd5DTO cache = fileCacheService.getFileInfoByMd5(md5);
         FileInfoExistDTO dto = new FileInfoExistDTO();
         if (cache == null) {
-            String uploadCode = UUID.randomUUID().toString().replace("-", "");
+            String uploadId = UUID.randomUUID().toString().replace("-", "");
             redisService.set(
                     REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                             .replace("{token}", token)
-                            .replace("{uploadCode}", uploadCode),
+                            .replace("{uploadId}", uploadId),
                     md5,
                     FileStorageConstant.LOCAL_UPLOAD_EXPIRE
             );
             dto.setExist(false);
-            dto.setUploadCode(uploadCode);
+            dto.setUploadId(uploadId);
         } else {
             BeanUtils.copyProperties(cache, dto);
             dto.setExist(true);
@@ -122,13 +122,13 @@ public class LocalFileService {
         String md5 = redisService.get(
                 REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                         .replace("{token}", token)
-                        .replace("{uploadCode}", uploadId)
+                        .replace("{uploadId}", uploadId)
         );
-        if (!StringUtils.hasText(md5)) throw new RuntimeException("uploadCode已过期");
+        if (!StringUtils.hasText(md5)) throw new RuntimeException("uploadId已过期");
         redisService.del(
                 REDIS_PREFIX + ":" + REDIS_KEY_PREUPLOAD_LOCAL
                         .replace("{token}", token)
-                        .replace("{uploadCode}", uploadId)
+                        .replace("{uploadId}", uploadId)
         );
 
         // ---------- 3.2 验证文件类型 + MD5 ----------

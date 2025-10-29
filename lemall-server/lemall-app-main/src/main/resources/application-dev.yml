@@ -15,8 +15,8 @@ spring:
 minio:
   endpoint: http://zhuyuqinlan.io:9000 #MinIO服务所在地址(局域网)
   publicEndpoint: http://zhuyuqinlan.io:9000 # 前端直传和回显时使用(公网)开发环境都用局域网
-  accessKey: wud5C5TvSdXzVTUk51Mh #访问的key
-  secretKey: dvkNmUKGYRBBKXFXKR7RJHLCbz1v81kp0O0ciEkF #访问的秘钥
+  accessKey: JDzR1fXQk4VeM4ZTCetZ #访问的key
+  secretKey: Va8KFYmQoM2G8wfRPhoUTLm2iMb5H4MYrX2Vdc1b #访问的秘钥
 localFile:
   base-path: D:/upload/lemall # 文件上传目录
   local-download-prefix: /file-dev/local-download # 开发环境使用本地上传，文件访问url的前缀

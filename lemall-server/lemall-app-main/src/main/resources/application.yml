@@ -71,12 +71,12 @@ redis:
         cache: fs:info:md5:{md5}       # MD5 -> 文件信息
         lock: fs:info:lock:md5:{md5}      #  防击穿
       preUpload:
-        local: fs:preUpload:local:{token}:{uploadCode} # local文件上传凭证
+        local: fs:preUpload:local:{token}:{uploadId} # local文件上传凭证
         minio:
           public:
-            fs:preupload:minio:public:{token}:{uploadCode} # minio上传凭证
+            fs:preupload:minio:public:{token}:{uploadId} # minio上传凭证
           private:
-            fs:preupload:minio:private:{token}:{uploadCode} # minio上传凭证
+            fs:preupload:minio:private:{token}:{uploadId} # minio上传凭证
 
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

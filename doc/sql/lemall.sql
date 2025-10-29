@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : nanguo.io_3306
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80043
- Source Host           : zhuyuqinlan.io:3306
+ Source Server Version : 80044
+ Source Host           : localhost:3306
  Source Schema         : lemall
 
  Target Server Type    : MySQL
- Target Server Version : 80043
+ Target Server Version : 80044
  File Encoding         : 65001
 
- Date: 19/09/2025 12:20:02
+ Date: 29/10/2025 17:54:15
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `cms_help`  (
   `read_count` int NULL DEFAULT NULL,
   `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '帮助表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '帮助表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_help
@@ -49,7 +49,7 @@ CREATE TABLE `cms_help_category`  (
   `show_status` int NULL DEFAULT NULL,
   `sort` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '帮助分类表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '帮助分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_help_category
@@ -166,7 +166,7 @@ CREATE TABLE `cms_subject_comment`  (
   `create_time` datetime NULL DEFAULT NULL,
   `show_status` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '专题评论表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '专题评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_subject_comment
@@ -205,7 +205,7 @@ CREATE TABLE `cms_topic`  (
   `attend_type` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '参与方式',
   `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '话题内容',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '话题表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '话题表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_topic
@@ -223,7 +223,7 @@ CREATE TABLE `cms_topic_category`  (
   `show_status` int NULL DEFAULT NULL,
   `sort` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '话题分类表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '话题分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_topic_category
@@ -242,11 +242,37 @@ CREATE TABLE `cms_topic_comment`  (
   `create_time` datetime NULL DEFAULT NULL,
   `show_status` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '专题评论表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '专题评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cms_topic_comment
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for fs_file_storage
+-- ----------------------------
+DROP TABLE IF EXISTS `fs_file_storage`;
+CREATE TABLE `fs_file_storage`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文件ID，主键',
+  `storage_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '存储类型：MINIO, LOCAL, OSS等',
+  `bucket` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '存储桶名称，可选，针对对象存储',
+  `uri` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文件路径/对象名',
+  `file_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文件key',
+  `size` bigint UNSIGNED NOT NULL COMMENT '文件大小，单位字节',
+  `content_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'MIME类型，如 image/png, application/pdf',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `md5` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文件MD5，用于去重和完整性校验',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `idx_md5`(`md5` ASC) USING BTREE,
+  INDEX `idx_storage_type`(`storage_type` ASC) USING BTREE,
+  INDEX `idx_create_time`(`create_time` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1982782933978583042 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '统一文件存储表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of fs_file_storage
+-- ----------------------------
+INSERT INTO `fs_file_storage` VALUES (1982782933978583041, 'local', NULL, '20251027/70adb8ac-cf10-409d-8da2-0f5a98dd023e.jpg', '20251027/70adb8ac-cf10-409d-8da2-0f5a98dd023e.jpg', 59533, 'image/jpeg', '2025-10-27 20:14:24', '2025-10-27 20:14:24', 'ff363eda63cf8b6f61baf3cb9dac582a');
 
 -- ----------------------------
 -- Table structure for oms_cart_item
@@ -493,7 +519,7 @@ CREATE TABLE `pms_album`  (
   `sort` int NULL DEFAULT NULL,
   `description` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '相册表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '相册表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_album
@@ -508,7 +534,7 @@ CREATE TABLE `pms_album_pic`  (
   `album_id` bigint NULL DEFAULT NULL,
   `pic` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '画册图片表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '画册图片表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_album_pic
@@ -558,7 +584,7 @@ CREATE TABLE `pms_comment`  (
   `member_icon` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '评论用户头像',
   `replay_count` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '商品评价表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '商品评价表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_comment
@@ -577,7 +603,7 @@ CREATE TABLE `pms_comment_replay`  (
   `create_time` datetime NULL DEFAULT NULL,
   `type` int NULL DEFAULT NULL COMMENT '评论人员类型；0->会员；1->管理员',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '产品评价回复表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '产品评价回复表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_comment_replay
@@ -597,7 +623,7 @@ CREATE TABLE `pms_feight_template`  (
   `continme_fee` decimal(10, 2) NULL DEFAULT NULL,
   `dest` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '目的地（省、市）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '运费模版' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '运费模版' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_feight_template
@@ -820,7 +846,7 @@ CREATE TABLE `pms_product_operate_log`  (
   `operate_man` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '操作人',
   `create_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_product_operate_log
@@ -987,7 +1013,7 @@ CREATE TABLE `sms_flash_promotion_log`  (
   `subscribe_time` datetime NULL DEFAULT NULL COMMENT '会员订阅时间',
   `send_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '限时购通知记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '限时购通知记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sms_flash_promotion_log
@@ -1131,7 +1157,7 @@ CREATE TABLE `ums_admin`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   `password` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `icon` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '头像',
+  `avatar_file_id` bigint NULL DEFAULT NULL COMMENT '头像文件id',
   `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '邮箱',
   `nick_name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '昵称',
   `note` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '备注信息',
@@ -1139,12 +1165,12 @@ CREATE TABLE `ums_admin`  (
   `login_time` datetime NULL DEFAULT NULL COMMENT '最后登录时间',
   `status` int NULL DEFAULT 1 COMMENT '帐号启用状态：0->禁用；1->启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1958437596929527810 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1958437596929527811 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_admin
 -- ----------------------------
-INSERT INTO `ums_admin` VALUES (1958437596929527809, 'admin', '$2a$10$GbCgIaSHVwuPySc1Inla3.yxF/IVpErCfT5j0o4jm2eHkaUsh.AMW', 'https://nanguo-zz.oss-cn-chengdu.aliyuncs.com/img/89e2e48b-4b4a-42a8-a4da-7f895ec6af4e.jpg', '2910694449@qq.com', '超级管理员', '拥有本系统最高权限', '2025-09-19 10:31:44', '2025-09-19 12:18:15', 1);
+INSERT INTO `ums_admin` VALUES (1958437596929527810, 'admin', '$2a$10$6DLfSkTw5LZl7aLlBVB6TOtYdg.xo6gqs3af5rRv/0gJ12EcPlRja', 1982782933978583041, '2910694449@qq.com', '超级管理员', '拥有系统最高权限', '2025-10-24 16:46:30', '2025-10-29 16:04:45', 1);
 
 -- ----------------------------
 -- Table structure for ums_admin_login_log
@@ -1158,7 +1184,7 @@ CREATE TABLE `ums_admin_login_log`  (
   `address` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   `user_agent` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '浏览器登录类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1968892367381393411 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户登录日志表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1983444882194137091 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户登录日志表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_admin_login_log
@@ -1172,6 +1198,42 @@ INSERT INTO `ums_admin_login_log` VALUES (1968868047137558529, 19584375969295278
 INSERT INTO `ums_admin_login_log` VALUES (1968869042194239489, 1958437596929527809, '2025-09-19 10:45:34', '127.0.0.1', NULL, NULL);
 INSERT INTO `ums_admin_login_log` VALUES (1968871541093453825, 1958437596929527809, '2025-09-19 10:55:30', '127.0.0.1', NULL, NULL);
 INSERT INTO `ums_admin_login_log` VALUES (1968892367381393410, 1958437596929527809, '2025-09-19 12:18:15', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1979543738212532226, 1958437596929527809, '2025-10-18 21:43:00', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1979544821743751170, 1958437596929527809, '2025-10-18 21:47:18', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981291379029786625, 1958437596929527809, '2025-10-23 17:27:30', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981291398583631873, 1958437596929527809, '2025-10-23 17:27:35', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981291501570572290, 1958437596929527809, '2025-10-23 17:27:59', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981293640896299010, 1958437596929527809, '2025-10-23 17:36:29', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981295056025108482, 1958437596929527809, '2025-10-23 17:42:07', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981296038670843905, 1958437596929527809, '2025-10-23 17:46:01', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981296161421344770, 1958437596929527809, '2025-10-23 17:46:30', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981296247148724225, 1958437596929527809, '2025-10-23 17:46:51', '192.168.1.104', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981334587306754049, 1958437596929527809, '2025-10-23 20:19:12', '10.6.22.3', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981334817787953154, 1958437596929527809, '2025-10-23 20:20:07', '10.6.22.3', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981346824415166465, 1958437596929527809, '2025-10-23 21:07:49', '10.6.22.3', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981376150085099521, 1958437596929527809, '2025-10-23 23:04:21', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981377252734115841, 1958437596929527809, '2025-10-23 23:08:44', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981377754494509058, 1958437596929527809, '2025-10-23 23:10:44', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981378038901780482, 1958437596929527809, '2025-10-23 23:11:51', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981948835747917825, 1958437596929527810, '2025-10-25 13:00:00', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981949320122920962, 1958437596929527810, '2025-10-25 13:01:55', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981950057322119170, 1958437596929527810, '2025-10-25 13:04:51', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981950244534878209, 1958437596929527810, '2025-10-25 13:05:36', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1981952543281905665, 1958437596929527810, '2025-10-25 13:14:44', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982015927838916609, 1958437596929527810, '2025-10-25 17:26:36', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982040954000961537, 1958437596929527810, '2025-10-25 19:06:03', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982075310350331905, 1958437596929527810, '2025-10-25 21:22:34', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982418616271835138, 1958437596929527810, '2025-10-26 20:06:44', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982429483805773826, 1958437596929527810, '2025-10-26 20:49:55', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982431472996388866, 1958437596929527810, '2025-10-26 20:57:50', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982438163250987010, 1958437596929527810, '2025-10-26 21:24:25', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982620857498849282, 1958437596929527810, '2025-10-27 09:30:22', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982675875316871169, 1958437596929527810, '2025-10-27 13:09:00', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1982782740973490177, 1958437596929527810, '2025-10-27 20:13:38', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1983444181359493121, 1958437596929527810, '2025-10-29 16:01:58', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1983444585380020225, 1958437596929527810, '2025-10-29 16:03:34', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1983444800346488834, 1958437596929527810, '2025-10-29 16:04:26', '0:0:0:0:0:0:0:1', NULL, NULL);
+INSERT INTO `ums_admin_login_log` VALUES (1983444882194137090, 1958437596929527810, '2025-10-29 16:04:45', '0:0:0:0:0:0:0:1', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for ums_admin_permission_relation
@@ -1203,7 +1265,7 @@ CREATE TABLE `ums_admin_role_relation`  (
 -- ----------------------------
 -- Records of ums_admin_role_relation
 -- ----------------------------
-INSERT INTO `ums_admin_role_relation` VALUES (1958437596925999809, 1958437596929527809, 1958437596925627809);
+INSERT INTO `ums_admin_role_relation` VALUES (1958437596925999809, 1958437596929527810, 1958437596925627809);
 
 -- ----------------------------
 -- Table structure for ums_growth_change_history
@@ -1239,7 +1301,7 @@ CREATE TABLE `ums_integration_change_history`  (
   `operate_note` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '操作备注',
   `source_type` int NULL DEFAULT NULL COMMENT '积分来源：0->购物；1->管理员修改',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '积分变化历史记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '积分变化历史记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_integration_change_history
@@ -1289,11 +1351,12 @@ CREATE TABLE `ums_member`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_username`(`username` ASC) USING BTREE,
   UNIQUE INDEX `idx_phone`(`email` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1968965552386826242 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member
 -- ----------------------------
+INSERT INTO `ums_member` VALUES (1968965552386826241, 1958437596977775809, 'zhuyuqinlan', '$2a$10$9tT/1Bw02gmeB9gCNBY7GuScAQ1PsSLkM1vIZJR4WH6/VHIz1mOc6', NULL, '2910694449@qq.com', 1, '2025-09-19 17:09:04', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for ums_member_level
@@ -1314,11 +1377,12 @@ CREATE TABLE `ums_member_level`  (
   `priviledge_birthday` int NULL DEFAULT NULL COMMENT '是否有生日特权',
   `note` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员等级表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1958437596977775810 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员等级表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_level
 -- ----------------------------
+INSERT INTO `ums_member_level` VALUES (1958437596977775809, '普通会员', 1, 1, 199.00, 20, 1, 1, 1, 1, 0, 0, NULL);
 
 -- ----------------------------
 -- Table structure for ums_member_login_log
@@ -1333,7 +1397,7 @@ CREATE TABLE `ums_member_login_log`  (
   `login_type` int NULL DEFAULT NULL COMMENT '登录类型：0->PC；1->android;2->ios;3->小程序',
   `province` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员登录记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员登录记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_login_log
@@ -1348,7 +1412,7 @@ CREATE TABLE `ums_member_member_tag_relation`  (
   `member_id` bigint NULL DEFAULT NULL,
   `tag_id` bigint NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户和标签关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户和标签关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_member_tag_relation
@@ -1363,7 +1427,7 @@ CREATE TABLE `ums_member_product_category_relation`  (
   `member_id` bigint NULL DEFAULT NULL,
   `product_category_id` bigint NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员与产品分类关系表（用户喜欢的分类）' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员与产品分类关系表（用户喜欢的分类）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_product_category_relation
@@ -1404,7 +1468,7 @@ CREATE TABLE `ums_member_rule_setting`  (
   `max_point_per_order` int NULL DEFAULT NULL COMMENT '每笔订单最高获取点数',
   `type` int NULL DEFAULT NULL COMMENT '类型：0->积分规则；1->成长值规则',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员积分成长规则表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员积分成长规则表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_rule_setting
@@ -1432,7 +1496,7 @@ CREATE TABLE `ums_member_statistics_info`  (
   `invite_friend_count` int NULL DEFAULT NULL,
   `recent_order_time` datetime NULL DEFAULT NULL COMMENT '最后一次下订单时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员统计信息' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员统计信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_statistics_info
@@ -1448,7 +1512,7 @@ CREATE TABLE `ums_member_tag`  (
   `finish_order_count` int NULL DEFAULT NULL COMMENT '自动打标签完成订单数量',
   `finish_order_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '自动打标签完成订单金额',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户标签表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户标签表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_tag
@@ -1465,7 +1529,7 @@ CREATE TABLE `ums_member_task`  (
   `intergration` int NULL DEFAULT NULL COMMENT '赠送积分',
   `type` int NULL DEFAULT NULL COMMENT '任务类型：0->新手任务；1->日常任务',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员任务表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '会员任务表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_member_task
@@ -1486,7 +1550,7 @@ CREATE TABLE `ums_menu`  (
   `icon` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '前端图标',
   `hidden` int NULL DEFAULT NULL COMMENT '前端隐藏',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1968870412267835394 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台菜单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981346589546725378 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台菜单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_menu
@@ -1496,6 +1560,12 @@ INSERT INTO `ums_menu` VALUES (1968870154699821058, 1968869724410368002, '2025-0
 INSERT INTO `ums_menu` VALUES (1968870242587267073, 1968869724410368002, '2025-09-19 10:50:20', '角色列表', 1, 0, 'role', 'ums-role', 0);
 INSERT INTO `ums_menu` VALUES (1968870335054893057, 1968869724410368002, '2025-09-19 10:50:42', '菜单列表', 1, 0, 'menu', 'ums-menu', 0);
 INSERT INTO `ums_menu` VALUES (1968870412267835393, 1968869724410368002, '2025-09-19 10:51:01', '资源列表', 1, 0, 'resource', 'ums-resource', 0);
+INSERT INTO `ums_menu` VALUES (1981344010276257794, 0, '2025-10-23 20:56:38', '商品', 0, 0, 'pms', 'product', 0);
+INSERT INTO `ums_menu` VALUES (1981344178803392513, 1981344010276257794, '2025-10-23 20:57:18', '商品列表', 1, 0, 'product', 'product-list', 0);
+INSERT INTO `ums_menu` VALUES (1981345637284528129, 1981344010276257794, '2025-10-23 21:03:06', '添加商品', 1, 0, 'addProduct', 'product-add', 0);
+INSERT INTO `ums_menu` VALUES (1981345744776151042, 1981345744776151042, '2025-10-23 21:03:32', '商品分类', 1, 0, 'productCate', 'product-cate', 0);
+INSERT INTO `ums_menu` VALUES (1981346024938881026, 1981344010276257794, '2025-10-23 21:04:39', '商品类型', 1, 0, 'productAttr', 'product-attr', 0);
+INSERT INTO `ums_menu` VALUES (1981346589546725377, 1981344010276257794, '2025-10-23 21:06:53', '品牌管理', 1, 0, 'brand', 'product-brand', 0);
 
 -- ----------------------------
 -- Table structure for ums_permission
@@ -1531,11 +1601,18 @@ CREATE TABLE `ums_resource`  (
   `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '描述',
   `category_id` bigint NULL DEFAULT NULL COMMENT '资源分类ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台资源表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981367857013682179 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台资源表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_resource
 -- ----------------------------
+INSERT INTO `ums_resource` VALUES (1981365568202960898, '2025-10-23 22:22:18', '用户登出', '/admin/logout', '登出，必备', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367141935181825, '2025-10-23 22:28:33', '获取登录用户信息', '/admin/info', '获取当前会话，必备', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367631704059905, '2025-10-23 22:30:30', '后台用户管理', '/admin/**', '', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367714549952514, '2025-10-23 22:30:50', '后台用户角色管理', '/role/**', '', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367764034351105, '2025-10-23 22:31:02', '后台菜单管理', '/menu/**', '', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367807504117761, '2025-10-23 22:31:12', '后台资源分类管理', '/resourceCategory/**', '', 1981365404365058050);
+INSERT INTO `ums_resource` VALUES (1981367857013682178, '2025-10-23 22:31:24', '后台资源管理', '/resource/**', '', 1981365404365058050);
 
 -- ----------------------------
 -- Table structure for ums_resource_category
@@ -1547,11 +1624,12 @@ CREATE TABLE `ums_resource_category`  (
   `name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '分类名称',
   `sort` int NULL DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源分类表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981365404365058051 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '资源分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_resource_category
 -- ----------------------------
+INSERT INTO `ums_resource_category` VALUES (1981365404365058050, '2025-10-23 22:21:39', '权限模块', 0);
 
 -- ----------------------------
 -- Table structure for ums_role
@@ -1560,18 +1638,20 @@ DROP TABLE IF EXISTS `ums_role`;
 CREATE TABLE `ums_role`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '名称',
+  `value` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '权限校验标识符',
   `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '描述',
   `admin_count` int NULL DEFAULT NULL COMMENT '后台用户数量',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `status` int NULL DEFAULT 1 COMMENT '启用状态：0->禁用；1->启用',
-  `sort` int NULL DEFAULT 0,
+  `sort` int NULL DEFAULT 0 COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1958437596925627810 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981378964534341634 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台用户角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_role
 -- ----------------------------
-INSERT INTO `ums_role` VALUES (1958437596925627809, '超级管理员', '超级管理员', 1, '2025-09-19 10:39:16', 1, 0);
+INSERT INTO `ums_role` VALUES (1958437596925627809, '超级管理员', 'sa', '超级管理员', 1, '2025-09-19 10:39:16', 1, 0);
+INSERT INTO `ums_role` VALUES (1981378964534341633, '商品管理员', 'pms', '负责处理商品业务', 0, '2025-10-23 23:15:32', 1, 0);
 
 -- ----------------------------
 -- Table structure for ums_role_menu_relation
@@ -1582,16 +1662,22 @@ CREATE TABLE `ums_role_menu_relation`  (
   `role_id` bigint NULL DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint NULL DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1968871188239241223 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台角色菜单关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981346779829714951 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台角色菜单关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_role_menu_relation
 -- ----------------------------
-INSERT INTO `ums_role_menu_relation` VALUES (1968871188239241218, 1958437596925627809, 1968869724410368002);
-INSERT INTO `ums_role_menu_relation` VALUES (1968871188239241219, 1958437596925627809, 1968870154699821058);
-INSERT INTO `ums_role_menu_relation` VALUES (1968871188239241220, 1958437596925627809, 1968870242587267073);
-INSERT INTO `ums_role_menu_relation` VALUES (1968871188239241221, 1958437596925627809, 1968870335054893057);
-INSERT INTO `ums_role_menu_relation` VALUES (1968871188239241222, 1958437596925627809, 1968870412267835393);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779800354817, 1958437596925627809, 1981344010276257794);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779821326338, 1958437596925627809, 0);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779825520641, 1958437596925627809, 1981346589546725377);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779825520642, 1958437596925627809, 1981346024938881026);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779825520643, 1958437596925627809, 1981345637284528129);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779825520644, 1958437596925627809, 1981344178803392513);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779829714946, 1958437596925627809, 1968869724410368002);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779829714947, 1958437596925627809, 1968870412267835393);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779829714948, 1958437596925627809, 1968870335054893057);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779829714949, 1958437596925627809, 1968870242587267073);
+INSERT INTO `ums_role_menu_relation` VALUES (1981346779829714950, 1958437596925627809, 1968870154699821058);
 
 -- ----------------------------
 -- Table structure for ums_role_permission_relation
@@ -1617,10 +1703,17 @@ CREATE TABLE `ums_role_resource_relation`  (
   `role_id` bigint NULL DEFAULT NULL COMMENT '角色ID',
   `resource_id` bigint NULL DEFAULT NULL COMMENT '资源ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 249 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台角色资源关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1981367971258134530 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '后台角色资源关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ums_role_resource_relation
 -- ----------------------------
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971211997186, 1958437596925627809, 1981365568202960898);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971241357313, 1958437596925627809, 1981367141935181825);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971245551617, 1958437596925627809, 1981367631704059905);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971249745921, 1958437596925627809, 1981367714549952514);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971249745922, 1958437596925627809, 1981367764034351105);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971253940225, 1958437596925627809, 1981367807504117761);
+INSERT INTO `ums_role_resource_relation` VALUES (1981367971258134529, 1958437596925627809, 1981367857013682178);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -9,7 +9,7 @@ import io.minio.messages.Part;
 import org.springframework.util.StringUtils;
 import org.zhuyuqinlan.lemall.common.file.bean.CustomMinioClient;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
-import org.zhuyuqinlan.lemall.common.file.dto.PostPolicyDTO;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -90,6 +90,7 @@ public class MinioUtil {
 
     /**
      * 删除文件
+     *
      * @param customMinioClient 自定义 MinIO 客户端
      * @param bucket            存储桶名称
      * @param fileKey           文件对象名
@@ -108,40 +109,47 @@ public class MinioUtil {
      *
      * @param customMinioClient 自定义 MinIO 客户端
      * @param bucket            存储桶名称
+     * @param uploadId          上传id
      * @param fileKey           文件对象名
      * @param expireSeconds     策略过期时间（秒）
      * @return PostPolicyDTO    封装了上传 URL、表单数据和过期时间
      */
-    public static PostPolicyDTO getPostPolicy(CustomMinioClient customMinioClient,
-                                              String bucket,
-                                              String fileKey,
-                                              int expireSeconds) throws Exception {
-        // 构建策略
-        PostPolicy policy = new PostPolicy(bucket, ZonedDateTime.now().plusSeconds(expireSeconds));
-        policy.addEqualsCondition("key", fileKey);
+    public static MultipartUploadInfo getPostPolicy(CustomMinioClient customMinioClient,
+                                                    String bucket,
+                                                    String uploadId,
+                                                    String fileKey,
+                                                    int expireSeconds) throws Exception {
+        // 计算总分片数
+        MultipartUploadInfo multipartUploadInfo = new MultipartUploadInfo();
+        multipartUploadInfo.setPartCount(1);
 
-        // 获取表单数据，用于前端直接上传
-        Map<String, String> formData = customMinioClient.getPresignedPostFormData(policy);
+        // 如果没有 uploadId，则初始化分片上传
+        if (!StringUtils.hasText(uploadId)) {
+            uploadId = customMinioClient.initMultiPartUpload(bucket, null, fileKey, null, null);
+        }
 
-        // 生成预签名 PUT URL
-        String endpoint = customMinioClient.getPresignedObjectUrl(
+        // 生成每个分片的预签名 URL
+        List<Map<String, Object>> partsList = new ArrayList<>();
+        Map<String, String> reqParams = new HashMap<>();
+        reqParams.put("uploadId", uploadId);
+
+        String presignedUrl = customMinioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.PUT)
                         .bucket(bucket)
                         .object(fileKey)
+                        .expiry(expireSeconds)
+                        .extraQueryParams(reqParams) // 上传分片需要携带 uploadId
                         .build()
         );
 
-        // 去掉路径，只保留域名 + 端口
-        endpoint = endpoint.replaceAll("/" + bucket + "/" + fileKey + ".*$", "");
+        Map<String, Object> partInfo = new HashMap<>();
+        partInfo.put("partNumber", 1);
+        partInfo.put("url", presignedUrl);
+        partsList.add(partInfo);
 
-        // 封装 DTO 返回
-        return new PostPolicyDTO(
-                endpoint + "/" + bucket,
-                formData,
-                System.currentTimeMillis() / 1000 + expireSeconds,
-                fileKey
-        );
+        multipartUploadInfo.setParts(partsList);
+        return multipartUploadInfo;
     }
 
     // 默认6小时有效期
@@ -151,10 +159,11 @@ public class MinioUtil {
 
     /**
      * 获取临时访问url
+     *
      * @param customMinioClient 自定义 MinIO 客户端
      * @param bucket            存储桶名称
      * @param fileKey           文件对象名
-     * @param expireSecs     过期时间（秒）
+     * @param expireSecs        过期时间（秒）
      */
     public static String getPreviewUrl(CustomMinioClient customMinioClient, String bucket, String fileKey, int expireSecs) throws Exception {
         return customMinioClient.getPresignedObjectUrl(
@@ -193,7 +202,6 @@ public class MinioUtil {
 
         // 如果没有 uploadId，则初始化分片上传
         if (!StringUtils.hasText(uploadId)) {
-            multipartUploadInfo.setExist(false);
             uploadId = customMinioClient.initMultiPartUpload(bucket, null, fileKey, null, null);
         }
 

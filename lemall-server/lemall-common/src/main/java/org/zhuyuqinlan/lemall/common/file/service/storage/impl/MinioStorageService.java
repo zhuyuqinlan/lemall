@@ -16,7 +16,6 @@ import org.zhuyuqinlan.lemall.common.file.bean.CustomMinioClient;
 import org.zhuyuqinlan.lemall.common.file.constant.FileStorageConstant;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
-import org.zhuyuqinlan.lemall.common.file.dto.PostPolicyDTO;
 import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.utils.MinioUtil;
 import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
@@ -182,10 +181,15 @@ public class MinioStorageService implements CloudFileStorageService {
 
     @Override
     @SneakyThrows
-    public PostPolicyDTO getPostPolicy(String fileKey, int expireSeconds, boolean isPublic) {
+    public MultipartUploadInfo getPostPolicy(String fileKey, int expireSeconds, String uploadId, boolean isPublic) {
         String bucket = isPublic ? bucketPublic : bucketPrivate;
         CustomMinioClient client = isPublic ? minioClientPublicNet : minioClientPrivateNet;
-        return MinioUtil.getPostPolicy(client, bucket, fileKey, expireSeconds);
+        return MinioUtil.getPostPolicy(client, bucket, fileKey, uploadId, expireSeconds);
+    }
+
+    @Override
+    public FileInfoDTO complete(String fileKey, String contentType, String md5, long size, boolean isPublic) {
+        return null;
     }
 
     @Override

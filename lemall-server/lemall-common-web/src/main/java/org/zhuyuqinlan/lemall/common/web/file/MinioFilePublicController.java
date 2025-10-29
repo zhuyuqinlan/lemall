@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
-import org.zhuyuqinlan.lemall.common.file.dto.ext.FileInfoExistDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.service.biz.MinioFileService;
 import org.zhuyuqinlan.lemall.common.response.Result;
@@ -34,11 +33,13 @@ public class MinioFilePublicController {
 
     @PostMapping("/upload-url")
     @Operation(summary = "上传凭证(单文件)")
-    public Result<FileInfoExistDTO> uploadUrl(HttpServletRequest request,
-                                              @RequestParam String accessCode,
-                                              @RequestParam String md5) {
+    public Result<MultipartUploadInfo> uploadUrl(HttpServletRequest request,
+                                                 @RequestParam String accessCode,
+                                                 @RequestParam String md5,
+                                                 @RequestParam String contentType,
+                                                 @RequestParam String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
-        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, true));
+        return Result.success(minioFileService.uploadUrl(token, accessCode, md5, contentType, uploadId,true));
     }
 
     @PostMapping("/complete")
