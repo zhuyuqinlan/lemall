@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,6 +204,7 @@ public class MinioUtil {
         if (!StringUtils.hasText(uploadId)) {
             uploadId = customMinioClient.initMultiPartUpload(bucket, null, fileKey, null, null);
         }
+        multipartUploadInfo.setUploadId(uploadId);
 
         // 生成每个分片的预签名 URL
         List<Map<String, Object>> partsList = new ArrayList<>();

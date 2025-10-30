@@ -22,7 +22,7 @@ async function uploadToLocal(file) {
   // 文件不存在，执行上传
   const formData = new FormData()
   formData.append('file', file)
-  formData.append('uploadCode', res.data.uploadCode)
+  formData.append('uploadId', res.data.uploadId)
   return await request.post('/api/lemall-common/file/local/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
@@ -30,9 +30,28 @@ async function uploadToLocal(file) {
 
 // minio 上传
 async function uploadToMinio(file) {
-  const formData = new FormData();
-  formData.append('file', file);
-  return request.post('/api/minio/upload', formData)
+  // 获取 access code
+  const { data: accessCode } = await request.get('/api/lemall-common/file/minio-public/access-code')
+
+  // 计算文件 MD5（前端秒传关键）
+  const fileMd5 = await calcFileMd5(file)
+
+  const fileName = file.name;
+  const contentType = file.type;
+  // 获取上传凭证（妙传）
+  const res = await request.post('/api/lemall-common/file/minio-public/upload-url-multipart', null, {
+    params: {md5: fileMd5, accessCode, fileName, contentType}
+  })
+
+  if (res.data.exist) {
+    // 秒传成功，直接返回文件信息
+    console.log('秒传成功：', res.data)
+    return res
+  }
+
+  // 文件不存在，执行上传 TODO
+  // 上传完回调
+
 }
 
 // 阿里云oss上传
