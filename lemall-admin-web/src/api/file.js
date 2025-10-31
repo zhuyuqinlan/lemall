@@ -3,14 +3,14 @@ import SparkMD5 from 'spark-md5'
 
 async function uploadToLocal(file) {
   // 获取 access code
-  const { data: accessCode } = await request.get('/api/lemall-common/file/local/access-code')
+  const {data: accessCode} = await request.get('/api/lemall-common/file/local/access-code')
 
   // 计算文件 MD5（前端秒传关键）
   const fileMd5 = await calcFileMd5(file)
 
   // 检查文件是否已存在（秒传）
   const res = await request.post('/api/lemall-common/file/local/check', null, {
-    params: { md5: fileMd5, accessCode },
+    params: {md5: fileMd5, accessCode},
   })
 
   if (res.data.exist) {
@@ -24,34 +24,44 @@ async function uploadToLocal(file) {
   formData.append('file', file)
   formData.append('uploadId', res.data.uploadId)
   return await request.post('/api/lemall-common/file/local/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: {'Content-Type': 'multipart/form-data'},
   })
 }
 
-// minio 上传
 async function uploadToMinio(file) {
-  // 获取 access code
-  const { data: accessCode } = await request.get('/api/lemall-common/file/minio-public/access-code')
+  // 1. 获取 access code
+  const {data: accessCode} = await request.get('/api/lemall-common/file/minio-public/access-code')
 
-  // 计算文件 MD5（前端秒传关键）
+  // 2. 计算 MD5
   const fileMd5 = await calcFileMd5(file)
+  const {name: fileName, type: contentType} = file
 
-  const fileName = file.name;
-  const contentType = file.type;
-  // 获取上传凭证（妙传）
-  const res = await request.post('/api/lemall-common/file/minio-public/upload-url-multipart', null, {
+  // 3. 获取上传凭证
+  const res = await request.post('/api/lemall-common/file/minio-public/upload-url', null, {
     params: {md5: fileMd5, accessCode, fileName, contentType}
   })
 
+  // 4. 秒传
   if (res.data.exist) {
-    // 秒传成功，直接返回文件信息
-    console.log('秒传成功：', res.data)
+    console.log('秒传成功：', res)
     return res
   }
 
-  // 文件不存在，执行上传 TODO
-  // 上传完回调
+  // 5. 上传文件
+  const {uploadId, parts} = res.data
+  const part = parts[0]
 
+  const uploadRes = await fetch(part.url, {
+    method: 'PUT',
+    body: file
+  })
+
+  if (!uploadRes.ok) throw new Error('上传失败')
+
+  // 6. 通知后端合并
+  return await request.post('/api/lemall-common/file/minio-public/complete', null, {
+    params: {uploadId}
+  })
 }
 
 // 阿里云oss上传

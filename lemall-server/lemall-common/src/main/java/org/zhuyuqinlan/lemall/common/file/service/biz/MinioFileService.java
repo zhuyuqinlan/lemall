@@ -71,7 +71,7 @@ public class MinioFileService {
         String limitKey = buildRedisKey(isPublic ? PUBLIC_LIMIT_KEY : PRIVATE_LIMIT_KEY, token, null);
         Long count = redisService.incr(limitKey, 1);
         if (count == 1) redisService.expire(limitKey, 60);
-        if (count > 3) throw new RuntimeException("请求过于频繁，请稍后再试");
+        if (count > 15) throw new RuntimeException("请求过于频繁，请稍后再试");
 
         // 生成 accessCode
         String accessCode = UUID.randomUUID().toString().replace("-", "");

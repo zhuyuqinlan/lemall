@@ -75,7 +75,7 @@ public class LocalFileService {
         String limitKey = REDIS_PREFIX + ":" + REDIS_KEY_LOCAL_LIMIT_LIMIT.replace("{token}", token);
         Long count = redisService.incr(limitKey, 1);
         if (count == 1) redisService.expire(limitKey, 60);
-        if (count > 5) throw new RuntimeException("请求过于频繁，请稍后再试");
+        if (count > 15) throw new RuntimeException("请求过于频繁，请稍后再试");
 
         String accessCode = UUID.randomUUID().toString().replace("-", "");
         redisService.set(
