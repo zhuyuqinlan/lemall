@@ -25,7 +25,10 @@ public class UmsAdminDTO implements Serializable {
     private String nickName;
 
     @Schema(description = "头像")
-    private String icon;
+    private String url;
+
+    @Schema(description = "头像文件id")
+    private Long avatarFileId;
 
     @Schema(description = "邮箱")
     private String email;

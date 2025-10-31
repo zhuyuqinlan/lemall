@@ -106,7 +106,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         return adminPage.convert(admin -> {
             UmsAdminDTO dto = new UmsAdminDTO();
             BeanUtils.copyProperties(admin, dto);
-            dto.setIcon(fileCacheService.getFileUrlByFileId(admin.getAvatarFileId()));
+            dto.setUrl(fileCacheService.getFileUrlByFileId(admin.getAvatarFileId()));
             return dto;
         });
     }
@@ -225,7 +225,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
         UmsAdmin admin = super.getById(id);
         BeanUtils.copyProperties(admin, dto);
         String fileUrl = fileCacheService.getFileUrlByFileId(admin.getAvatarFileId());
-        dto.setIcon(fileUrl);
+        dto.setUrl(fileUrl);
 
         List<UmsResource> resources = umsAdminDao.getResourceList(admin.getId());
         dto.setResourceList(resources.stream().map(UmsResource::getName).toList());

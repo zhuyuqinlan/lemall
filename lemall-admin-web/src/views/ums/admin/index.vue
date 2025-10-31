@@ -36,9 +36,6 @@
                 :data="list"
                 style="width: 100%;"
                 v-loading="listLoading" border>
-        <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{ scope.row.id }}</template>
-        </el-table-column>
         <el-table-column label="帐号" align="center">
           <template slot-scope="scope">{{ scope.row.username }}</template>
         </el-table-column>
@@ -115,15 +112,7 @@
           <el-input v-model="admin.password" type="password" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="头像：">
-          <el-upload
-            class="avatar-uploader"
-            :show-file-list="false"
-            accept="image/*"
-            :action="''"
-            :http-request="handleUploadFile">
-            <img v-if="admin.icon" :src="admin.icon" class="avatar" alt="头像"/>
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+          <single-upload v-model="admin.avatarFile"></single-upload>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="admin.note"
@@ -166,7 +155,7 @@
 import {fetchList, createAdmin, updateAdmin, updateStatus, deleteAdmin, getRoleByAdmin, allocRole} from '@/api/login';
 import {fetchAllRoleList} from '@/api/role';
 import {formatDate} from '@/utils/date';
-import {uploadFile} from '@/api/file';
+import SingleUpload from '@/components/Upload/singleUpload'
 
 const defaultListQuery = {
   pageNum: 1,
@@ -181,11 +170,11 @@ const defaultAdmin = {
   email: null,
   note: null,
   status: 1,
-  icon: null,
-  avatarFileId: null
+  avatarFile: {}
 };
 export default {
   name: 'adminList',
+  components:{SingleUpload},
   data() {
     return {
       listQuery: Object.assign({}, defaultListQuery),
@@ -215,11 +204,6 @@ export default {
     }
   },
   methods: {
-    async handleUploadFile(option) {
-      const res = await uploadFile(option.file)
-      this.admin.icon = res.data.url;
-      this.admin.avatarFileId = res.data.id;
-    },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
     },
@@ -279,7 +263,8 @@ export default {
     handleUpdate(index, row) {
       this.dialogVisible = true;
       this.isEdit = true;
-      this.admin = Object.assign({}, row);
+      let info = Object.assign({}, row);
+      this.admin = {...info, avatarFile: {url: info.url, id: info.avatarFileId}}
     },
     handleDialogConfirm() {
       this.$confirm('是否要确认?', '提示', {
@@ -288,7 +273,7 @@ export default {
         type: 'warning'
       }).then(() => {
         if (this.isEdit) {
-          updateAdmin(this.admin.id, this.admin).then(response => {
+          updateAdmin(this.admin.id, { ...this.admin, avatarFileId: this.admin.avatarFile.id || null}).then(response => {
             this.$message({
               message: '修改成功！',
               type: 'success'
@@ -297,7 +282,7 @@ export default {
             this.getList();
           })
         } else {
-          createAdmin(this.admin).then(response => {
+          createAdmin({ ...this.admin, avatarFileId: this.admin.avatarFile.id || null}).then(response => {
             this.$message({
               message: '添加成功！',
               type: 'success'
