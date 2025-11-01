@@ -4,6 +4,7 @@ import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * 云存储扩展接口
@@ -68,5 +69,11 @@ public interface CloudFileStorageService {
     FileInfoDTO mergeMultipartUpload(String uploadId, String fileKey, String md5, Long size, String contentType, boolean isPublic);
 
 
-
+    /**
+     * 获取已上传分片编号
+     * @param fileKey 文件key
+     * @param uploadId 上传编号
+     * @return 编号
+     */
+    List<Integer> getPartNums(String fileKey, String uploadId, boolean isPublic);
 }

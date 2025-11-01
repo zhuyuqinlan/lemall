@@ -10,7 +10,7 @@ async function uploadToMinio(file) {
   const {name: fileName, type: contentType} = file
 
   // 3. 获取上传凭证
-  const res = await request.post('/api/lemall-common/file/minio-public/upload-url', null, {
+  const res = await request.post('/api/lemall-common/file/minio-public/upload-url-multipart', null, {
     params: {md5: fileMd5, accessCode, fileName, contentType}
   })
 
@@ -22,24 +22,25 @@ async function uploadToMinio(file) {
 
   // 5. 上传文件
   const {uploadId, parts} = res.data
-  const part = parts[0]
 
-  const uploadRes = await fetch(part.url, {
-    method: 'PUT',
-    body: file
-  })
+  for (const part of parts) {
+    const uploadRes = await fetch(part.url, {
+      method: 'PUT',
+      body: file
+    })
 
-  if (!uploadRes.ok) throw new Error('上传失败')
+    if (!uploadRes.ok) throw new Error('上传失败')
+  }
 
   // 6. 通知后端合并
-  return await request.post('/api/lemall-common/file/minio-public/complete', null, {
+  return await request.post('/api/lemall-common/file/minio-public/complete-multipart', null, {
     params: {uploadId}
   })
 }
 
 // 阿里云oss上传
 async function uploadToOSS(file) {
-   // TODO 阿里云大文件分片上传
+  // TODO 阿里云大文件分片上传
 }
 
 // 根据 localStorage 自动选择上传方式

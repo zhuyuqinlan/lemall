@@ -20,6 +20,7 @@ import org.zhuyuqinlan.lemall.common.mapper.FsFileStorageMapper;
 
 import java.io.InputStream;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -269,5 +270,13 @@ public class MinioStorageService implements CloudFileStorageService {
             log.error("合并分片上传失败: {}", fileKey, e);
             throw new RuntimeException("合并分片上传失败", e);
         }
+    }
+
+    @Override
+    @SneakyThrows
+    public List<Integer> getPartNums(String fileKey, String uploadId, boolean isPublic) {
+        CustomMinioClient client = getClient(isPublic, true);
+        String bucket = isPublic ? bucketPublic : bucketPrivate;
+        return MinioUtil.getListParts(client, bucket, fileKey, uploadId);
     }
 }

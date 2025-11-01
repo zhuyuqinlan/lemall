@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.service.biz.MinioFileService;
+import org.zhuyuqinlan.lemall.common.file.vo.FileMultiCacheInfo;
 import org.zhuyuqinlan.lemall.common.response.Result;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,6 +64,13 @@ public class MinioFilePublicController {
                                                                  @RequestParam(required = false) String uploadId) {
         String token = request.getHeader(SA_TOKEN_NAME);
         return Result.success(minioFileService.multipartUploadInfoResult(token, accessCode, uploadId,md5, contentType,fileName,fileSize,true));
+    }
+
+    @GetMapping("/check-upload-multipart")
+    @Operation(summary = "检查上传信息(断点续传)")
+    public Result<List<FileMultiCacheInfo>> checkMultipartUploadInfoResult(HttpServletRequest request) {
+        String token = request.getHeader(SA_TOKEN_NAME);
+        return Result.success(minioFileService.checkMultipartUploadInfoResult(token,true));
     }
 
     @PostMapping("/complete-multipart")

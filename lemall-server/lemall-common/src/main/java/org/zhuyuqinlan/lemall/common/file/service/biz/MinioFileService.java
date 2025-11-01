@@ -13,6 +13,7 @@ import org.zhuyuqinlan.lemall.common.file.dto.FileInfoDTO;
 import org.zhuyuqinlan.lemall.common.file.dto.ext.MultipartUploadInfo;
 import org.zhuyuqinlan.lemall.common.file.service.storage.CloudFileStorageService;
 import org.zhuyuqinlan.lemall.common.file.service.storage.FileCacheService;
+import org.zhuyuqinlan.lemall.common.file.vo.FileMultiCacheInfo;
 import org.zhuyuqinlan.lemall.common.service.RedisService;
 
 import java.time.LocalDate;
@@ -161,7 +162,7 @@ public class MinioFileService {
         map.put("md5", md5);
         map.put("fileSize", String.valueOf(fileSize));
         String uploadKey = buildRedisKey(isPublic ? PUBLIC_UPLOAD_KEY : PRIVATE_UPLOAD_KEY, token, postPolicy.getUploadId());
-        redisService.hSetAll(uploadKey, map, FileStorageConstant.POST_POLICY_EXPIRE + 30);
+        redisService.hSetAll(uploadKey, map, FileStorageConstant.POST_POLICY_MULTIPART_EXPIRE + 30);
 
         return postPolicy;
     }
@@ -226,4 +227,34 @@ public class MinioFileService {
         if (suffix != null) key = key.replace("{uploadId}", suffix).replace("{accessCode}", suffix);
         return key;
     }
+
+    // 检查上传信息(断点续传)
+    public List<FileMultiCacheInfo> checkMultipartUploadInfoResult(String token, boolean isPublic) {
+        String uploadPrefix = buildRedisKey(isPublic ? PUBLIC_UPLOAD_KEY : PRIVATE_UPLOAD_KEY, token, "");
+        // 扫描 Redis 获取前缀相关 key
+        List<String> keys = redisService.scanKeys(uploadPrefix, 100);
+
+        if (keys.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<FileMultiCacheInfo> result = new ArrayList<>();
+        for (String key : keys) {
+            Map<Object, Object> value = redisService.hGetAll(key);
+            if (value != null) {
+                FileMultiCacheInfo fileMultiCacheInfo = new FileMultiCacheInfo();
+                fileMultiCacheInfo.setFileKey(value.get("fileKey").toString());
+                fileMultiCacheInfo.setMd5(value.get("md5").toString());
+                fileMultiCacheInfo.setSize(Long.parseLong(value.get("fileSize").toString()));
+                fileMultiCacheInfo.setContentType(value.get("contentType").toString());
+                String uploadId = key.substring(key.lastIndexOf(":") + 1);
+                fileMultiCacheInfo.setUploadId(uploadId);
+                fileMultiCacheInfo.setPartNums(cloudFileStorageService.getPartNums(value.get("fileKey").toString(), uploadId, isPublic));
+                result.add(fileMultiCacheInfo);
+            }
+        }
+
+        return result;
+    }
+
 }

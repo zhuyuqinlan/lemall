@@ -1,12 +1,15 @@
 package org.zhuyuqinlan.lemall.common.service;
 
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -173,6 +176,19 @@ public class RedisService {
     public Long lRemove(String key, long count, String value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }
+
+    public List<String> scanKeys(String prefix, int count) {
+        List<String> keys = new ArrayList<>();
+        RedisConnection connection = Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection();
+
+        try (Cursor<byte[]> cursor = connection.scan(
+                ScanOptions.scanOptions().match(prefix + "*").count(count).build()
+        )) {
+            cursor.forEachRemaining(k -> keys.add(new String(k, StandardCharsets.UTF_8)));
+        }
+        return keys;
+    }
+
 
     // ======================= 分布式锁 =======================
 
