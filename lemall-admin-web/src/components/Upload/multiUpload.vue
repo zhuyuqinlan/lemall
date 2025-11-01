@@ -1,24 +1,35 @@
-<template> 
+<template>
   <div>
-    <el-upload :action="useOss ? ossUploadUrl : minioUploadUrl" :data="useOss ? dataObj : null" list-type="picture-card"
-      :file-list="fileList" :before-upload="beforeUpload" :on-remove="handleRemove" :on-success="handleUploadSuccess"
-      :on-preview="handlePreview" :limit="maxCount" :on-exceed="handleExceed">
+    <el-upload
+      :action="''"
+      list-type="picture-card"
+      :file-list="fileList"
+      :before-upload="beforeUpload"
+      :on-remove="handleRemove"
+      :on-preview="handlePreview"
+      :multiple="true"
+      :limit="maxCount"
+      :on-exceed="handleExceed"
+    >
       <i class="el-icon-plus"></i>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
+
+    <el-dialog :visible.sync="dialogVisible" width="50%">
+      <img width="100%" :src="dialogImageUrl" alt="图片预览" />
     </el-dialog>
   </div>
 </template>
+
 <script>
-import { policy } from '@/api/oss'
+import { uploadFile } from '@/utils/upload'
 
 export default {
   name: 'multiUpload',
   props: {
-    //图片属性数组
-    value: Array,
-    //最大上传图片数量
+    value: {
+      type: Array,
+      default: () => []
+    },
     maxCount: {
       type: Number,
       default: 5
@@ -26,83 +37,54 @@ export default {
   },
   data() {
     return {
-      dataObj: {
-        policy: '',
-        signature: '',
-        key: '',
-        ossaccessKeyId: '',
-        dir: '',
-        host: ''
-      },
       dialogVisible: false,
-      dialogImageUrl: null,
-      useOss: false, //使用oss->true;使用MinIO->false
-      ossUploadUrl: 'http://nanguo-zz.oss-cn-chengdu.aliyuncs.com',
-      minioUploadUrl: 'http://localhost:8080/minio/upload',
-    };
+      dialogImageUrl: '',
+      fileList: []
+    }
   },
-  computed: {
-    fileList() {
-      let fileList = [];
-      for (let i = 0; i < this.value.length; i++) {
-        fileList.push({ url: this.value[i] });
+  watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.fileList = val.map(url => ({ name: url.split('/').pop(), url }))
       }
-      return fileList;
     }
   },
   methods: {
-    emitInput(fileList) {
-      let value = [];
-      for (let i = 0; i < fileList.length; i++) {
-        value.push(fileList[i].url);
-      }
-      this.$emit('input', value)
+    emitInput(val) {
+      this.$emit('input', val)
     },
     handleRemove(file, fileList) {
-      this.emitInput(fileList);
+      this.fileList = fileList
+      this.emitInput(fileList.map(f => f.url))
     },
     handlePreview(file) {
-      this.dialogVisible = true;
-      this.dialogImageUrl = file.url;
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
     beforeUpload(file) {
-      let _self = this;
-      if (!this.useOss) {
-        //不使用oss不需要获取策略
-        return true;
-      }
-      return new Promise((resolve, reject) => {
-        policy().then(response => {
-          _self.dataObj.policy = response.data.policy;
-          _self.dataObj.signature = response.data.signature;
-          _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-          _self.dataObj.key = response.data.dir + '/${filename}';
-          _self.dataObj.dir = response.data.dir;
-          _self.dataObj.host = response.data.host;
-          resolve(true)
-        }).catch(err => {
-          console.log(err)
-          reject(false)
+      uploadFile(file)
+        .then(res => {
+          const newFile = { name: file.name, url: res.data.url }
+          this.fileList.push(newFile)
+          this.emitInput(this.fileList.map(f => f.url))
         })
-      })
-    },
-    handleUploadSuccess(res, file) {
-      let url = this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name;
-      if (!this.useOss) {
-        //不使用oss直接获取图片路径
-        url = res.data.url;
-      }
-      this.fileList.push({ name: file.name, url: url });
-      this.emitInput(this.fileList);
+        .catch(err => {
+          console.error('上传失败', err)
+          this.$message.error('上传失败')
+        })
+      return false
     },
     handleExceed(files, fileList) {
-      this.$message({
-        message: '最多只能上传' + this.maxCount + '张图片',
-        type: 'warning',
-        duration: 1000
-      });
-    },
+      this.$message.warning(`最多只能上传${this.maxCount}张图片`)
+    }
   }
 }
 </script>
-<style></style>
+
+<style scoped>
+.el-upload__tip {
+  font-size: 12px;
+  color: #999;
+}
+</style>

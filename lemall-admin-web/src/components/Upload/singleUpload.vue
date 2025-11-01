@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { uploadFile } from '@/api/file'
+import { uploadFile } from '@/utils/upload'
 
 export default {
   name: 'singleUpload',

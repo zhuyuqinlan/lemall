@@ -208,12 +208,18 @@
         </el-col>
       </el-row>
     </div>
-    <el-form label-width="120px">
-      <el-form-item label="文件上传方式：">
+    <el-form>
+      <el-form-item label="全局小文件上传途径：">
         <el-radio-group v-model="uploadType">
           <el-radio label="local">本地上传</el-radio>
           <el-radio label="oss">阿里云OSS</el-radio>
-          <el-radio label="minio">minio上传</el-radio>
+          <el-radio label="minio">minio对象存储</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="全局大文件分片上传途径：">
+        <el-radio-group v-model="uploadTypeMulti">
+          <el-radio label="oss">阿里云OSS</el-radio>
+          <el-radio label="minio">minio对象存储</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -250,6 +256,7 @@
     data() {
       return {
         uploadType: localStorage.getItem('uploadType') || 'local',
+        uploadTypeMulti: localStorage.getItem('uploadMulti') || 'minio',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -292,6 +299,9 @@
       // 用户选择改变时同步到 localStorage
       uploadType(newVal) {
         localStorage.setItem('uploadType', newVal)
+      },
+      uploadTypeMulti(newVal) {
+        localStorage.setItem('uploadTypeMulti', newVal)
       }
     },
     methods:{
