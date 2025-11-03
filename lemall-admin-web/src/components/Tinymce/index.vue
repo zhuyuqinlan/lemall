@@ -9,7 +9,7 @@
 
 <script>
   import editorImage from './components/editorImage'
-  import '../../../static/tinymce4.7.5/langs/zh_CN'
+  // import '../../../static/tinymce4.7.5/langs/zh_CN'
 
   const plugins = [
  `advlist anchor autolink autosave code codesample colorpicker colorpicker
@@ -86,6 +86,7 @@
           width: this.width,
           height: this.height,
           language: 'zh_CN',
+          language_url: '/static/tinymce4.7.5/langs/zh_CN.js',
           body_class: 'panel-body ',
           object_resizing: false,
           toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,

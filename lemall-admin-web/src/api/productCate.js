@@ -1,21 +1,21 @@
 import request from '@/utils/request'
 export function fetchList(parentId,params) {
   return request({
-    url:'/product/productCategory/list/'+parentId,
+    url:'/api/lemall-admin/system/product/productCategory/list/'+parentId,
     method:'get',
     params:params
   })
 }
 export function deleteProductCate(id) {
   return request({
-    url:'/product/productCategory/delete/'+id,
+    url:'/api/lemall-admin/product/productCategory/delete/'+id,
     method:'post'
   })
 }
 
 export function createProductCate(data) {
   return request({
-    url:'/product/productCategory/create',
+    url:'/api/lemall-admin/product/productCategory/create',
     method:'post',
     data:data
   })
@@ -23,7 +23,7 @@ export function createProductCate(data) {
 
 export function updateProductCate(id,data) {
   return request({
-    url:'/product/productCategory/update/'+id,
+    url:'/api/lemall-admin/product/productCategory/update/'+id,
     method:'post',
     data:data
   })
@@ -31,14 +31,14 @@ export function updateProductCate(id,data) {
 
 export function getProductCate(id) {
   return request({
-    url:'/product/productCategory/'+id,
+    url:'/api/lemall-admin/product/productCategory/'+id,
     method:'get',
   })
 }
 
 export function updateShowStatus(data) {
   return request({
-    url:'/product/productCategory/update/showStatus',
+    url:'/api/lemall-admin/product/productCategory/update/showStatus',
     method:'post',
     data:data
   })
@@ -46,7 +46,7 @@ export function updateShowStatus(data) {
 
 export function updateNavStatus(data) {
   return request({
-    url:'/product/productCategory/update/navStatus',
+    url:'/api/lemall-admin/product/productCategory/update/navStatus',
     method:'post',
     data:data
   })
@@ -54,7 +54,7 @@ export function updateNavStatus(data) {
 
 export function fetchListWithChildren() {
   return request({
-    url:'/product/productCategory/list/withChildren',
+    url:'/api/lemall-admin/product/productCategory/list/withChildren',
     method:'get'
   })
 }

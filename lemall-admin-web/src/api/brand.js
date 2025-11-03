@@ -1,21 +1,21 @@
 import request from '@/utils/request'
 export function fetchList(params) {
   return request({
-    url:'/product/brand/list',
+    url:'/api/lemall-admin/product/brand/list',
     method:'get',
     params:params
   })
 }
 export function createBrand(data) {
   return request({
-    url:'/product/brand/create',
+    url:'/api/lemall-admin/product/brand/create',
     method:'post',
     data:data
   })
 }
 export function updateShowStatus(data) {
   return request({
-    url:'/product/brand/update/showStatus',
+    url:'/api/lemall-admin/product/brand/update/showStatus',
     method:'post',
     data:data
   })
@@ -23,7 +23,7 @@ export function updateShowStatus(data) {
 
 export function updateFactoryStatus(data) {
   return request({
-    url:'/product/brand/update/factoryStatus',
+    url:'/api/lemall-admin/product/brand/update/factoryStatus',
     method:'post',
     data:data
   })
@@ -31,21 +31,21 @@ export function updateFactoryStatus(data) {
 
 export function deleteBrand(id) {
   return request({
-    url:'/product/brand/delete/'+id,
+    url:'/api/lemall-admin/product/brand/delete/'+id,
     method:'get',
   })
 }
 
 export function getBrand(id) {
   return request({
-    url:'/product/brand/'+id,
+    url:'/api/lemall-admin/product/brand/'+id,
     method:'get',
   })
 }
 
 export function updateBrand(id,data) {
   return request({
-    url:'/product/brand/update/'+id,
+    url:'/api/lemall-admin/product/brand/update/'+id,
     method:'post',
     data:data
   })
