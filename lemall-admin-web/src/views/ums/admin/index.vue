@@ -36,6 +36,12 @@
                 :data="list"
                 style="width: 100%;"
                 v-loading="listLoading" border>
+        <el-table-column
+          type="index"
+          label="编号"
+          width="80"
+          align="center">
+        </el-table-column>
         <el-table-column label="帐号" align="center">
           <template slot-scope="scope">{{ scope.row.username }}</template>
         </el-table-column>

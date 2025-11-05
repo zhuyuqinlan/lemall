@@ -47,9 +47,13 @@
                 @selection-change="handleSelectionChange"
                 v-loading="listLoading" border>
         <el-table-column type="selection" width="60" align="center"></el-table-column>
-        <el-table-column label="编号" width="100" align="center">
-          <template slot-scope="scope">{{scope.row.id}}</template>
+        <el-table-column
+          type="index"
+          label="编号"
+          width="80"
+          align="center">
         </el-table-column>
+
         <el-table-column label="优惠劵名称" align="center">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
