@@ -63,8 +63,8 @@ public class PmsProductAttributeController {
     @Operation(summary = "批量删除商品属性")
     @PostMapping("/delete")
     public Result<?> delete(@RequestParam("ids") List<Long> ids) {
-        boolean flag = pmsProductAttributeService.delete(ids);
-        return flag ? Result.success() : Result.fail("批量删除商品属性失败");
+        int flag = pmsProductAttributeService.delete(ids);
+        return flag > 0 ? Result.success() : Result.fail("批量删除商品属性失败");
     }
 
     @Operation(summary = "根据商品分类的id获取商品属性及属性分类")

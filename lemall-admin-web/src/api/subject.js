@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 export function fetchListAll() {
   return request({
-    url:'/subject/listAll',
+    url:'/api/lemall-admin/content/subject/listAll',
     method:'get',
   })
 }
 
 export function fetchList(params) {
   return request({
-    url:'/subject/list',
+    url:'/api/lemall-admin/content/subject/list',
     method:'get',
     params:params
   })
