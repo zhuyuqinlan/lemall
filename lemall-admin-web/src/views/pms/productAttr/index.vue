@@ -125,6 +125,7 @@
       },
       addProductAttrCate() {
         this.dialogVisible = true;
+        this.productAttrCate.name = null;
         this.dialogTitle = "添加类型";
       },
       handleSizeChange(val) {
