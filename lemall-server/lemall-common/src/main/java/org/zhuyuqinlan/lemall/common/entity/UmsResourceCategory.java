@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 资源分类表
-    */
+ * 资源分类表
+ */
 @TableName(value = "ums_resource_category")
 public class UmsResourceCategory {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -29,6 +29,12 @@ public class UmsResourceCategory {
      */
     @TableField(value = "sort")
     private Integer sort;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * @return id
@@ -96,5 +102,23 @@ public class UmsResourceCategory {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

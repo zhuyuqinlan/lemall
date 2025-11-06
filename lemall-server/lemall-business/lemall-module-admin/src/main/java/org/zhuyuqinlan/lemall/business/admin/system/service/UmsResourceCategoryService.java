@@ -29,7 +29,7 @@ public class UmsResourceCategoryService extends ServiceImpl<UmsResourceCategoryM
     public List<UmsResourceCategoryDTO> listAllResourceCategory() {
         return super.list(Wrappers.<UmsResourceCategory>lambdaQuery()
                         .orderByDesc(UmsResourceCategory::getSort)
-                        .orderByDesc(UmsResourceCategory::getCreateTime))
+                        .orderByDesc(UmsResourceCategory::getUpdateTime))
                 .stream().map(e -> {
                     UmsResourceCategoryDTO dto = new UmsResourceCategoryDTO();
                     BeanUtils.copyProperties(e, dto);

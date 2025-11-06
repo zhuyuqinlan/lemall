@@ -35,4 +35,7 @@ public class UmsRoleDTO implements Serializable {
 
     @Schema(description = "添加时间")
     private Date createTime;
+
+    @Schema(description = "创建时间")
+    private Date updateTime;
 }

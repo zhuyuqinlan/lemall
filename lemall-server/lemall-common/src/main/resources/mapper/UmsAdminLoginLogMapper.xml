@@ -10,9 +10,10 @@
     <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="user_agent" jdbcType="VARCHAR" property="userAgent" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, admin_id, create_time, ip, address, user_agent
+    id, admin_id, create_time, ip, address, user_agent, update_time
   </sql>
 </mapper>

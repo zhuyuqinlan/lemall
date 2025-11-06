@@ -32,4 +32,7 @@ public class UmsResourceDTO implements Serializable {
 
     @Schema(description = "资源分类id")
     private Long categoryId;
+
+    @Schema(description = "创建时间")
+    private Date updateTime;
 }

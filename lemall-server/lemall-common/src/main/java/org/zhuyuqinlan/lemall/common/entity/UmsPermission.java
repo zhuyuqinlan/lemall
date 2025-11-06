@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 后台用户权限表
-    */
+ * 后台用户权限表
+ */
 @TableName(value = "ums_permission")
 public class UmsPermission {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -65,6 +65,12 @@ public class UmsPermission {
      */
     @TableField(value = "sort")
     private Integer sort;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * @return id
@@ -240,5 +246,23 @@ public class UmsPermission {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

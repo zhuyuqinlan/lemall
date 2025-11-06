@@ -13,9 +13,10 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="hidden" jdbcType="INTEGER" property="hidden" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, create_time, title, `level`, sort, `name`, icon, hidden
+    id, parent_id, create_time, title, `level`, sort, `name`, icon, hidden, update_time
   </sql>
 </mapper>

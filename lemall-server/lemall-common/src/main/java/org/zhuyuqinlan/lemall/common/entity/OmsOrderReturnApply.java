@@ -1,9 +1,7 @@
 package org.zhuyuqinlan.lemall.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -42,7 +40,7 @@ public class OmsOrderReturnApply {
     /**
      * 申请时间
      */
-    @TableField(value = "create_time")
+    @TableField(value="create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**

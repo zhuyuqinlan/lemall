@@ -39,7 +39,7 @@ public class UmsRoleService extends ServiceImpl<UmsRoleMapper, UmsRole> {
                 com.baomidou.mybatisplus.core.toolkit.Wrappers.<UmsRole>lambdaQuery()
                         .like(StringUtils.hasText(keyword), UmsRole::getName, keyword)
                         .orderByDesc(UmsRole::getSort)
-                        .orderByDesc(UmsRole::getCreateTime)
+                        .orderByDesc(UmsRole::getUpdateTime)
         ).convert(umsRole -> {
             UmsRoleDTO dto = new UmsRoleDTO();
             org.springframework.beans.BeanUtils.copyProperties(umsRole, dto);

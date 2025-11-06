@@ -12,10 +12,11 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, `value`, description, admin_count, create_time, `status`, sort
+    id, `name`, `value`, description, admin_count, create_time, `status`, sort, update_time
   </sql>
 
 </mapper>

@@ -39,6 +39,9 @@ public class UmsMenuDTO implements Serializable {
     @Schema(description = "创建时间")
     private Date createTime;
 
+    @Schema(description = "创建时间")
+    private Date updateTime;
+
     @Schema(description = "排序")
     private Integer sort;
 }

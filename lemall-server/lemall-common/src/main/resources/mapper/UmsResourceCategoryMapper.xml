@@ -8,9 +8,10 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, create_time, `name`, sort
+    id, create_time, `name`, sort, update_time
   </sql>
 </mapper>

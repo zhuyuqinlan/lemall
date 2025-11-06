@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 后台用户登录日志表
-    */
+ * 后台用户登录日志表
+ */
 @TableName(value = "ums_admin_login_log")
 public class UmsAdminLoginLog {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -29,6 +29,12 @@ public class UmsAdminLoginLog {
      */
     @TableField(value = "user_agent")
     private String userAgent;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * @return id
@@ -116,5 +122,23 @@ public class UmsAdminLoginLog {
      */
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

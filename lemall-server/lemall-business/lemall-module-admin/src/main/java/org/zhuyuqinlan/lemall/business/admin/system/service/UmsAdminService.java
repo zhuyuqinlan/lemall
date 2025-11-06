@@ -101,7 +101,7 @@ public class UmsAdminService extends ServiceImpl<UmsAdminMapper, UmsAdmin> {
                         .like(UmsAdmin::getUsername, keyword)
                         .or()
                         .like(UmsAdmin::getNickName, keyword))
-                .orderByDesc(UmsAdmin::getCreateTime)
+                .orderByDesc(UmsAdmin::getUpdateTime)
         );
         return adminPage.convert(admin -> {
             UmsAdminDTO dto = new UmsAdminDTO();

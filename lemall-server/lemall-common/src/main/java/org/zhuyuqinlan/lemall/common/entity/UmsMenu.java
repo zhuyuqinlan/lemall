@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 /**
-    * 后台菜单表
-    */
+ * 后台菜单表
+ */
 @TableName(value = "ums_menu")
 public class UmsMenu {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -59,6 +59,12 @@ public class UmsMenu {
      */
     @TableField(value = "hidden")
     private Integer hidden;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * @return id
@@ -216,5 +222,23 @@ public class UmsMenu {
      */
     public void setHidden(Integer hidden) {
         this.hidden = hidden;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

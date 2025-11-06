@@ -52,7 +52,7 @@ public class UmsMenuService extends ServiceImpl<UmsMenuMapper, UmsMenu> {
                         Wrappers.<UmsMenu>lambdaQuery()
                                 .eq(UmsMenu::getParentId, parentId)
                                 .orderByDesc(UmsMenu::getSort)
-                                .orderByDesc(UmsMenu::getCreateTime))
+                                .orderByDesc(UmsMenu::getUpdateTime))
                 .convert(umsMenu -> {
                     UmsMenuDTO dto = new UmsMenuDTO();
                     BeanUtils.copyProperties(umsMenu, dto);

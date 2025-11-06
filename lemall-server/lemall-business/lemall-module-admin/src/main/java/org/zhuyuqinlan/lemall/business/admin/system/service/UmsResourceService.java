@@ -71,7 +71,7 @@ public class UmsResourceService extends ServiceImpl<UmsResourceMapper, UmsResour
                                 .eq(categoryId != null, UmsResource::getCategoryId, categoryId)
                                 .like(StringUtils.hasText(nameKeyword), UmsResource::getName, nameKeyword)
                                 .like(StringUtils.hasText(urlKeyword), UmsResource::getUrl, urlKeyword)
-                                .orderByDesc(UmsResource::getCreateTime)
+                                .orderByDesc(UmsResource::getUpdateTime)
                 )
                 .convert(e -> {
                     UmsResourceDTO umsResourceDTO = new UmsResourceDTO();

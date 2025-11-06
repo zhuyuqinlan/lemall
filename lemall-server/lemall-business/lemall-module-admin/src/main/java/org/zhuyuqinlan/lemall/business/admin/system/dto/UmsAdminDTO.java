@@ -36,6 +36,9 @@ public class UmsAdminDTO implements Serializable {
     @Schema(description = "添加时间")
     private Date createTime;
 
+    @Schema(description = "创建时间")
+    private Date updateTime;
+
     @Schema(description = "登录时间")
     private Date loginTime;
 

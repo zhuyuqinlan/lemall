@@ -43,12 +43,6 @@ public class UmsAdmin {
     private String note;
 
     /**
-     * 创建时间
-     */
-    @TableField(value="create_time", fill = FieldFill.INSERT)
-    private Date createTime;
-
-    /**
      * 最后登录时间
      */
     @TableField(value = "login_time")
@@ -59,6 +53,18 @@ public class UmsAdmin {
      */
     @TableField(value = "`status`")
     private Integer status;
+
+    /**
+     * 创建时间
+     */
+    @TableField(value="create_time", fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 
     /**
      * @return id
@@ -175,24 +181,6 @@ public class UmsAdmin {
     }
 
     /**
-     * 获取创建时间
-     *
-     * @return create_time - 创建时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置创建时间
-     *
-     * @param createTime 创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
      * 获取最后登录时间
      *
      * @return login_time - 最后登录时间
@@ -226,5 +214,41 @@ public class UmsAdmin {
      */
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
