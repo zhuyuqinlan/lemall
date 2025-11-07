@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 export function fetchList(params) {
   return request({
-    url:'/coupon/list',
+    url:'/api/lemall-admin/sale/coupon/list',
     method:'get',
     params:params
   })
@@ -9,7 +9,7 @@ export function fetchList(params) {
 
 export function createCoupon(data) {
   return request({
-    url:'/coupon/create',
+    url:'/api/lemall-admin/sale/coupon/create',
     method:'post',
     data:data
   })
@@ -17,14 +17,14 @@ export function createCoupon(data) {
 
 export function getCoupon(id) {
   return request({
-    url:'/coupon/'+id,
+    url:'/api/lemall-admin/sale/coupon/'+id,
     method:'get',
   })
 }
 
 export function updateCoupon(id,data) {
   return request({
-    url:'/coupon/update/'+id,
+    url:'/api/lemall-admin/sale/coupon/update/'+id,
     method:'post',
     data:data
   })
@@ -32,7 +32,7 @@ export function updateCoupon(id,data) {
 
 export function deleteCoupon(id) {
   return request({
-    url:'/coupon/delete/'+id,
+    url:'/api/lemall-admin/sale/coupon/delete/'+id,
     method:'post',
   })
 }

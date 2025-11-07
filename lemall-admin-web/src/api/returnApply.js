@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 export function fetchList(params) {
   return request({
-    url:'/returnApply/list',
+    url:'/api/lemall-admin/order/returnApply/list',
     method:'get',
     params:params
   })
@@ -9,14 +9,14 @@ export function fetchList(params) {
 
 export function deleteApply(params) {
   return request({
-    url:'/returnApply/delete',
+    url:'/api/lemall-admin/order/returnApply/delete',
     method:'post',
     params:params
   })
 }
 export function updateApplyStatus(id,data) {
   return request({
-    url:'/returnApply/update/status/'+id,
+    url:'/api/lemall-admin/order/returnApply/update/status/'+id,
     method:'post',
     data:data
   })
@@ -24,7 +24,7 @@ export function updateApplyStatus(id,data) {
 
 export function getApplyDetail(id) {
   return request({
-    url:'/returnApply/'+id,
+    url:'/api/lemall-admin/order/returnApply/'+id,
     method:'get'
   })
 }

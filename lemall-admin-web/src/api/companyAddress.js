@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 export function fetchList() {
   return request({
-    url:'/companyAddress/list',
+    url:'/api/lemall-admin/order/companyAddress/list',
     method:'get'
   })
 }
